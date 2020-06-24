@@ -1,0 +1,8 @@
+PORT=80
+MONGODB_URL='mongodb://127.0.0.1:27017/CustomerProfile'
+JWT_SECRET='keyboard cat'
+LDAP_URL='ldap://yourdomain.com:389'
+LDAP_bindDN='CN=Service Account,OU=Service Accounts,DC=yourdomain,DC=com'
+LDAP_bindCredentials='secretpassword'
+LDAP_searchBase='DC=yourdomain,DC=com'
+LDAP_searchFilter='(sAMAccountName={{username}})'
