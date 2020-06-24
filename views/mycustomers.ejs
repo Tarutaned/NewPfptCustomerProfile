@@ -1,0 +1,44 @@
+<%- include('./partials/header.ejs') %> 
+
+
+<% if(customers.length < 1) { %>
+  <p> You don't have any customers associated with yor account</p>
+  <p>Check out the <a href="/index"><strong>Customer Index</strong></a> page.</p>
+<% } else { %>
+  <div class="row">
+      <div class="col-md-1" style="background-color:white;"></div>
+      <div class="col-md-10" style="background-color:white;">
+      <table id="tblCustomers" class="table table-striped custab">
+        <thead class="thead-dark">
+          <tr>
+            <th onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></th>
+            <th onclick="sortTable(1)">Sales Rep<i class="fa fa-fw fa-sort"></i></th>
+            <th onclick="sortTable(2)">Archiving SE<i class="fa fa-fw fa-sort"></i></th>
+            <th onclick="sortTable(3)">Status<i class="fa fa-fw fa-sort"></i></th>
+            <th onclick="sortTable(4)">Updated Date<i class="fa fa-fw fa-sort"></i></th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% customers.forEach(function (customer) { %>
+          <tr id="<%= customer.name %>">
+            <td><a href="./index/<%= encodeURIComponent(customer.name) %>"><%= customer.name %></a></td>
+            <td><%= customer.salesRep %></td>
+            <td><%= customer.archivingSe %></td>
+            <td><%= customer.status %></td>
+            <td><%= customer.updatedAt.getMonth() + 1 %>/<%= customer.updatedAt.getDate() %>/<%= customer.updatedAt.getFullYear() %></td>
+            <td class="text-center">
+              <% if(user == 'mengineer' || user == 'nlee' || user == 'vrathee' || user == 'sprokai') { %>
+              <button class="btn" onclick='delete_customer("<%= customer.name %>")'><i class="fa fa-trash"></i></button>
+              <% } %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+  <% } %>
+
+<%- include('./partials/footer.ejs') %> 

@@ -86,18 +86,20 @@ const upload = multer({
     }
 });
 
-//using sessions for tracking logins
+// Setup express-session
 app.use(session({
-    secret: "work hard",
-    resave: true,
-    saveUninitialized: false,
-    cookie: {
-        //maxAge: 30 * 24 * 60 * 60 * 1000 // 1 month
-    },
-    store: new MongoStore({
-        mongooseConnection: db
-    })
-}));
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    secret: 'supersecretcode',
+    ttl: (120),
+    cookie: { maxAge: 3600000 },  // 1 hour in Milliseconds
+    resave: false,
+    saveUninitialized: true
+}))
+
+// Setup Passport
+const passport = require('passport')
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Used in update
 app.locals.make_custom_dropdown = function (name, value, list, classname) {
@@ -143,15 +145,18 @@ app.use(function (req, res, next) {
 app.set("view engine", "ejs");
 // used so we can make a public folder that contains stylesheet and js, and be able to access it
 app.use(express.static(__dirname + "/public"));
-//including routes. Seperating the routes to different file, so it will be cleaner.
-var routes = require("./routes/router");
 // used so we can get data from forms and etc.
 app.use(bodyParser.urlencoded({ extended: true }));
 // security. This line of code has to be always after body-parser
 app.use(expressSanitizer());
 // so we can use PUT request
 app.use(methodOverride("_method"));
+
+//including routes. Seperating the routes to different file, so it will be cleaner.
+var routes = require("./routes/router");
+var apiEndpoints = require ("./routes/api")
 app.use(routes);
+app.use(apiEndpoints)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 

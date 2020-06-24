@@ -1,4 +1,7 @@
 
+<%- include('./partials/header.ejs') %> 
+
+
 <div class="godown-60" id="godown"></div>
 
 <!-- Displaying customer data -->
@@ -14,6 +17,7 @@
         </div>
 
     </div>
+
 
     <form id="customerForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
     <fieldset id="customerFormFieldset" disabled>
@@ -243,7 +247,7 @@
                         <thead>
                             <tr>
                                 <th>Contact name</th>
-                                <th>Title</th> 
+                                <th>Title</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Primary contact</th>
@@ -311,3 +315,6 @@
     </form>
 
 </div>
+
+
+<%- include('./partials/footer.ejs') %> 

@@ -1,0 +1,138 @@
+<%- include('./partials/header.ejs') %> 
+
+
+<div class="container-fluid pt-3">
+<div class="row">
+    <div class="col-xl-2" style="background-color:white;"></div>
+    <div class="col-xl-3" style="background-color:white;">
+        <h1 class="display-4" mb-3>New Customer</h1>
+    </div>
+    <div class="col-xl-3" style="background-color:white;">
+        <form action="../newcustomer" method="POST" class="needs-validation">
+        <div class="row justify-content-end mb-3 " style="background-color:white;">
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                <button type="reset" class="btn btn-secondary" id="reset">Reset</button>
+                <a class="btn btn-secondary" id="cancel" href="/">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-xl-2" style="background-color:white;">
+        
+    </div>
+    <div class="col-xl-6" style="background-color:white;">
+
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="name">Customer Name</label>
+                </div>
+                    <input type="text" class="form-control" id="name" placeholder="Customer Name" name="customer[name]" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="numberOfUsers">Number of Mailboxes</label>
+                </div>
+                <input type="text" class="form-control" id="numberOfUsers" placeholder="0" name="customer[numberOfMailboxes]" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="status">Status</label>
+                </div>
+                <select class="custom-select" id="status" name="customer[status]" required>
+                    <option selected value=""></option>
+                    <option>Waiting for PDQ</option>
+                    <option>Waiting for Sales</option>
+                    <option>Waiting for Finance</option>
+                    <option>Waiting for OPS</option>
+                    <option>Waiting for Customer</option>
+                    <option>Waiting for Scheduling</option>
+                    <option>Deployment Started</option>
+                    <option>Deployment Complete</option>
+                </select>
+            </div>
+
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="archivingSe">Sales Engineer</label>
+                    </div>
+                    <select class="custom-select" id="archivingSe" name="customer[archivingSe]" required>
+                        <option selected value></option>
+                        <option>Ben Chapman</option>
+                        <option>Brad Cope</option>
+                        <option>Coleem Chestnut</option>
+                        <option>Davin Stilson</option>
+                        <option>Frank Beck</option>
+                        <option>Jason Colvin</option>
+                        <option>Micah Wyenn</option>
+                        <option>Mike Fenili</option>
+                        <option>Robert Kreusher</option>
+                        <option>Shane Sauer</option>
+                        <option>Terry McMahon</option>
+                    </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="salesRep">Specialist Representative</label>
+                    </div>
+                    <input type="text" class="form-control" id="salesRep" placeholder="Specialist Representative" name="customer[salesRep]" required>
+
+                </div>
+
+            </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-2" style="background-color:white;"></div>
+    <div class="col-xl-6 rounded-lg" style="background-color:whitesmoke;">
+        <div class="title">
+            <h1 class="display-5" mb-3>Contact Info</h1>
+        </div>
+        
+        <button id="add_row" type="button" class="btn btn-primary">Add row</button>
+        <button id="delete_row" type="button" class="btn btn-primary">Delete row</button>
+        <br>
+        <br>
+        <table id="contacts_table" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Contact name</th>
+                    <th>Title</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Primary contact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Contact Name" name="customer[contacts][0][name]" value="" required/>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Contact Title" name="customer[contacts][0][title]" value="" required/>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Contact Email" name="customer[contacts][0][email]" value=""required />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Contact Phone" name="customer[contacts][0][phone]" value="" required/>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="customer[contacts][0][primary_contact]" value="" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+
+<%- include('./partials/footer.ejs') %> 
+<script type="text/javascript" src="../scripts/new.js"></script>

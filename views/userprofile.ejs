@@ -1,0 +1,50 @@
+<%- include('./partials/header.ejs') %> 
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1>User Profile</h1>      
+    </div>
+</div>
+
+ 
+<div class="row" >
+  <div class="col-sm-1"></div>
+  <div class="col-sm-5">
+      <div class="card">
+            <div class="card-header bg-secondary text-white">LDAP Info for <%= user.cn %></div>
+            <div class="card-body bg-light text-dark">
+            <% if (locals.user) { %>
+                <p>
+                  <strong>dn: </strong><%= user.dn %><br>
+                  <strong>cn: </strong><%= user.cn %><br>
+                  <strong>sn: </strong><%= user.sn %><br>
+                  <strong>givenName: </strong><%= user.givenName %><br>
+                  <strong>distinguishedName </strong><%= user.distinguishedName %><br>
+                  <strong>whenCreated: </strong><%= user.whenCreated %><br>
+                  <strong>sAMAccountName: </strong><%= user.sAMAccountName %><br>
+                  <strong>userPrincipalName: </strong><%= user.userPrincipalName %><br>
+                  
+                </p>
+            <% } %>
+          </div>
+          <div class="card-footer bg-secondary text-white"></div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="card">
+            <div class="card-header bg-secondary text-white">Session Info</div>
+            <div class="card-body bg-light text-dark">
+              <a href="/logout" class="btn btn-outline-primary">logout</a>
+            <% if (sessionInfo) { %>
+                <p>
+                  <strong>Expires: </strong><%= sessionInfo.expires %><br>
+                  <strong>Seconds Remaining: </strong><%= sessionInfo.expiresIn %><br>
+                </p>
+            <% } %>
+          </div>
+          <div class="card-footer bg-secondary text-white"></div>
+        </div>
+    </div>
+</div>
+
+<%- include('./partials/footer.ejs') %> 

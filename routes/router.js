@@ -1,286 +1,237 @@
-var express = require("express");
-var mongoose = require("mongoose");
-var bcrypt = require("bcrypt");
-var nodemailer = require("nodemailer");
-var mongoxlsx = require("mongo-xlsx");
-var XlsxPopulate = require("xlsx-populate");
-var _ = require("lodash");
-var multer = require("multer");
-var upload = multer({dest: "./public/files"});
-var fs = require("fs");
-var fse = require("fs-extra");
-var glob = require("glob");
-var path = require("path");
-var router = express.Router();
-require("dotenv").config();
+// **************************************************
+// /routes/router.js
+// Provides basic routing for the app
+// **************************************************
 
-// var jwt = require('jsonwebtoken');
-// var jwt_secret = 'Just like the stars that have faded, we too, will fade one day and become one with the stars.';
+const express                 = require('express')
+const app                     = new express.Router()
+const connectEnsureLogin      = require('connect-ensure-login')
+const passport                = require('passport')
+const User                    = require('../models/user')
+var {Customer}                = require("../models/customer")
+var {CustomerVersions}        = require("../models/customer")
+var {SizingQuestions}         = require("../models/sizing")
+var {SizingQuestionsVersions} = require("../models/sizing")
+var {DesktopNetworkQuestions} = require("../models/desktop_network")
+var {EmailQuestions}          = require("../models/email")
+var {EmailQuestionsVersions}  = require("../models/email")
+var {UsageQuestions}          = require("../models/usage")
+var {UsageQuestionsVersions}  = require("../models/usage")
+var {ImportQuestions}         = require("../models/import")
+var {ImportQuestionsVersions} = require("../models/import")
+var {POCQuestions}            = require("../models/poc")
+var {POCQuestionsVersions}    = require("../models/poc")
+var {RFEQuestions}            = require("../models/rfe")
+var {RFEQuestionsVersions}    = require("../models/rfe")
+var {SupervisionQuestions}    = require("../models/supervision")
+var {DesktopNetworkQuestionsVersions}     = require("../models/desktop_network")
+var {ConnectorPlatformQuestions}          = require("../models/connector_platform")
+var {ConnectorPlatformQuestionsVersions}  = require("../models/connector_platform")
+var {SupervisionQuestionsVersions}        = require("../models/supervision")
 
 
-
-/**
-*   ============================ IMPORTANT ============================
-*   Use /customerprofile in production if nginx is present, use "" locally/in localhost
-*/
-
-// var append = "/customerprofile";
+// append is the base URL
 var append = "";
 
-var ldap_auth = require("ldapjs");
-
-var {Customer} = require("../models/customer");
-var {CustomerVersions} = require("../models/customer");
-var {SizingQuestions} = require("../models/sizing");
-var {SizingQuestionsVersions} = require("../models/sizing");
-var {DesktopNetworkQuestions} = require("../models/desktop_network");
-var {DesktopNetworkQuestionsVersions} = require("../models/desktop_network");
-var {EmailQuestions} = require("../models/email");
-var {EmailQuestionsVersions} = require("../models/email");
-var {ConnectorPlatformQuestions} = require("../models/connector_platform");
-var {ConnectorPlatformQuestionsVersions} = require("../models/connector_platform");
-var {UsageQuestions} = require("../models/usage");
-var {UsageQuestionsVersions} = require("../models/usage");
-var {ImportQuestions} = require("../models/import");
-var {ImportQuestionsVersions} = require("../models/import");
-var {POCQuestions} = require("../models/poc");
-var {POCQuestionsVersions} = require("../models/poc");
-var {RFEQuestions} = require("../models/rfe");
-var {RFEQuestionsVersions} = require("../models/rfe");
-var {SupervisionQuestions} = require("../models/supervision");
-var {SupervisionQuestionsVersions} = require("../models/supervision");
-var User = require("../models/user");
-
-
-// ======================================================
-// For authenticating cookies/sessions.
-// ======================================================
-function authenticate_session(req, res, next) {
-    if (req.session.user) {
-        next();
-    } else {
-        res.redirect(append + "/login");
-    }
+// ==================================================
+// Passport LDAP Strategy
+// ==================================================
+passport.serializeUser(function(user, done) {
+  console.log("[+] Serialize the User: " + user)
+  done(null, user);
+});
+passport.deserializeUser(function(id, done) {
+  // all the user info is currently stored in the "id" in the session
+  // The session info is stored in the Mongo DB
+  return done(null, id);
+});
+var LdapStrategy = require('passport-ldapauth')
+var OPTS = {
+  server: {
+    url: process.env.LDAP_URL,
+    bindDN: 'CN=Martin Engineer,OU=Proofpoint Staff,DC=archiveadmin,DC=com',
+    bindCredentials: 'Winter1949',
+    searchBase: process.env.LDAP_searchBase,
+    searchFilter: process.env.LDAP_searchFilter
+    // '(sAMAccountName={{username}})'
+  }
 }
+passport.use(new LdapStrategy(OPTS))
 
 
-// ======================================================
-// Logout the current user
-// ======================================================
-router.post("/logout", function (req, res) {
-    var user = req.session.user
-    req.session.destroy(() => {
-        if (user) {
-            console.log('[+] Logout: ' + user)
-        }
-    })
-    res.redirect("/login")
-})
-
-
-// ======================================================
-// Logout current user
-// ======================================================
-router.get('/logout', (req, res) => {
-  console.log('[+] Logout: ' + req.session.user)
-  req.session.destroy()
-  res.redirect('/login')
-})
-
-
-// ======================================================
-// Returns the Currently Logged in User
-// ======================================================
-router.get('/CurrentUser', (req, res) => {
-  var user = req.session.user
-  res.send({
-    user
+// ==================================================
+// Display the root page 
+// Show customers created by the current user
+// ==================================================
+app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  Customer.find({ createdBy: req.user.sAMAccountName}).then((customers) => {
+    res.render("mycustomers.ejs", { customers: customers, user: req.user })
+  }).catch((error) => {
+    console.log("An error has occurred.")
+    console.log(error)
   })
 })
 
-router.get('/getCustomer/:id', (req, res) => {
-  console.log("Getting customer " + req.param.id)
-    const customer = Customer.findOne({ name: req.params.id }, req.body.customer).exec();
-    req.send(customer)
-  
+
+// ==================================================
+// Display the Login page
+// ==================================================
+app.get('/login', (req, res) => {
+  if(!(typeof req.user === 'undefined')) {
+    console.log("[+] " + req.user.username + " is already logged in.")
+    return res.render('index.ejs', {user: req.user})
+  }
+  res.render('login.ejs')
+})
+
+
+// ==================================================
+// Process the Login Form
+// ==================================================
+app.post('/login', passport.authenticate('ldapauth', {session: true, failureRedirect: '/'}), function(req, res) {
+  console.log("[+] Processing login form")
+  return res.redirect('/');
+})
+
+
+// ==================================================
+// Display the Profile page
+// ==================================================
+app.get('/userprofile', connectEnsureLogin.ensureLoggedIn(),(req, res) => {
+  const sessionInfo = { expires: req.session.cookie._expires,
+                        expiresIn: req.session.cookie.maxAge / 1000}
+  res.render('userprofile.ejs', {user: req.user, sessionInfo})
+})
+
+
+// ==================================================
+// Return the current User info
+// ==================================================
+app.get('/user', connectEnsureLogin.ensureLoggedIn(),
+  (req, res) => res.send({user: req.user})
+)
+
+
+// =============================================
+// Logout
+// =============================================
+app.get('/logout', function(req, res) {
+  if(typeof req.session.passport == 'undefined') {
+    return res.redirect('/')  // not logged in
+  }
+
+  if(req.session.passport) {
+    console.log("[+] Logout User: " + req.session.passport.user.sAMAccountName)
+    try {
+      req.logout()
+      req.session.destroy()
+    }
+    catch (e) {
+      console.log("[-] Logout Error: " + e)
+    }
+    // double check
+    if(typeof req.session === 'undefined') {
+      console.log('[+] The user was logged out.')
+    }
+  }
+  res.redirect('/')
 })
 
 
 // ======================================================
-//Entry point for the app startup
+// Render the Customer List
 // ======================================================
-router.get("/", function (req, res) {
-    res.redirect(append + "/index");
-});
-
-
-// ======================================================
-// REGISTER
-// ======================================================
-router.get("/register", function (req, res) {
-    res.render("register", {error_message: undefined});
-});
-
-
-// ======================================================
-// POST REGISTER
-// ======================================================
-router.post("/register", function (req, res) {
-    if (!req.body.registration_info["username"] || !req.body.registration_info["password"] || !req.body.registration_info["confirm_password"]) {
-        res.render("register", {error_message: "Please enter all fields."});
-    }
-    // if (req.body.registration_info["code"] != process.env.CODE) {
-    //   res.render("register", {error_message: "Code is incorrect."})
-    // }
-    else {
-        if ((req.body.registration_info["password"] == req.body.registration_info["confirm_password"]) && (req.body.registration_info["code"] == process.env.CODE)) {
-            async function register_user() {
-                var hashed_password = await bcrypt.hash(req.body.registration_info["password"], 10);
-                await User.create({username: req.body.registration_info["username"], password: hashed_password});
-            }
-
-            register_user().then(() => {
-                res.redirect( append + "/login");
-            }).catch((error) => {
-                if (error["code"] == 11000) {
-                    console.log("-- Duplicate entry for user: " + req.body.registration_info["username"]);
-                    // Send pop up alert to HTML here
-                    res.render("register", {error_message: "User already exists: " + req.body.registration_info["username"]});
-                } else {
-                    console.log(error);
-                }
-            });
-        } else {
-            res.render("register", {error_message: "Passwords are not equal."});
-        }
-    }
-});
-
-
-// ======================================================
-// LOGIN
-// ======================================================
-router.get("/login", function (req, res) {
-    res.render("login", { fail: false });
-});
-
-
-// ======================================================
-// POST LOGIN
-// ======================================================
-router.post("/login", function (req, res) {
-      // Check the  form fields
-      if (!req.body.login || req.body.login == null) {
-        res.render("login", { fail: true });
-        return;
-      }
-    
-      // Create an LDAPJS Client Object
-      console.log("[+] Connecting to: " + process.env.LDAP)
-      var client = ldap_auth.createClient({
-          url: process.env.LDAP});
-      
-      // Get the User details from the Form
-      const username = req.body.login["username"] + "@" + process.env.DOMAIN
-      const password = req.body.login["password"]
-      console.log("[+] " + username + " attempting to login to: " + process.env.DOMAIN)
-     
-      // Attempt to bind with the credentials
-      client.bind(username, password, function(err) {
-        if (err) {
-          res.send("Login failed " + err);
-          return;
-        }
-        // else login was successful
-        console.log("[+] Logged in: " + req.body.login["username"]);
-        req.session.user = req.body.login["username"];
-        res.redirect(append + "/index");
-      }); // client.bind     
-});
-
+app.get("/index", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  Customer.find({}).then((customers) => {
+      res.render("index", { customers: customers, user: req.user})
+  }).catch((error) => {
+      console.log("An error has occurred.")
+      console.log(error)
+  })
+})
 
 // ======================================================
 // Display the New Customer Page
 // ======================================================
-router.get("/new", authenticate_session, function (req, res) {
-  res.render("new", { error_message: undefined });
+app.get("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  res.render("new", { error_message: undefined, user: req.user });
 });
 
 
 // ======================================================
-// Save the Customer
+// Save the New Customer
 // ======================================================
-router.post("/new", authenticate_session, function (req, res) {
-    if (req == undefined || req == null) {
-        console.log('[+] Cannot create new customer.  The req is empty.');
-    } else {
-        console.log("[+] Trying to create new customer...");
+app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  if (req == undefined || req == null) {
+      console.log('[+] Cannot create new customer.  The req is empty.');
+  } else {
+      console.log("[+] Trying to create new customer...");
 
-        Customer.create(req.body.customer)
-        .then(customer => {
-          //update the created by field and the updated by field
-          customer.createdBy = req.session.user;
-          customer.updatedBy = req.session.user;
-          customer.save();
+      Customer.create(req.body.customer)
+      .then(customer => {
+        //update the created by field and the updated by field
+        customer.createdBy = req.session.user;
+        customer.updatedBy = req.session.user;
+        customer.save();
 
-          //update the version array in the versioned collection
-          CustomerVersions.create({ refId: customer._id, versions: [customer] });
-          SizingQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            SizingQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          DesktopNetworkQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            DesktopNetworkQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          EmailQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            EmailQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          ImportQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            ImportQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          ConnectorPlatformQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            ConnectorPlatformQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          POCQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            POCQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          RFEQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            RFEQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          UsageQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            UsageQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          SupervisionQuestions.create({ name: req.body.customer["name"] })
-          .then(questions => {
-            SupervisionQuestionsVersions.create({ refId: customer._id, versions: [questions] });
-          })
-          res.redirect(append + "/index");
-          console.log("[+] Created customer '" + req.body.customer["name"]);
+        //update the version array in the versioned collection
+        CustomerVersions.create({ refId: customer._id, versions: [customer] });
+        SizingQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          SizingQuestionsVersions.create({ refId: customer._id, versions: [questions] });
         })
-        .catch(error => {
-          if (error["code"] == 11000) {
-              console.log("-- Duplicate entry for customer: '" + req.body.customer["name"] + "'");
-              // Send pop up alert to HTML here
-              res.render('new', { error_message: "Duplicate entry for customer: " + req.body.customer["name"] });
-          } else {
-              console.log(error);
-          }
+        DesktopNetworkQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          DesktopNetworkQuestionsVersions.create({ refId: customer._id, versions: [questions] });
         })
-    }
+        EmailQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          EmailQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        ImportQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          ImportQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        ConnectorPlatformQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          ConnectorPlatformQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        POCQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          POCQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        RFEQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          RFEQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        UsageQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          UsageQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        SupervisionQuestions.create({ name: req.body.customer["name"] })
+        .then(questions => {
+          SupervisionQuestionsVersions.create({ refId: customer._id, versions: [questions] });
+        })
+        res.redirect("/index");
+        console.log("[+] Created customer '" + req.body.customer["name"]);
+      })
+      .catch(error => {
+        if (error["code"] == 11000) {
+            console.log("-- Duplicate entry for customer: '" + req.body.customer["name"] + "'");
+            // Send pop up alert to HTML here
+            res.render('new', { error_message: "Duplicate entry for customer: " + req.body.customer["name"] });
+        } else {
+            console.log(error);
+        }
+      })
+  }
 });
 
 
 // ======================================================
 // Updates a customer profile
 // ======================================================
-router.put("/index/:id", authenticate_session, function (req, res) {
+app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   
   // Update General Questions
   if (req.body.customer != undefined && req.body.customer != null) {
@@ -311,7 +262,7 @@ router.put("/index/:id", authenticate_session, function (req, res) {
           .catch(e => {
             console.log(e);
           })
-          res.redirect(append + "/index/" + encodeURIComponent(req.body.customer["name"]));
+          res.redirect("/index/" + encodeURIComponent(req.body.customer["name"]));
       }).catch((error) => {
           console.log(error);
           if (error["code"] == 11000) { // Dupe ID
@@ -557,357 +508,102 @@ router.put("/index/:id", authenticate_session, function (req, res) {
 
 
 // ======================================================
-// Render the Customer List
+// SHOW ROUTE
+// Display a Customer Profile
 // ======================================================
-router.get("/index", authenticate_session, function (req, res) {
-    Customer.find({}).then((customers) => {
-        res.render("index", { customers: customers });
-    }).catch((error) => {
-        console.log("An error has occurred.");
-        console.log(error);
-    });
+app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+
+  // ATTEMPTING TO ESCAPE CALLBACK HELL: ESCAPED B O I S
+
+  // var sizing_query = SizingQuestions.findOne({"name": req.params.id}).exec();
+  // var customer_query = Customer.findOne({"name": req.params.id}).exec();
+  // var desktop_network_query = DesktopNetworkQuestions.findOne({"name": req.params.id}).exec();
+  // var email_ps_questions_query = EmailPSQuestions.findOne({"name": req.params.id}).exec();
+  // var email_se_questions_query = EmailSEQuestions.findOne({"name": req.params.id}).exec();
+  // var import_query = ImportQuestions.findOne({"name": req.params.id}).exec();
+  // var journaling_query = JournalingQuestions.findOne({"name": req.params.id}).exec();
+  // var connector_platform_query = ConnectorPlatformQuestions.findOne({"name": req.params.id}).exec();
+  // var poc_query = POCQuestions.findOne({"name": req.params.id}).exec();
+  // var usage_query = UsageQuestions.findOne({"name": req.params.id}).exec();
+
+  // Query every table and grab the results in a blocking manner
+  async function query(search_term) {
+      var questionnaire = {};
+      questionnaire["customer"] = await Customer.findOne(search_term).exec();
+      if (questionnaire["customer"]) {
+          questionnaire["sizing_questions"] = await SizingQuestions.findOne(search_term).exec();
+          //questionnaire["customer"] = await Customer.findOne(search_term).exec();
+          questionnaire["desktop_network_questions"] = await DesktopNetworkQuestions.findOne(search_term).exec();
+          questionnaire["email_questions"] = await EmailQuestions.findOne(search_term).exec();
+          questionnaire["import_questions"] = await ImportQuestions.findOne(search_term).exec();
+          questionnaire["connector_platform_questions"] = await ConnectorPlatformQuestions.findOne(search_term).exec();
+          questionnaire["poc_questions"] = await POCQuestions.findOne(search_term).exec();
+          questionnaire["rfe_questions"] = await RFEQuestions.findOne(search_term).exec();
+          questionnaire["usage_questions"] = await UsageQuestions.findOne(search_term).exec();
+          questionnaire["supervision_questions"] = await SupervisionQuestions.findOne(search_term).exec();
+      }
+      return questionnaire;
+  }
+
+  // RENDER ALL THE THINGS
+  query({ "name": req.params.id }).then((result) => {
+      if (result["customer"]) {
+        // "result" is in bracket notation. I'd like to change it to object literal notation.
+        // The benefit would be that we can pass more args to the template
+          res.render("show", result);
+      } else {
+          res.redirect("/");
+      }
+  }).catch((error) => {
+      console.log(error);
+      res.redirect("/")
+  });
 });
 
 
 // ======================================================
 // Delete a customer profile
 // ======================================================
-router.delete("/index/:id", authenticate_session, function (req, res) {
-    console.log("[+] Deleting customer " + req.params.id);
+app.delete("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  console.log("[+] Deleting customer " + req.params.id);
 
-    async function delete_customer(search_term) {
-        var refId = await Customer.findOne({ name: req.params.id });
-        SizingQuestions.findOneAndRemove(search_term).exec();
-        SizingQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        Customer.findOneAndRemove(search_term).exec();
-        CustomerVersions.findOneAndRemove({ refId: refId }).exec();
-        DesktopNetworkQuestions.findOneAndRemove(search_term).exec();
-        DesktopNetworkQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        EmailQuestions.findOneAndRemove(search_term).exec();
-        EmailQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        ImportQuestions.findOneAndRemove(search_term).exec();
-        ImportQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        ConnectorPlatformQuestions.findOneAndRemove(search_term).exec();
-        ConnectorPlatformQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        POCQuestions.findOneAndRemove(search_term).exec();
-        POCQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        RFEQuestions.findOneAndRemove(search_term).exec();
-        RFEQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        UsageQuestions.findOneAndRemove(search_term).exec();
-        UsageQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-        SupervisionQuestions.findOneAndRemove(search_term).exec();
-        SupervisionQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
-    }
+  async function delete_customer(search_term) {
+      var refId = await Customer.findOne({ name: req.params.id });
+      SizingQuestions.findOneAndRemove(search_term).exec();
+      SizingQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      Customer.findOneAndRemove(search_term).exec();
+      CustomerVersions.findOneAndRemove({ refId: refId }).exec();
+      DesktopNetworkQuestions.findOneAndRemove(search_term).exec();
+      DesktopNetworkQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      EmailQuestions.findOneAndRemove(search_term).exec();
+      EmailQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      ImportQuestions.findOneAndRemove(search_term).exec();
+      ImportQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      ConnectorPlatformQuestions.findOneAndRemove(search_term).exec();
+      ConnectorPlatformQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      POCQuestions.findOneAndRemove(search_term).exec();
+      POCQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      RFEQuestions.findOneAndRemove(search_term).exec();
+      RFEQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      UsageQuestions.findOneAndRemove(search_term).exec();
+      UsageQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+      SupervisionQuestions.findOneAndRemove(search_term).exec();
+      SupervisionQuestionsVersions.findOneAndRemove({ refId: refId }).exec();
+  }
 
-    delete_customer({ "name": req.params.id }).then((result) => {
-        res.redirect(append + "/index");
-    }).catch((error) => {
-        console.log(error);
-        res.redirect(append + "/index");
-    });
+  delete_customer({ "name": req.params.id }).then((result) => {
+      res.redirect(append + "/index");
+  }).catch((error) => {
+      console.log(error);
+      res.redirect(append + "/index");
+  });
 });
 
 
-// ======================================================
-// SHOW ROUTE
-// ======================================================
-router.get("/index/:id", authenticate_session, function (req, res) {
-    //delete files created by import
-    fse.emptyDir("./public/files", function(err) {
-      if (err) {
-        console.log(err);
-      }
-    })
-
-    //delete files created by export
-    glob("*.xlsx", function(err, files) {
-      files.forEach(file => {
-        if (err) {
-          console.log(err);
-        }
-        fse.remove(file, function(err) {
-          if (err) {
-            console.log(err);
-          }
-        })
-      })
-    })
-
-    // ATTEMPTING TO ESCAPE CALLBACK HELL: ESCAPED B O I S
-
-    // var sizing_query = SizingQuestions.findOne({"name": req.params.id}).exec();
-    // var customer_query = Customer.findOne({"name": req.params.id}).exec();
-    // var desktop_network_query = DesktopNetworkQuestions.findOne({"name": req.params.id}).exec();
-    // var email_ps_questions_query = EmailPSQuestions.findOne({"name": req.params.id}).exec();
-    // var email_se_questions_query = EmailSEQuestions.findOne({"name": req.params.id}).exec();
-    // var import_query = ImportQuestions.findOne({"name": req.params.id}).exec();
-    // var journaling_query = JournalingQuestions.findOne({"name": req.params.id}).exec();
-    // var connector_platform_query = ConnectorPlatformQuestions.findOne({"name": req.params.id}).exec();
-    // var poc_query = POCQuestions.findOne({"name": req.params.id}).exec();
-    // var usage_query = UsageQuestions.findOne({"name": req.params.id}).exec();
-
-    // Query every table and grab the results in a blocking manner
-    async function query(search_term) {
-        var questionnaire = {};
-        questionnaire["customer"] = await Customer.findOne(search_term).exec();
-        if (questionnaire["customer"]) {
-            questionnaire["sizing_questions"] = await SizingQuestions.findOne(search_term).exec();
-            //questionnaire["customer"] = await Customer.findOne(search_term).exec();
-            questionnaire["desktop_network_questions"] = await DesktopNetworkQuestions.findOne(search_term).exec();
-            questionnaire["email_questions"] = await EmailQuestions.findOne(search_term).exec();
-            questionnaire["import_questions"] = await ImportQuestions.findOne(search_term).exec();
-            questionnaire["connector_platform_questions"] = await ConnectorPlatformQuestions.findOne(search_term).exec();
-            questionnaire["poc_questions"] = await POCQuestions.findOne(search_term).exec();
-            questionnaire["rfe_questions"] = await RFEQuestions.findOne(search_term).exec();
-            questionnaire["usage_questions"] = await UsageQuestions.findOne(search_term).exec();
-            questionnaire["supervision_questions"] = await SupervisionQuestions.findOne(search_term).exec();
-        }
-        return questionnaire;
-    }
-
-    // RENDER ALL THE THINGS
-    query({ "name": req.params.id }).then((result) => {
-        if (result["customer"]) {
-            res.render("show", result);
-        } else {
-            res.redirect(append + "/");
-        }
-    }).catch((error) => {
-        console.log(error);
-        res.redirect(append + "/")
-    });
-});
 
 
-// ======================================================
-// Import files for a customer
-// ======================================================
-router.post("/import/:id", authenticate_session, upload.single("file"), function (req, res) {
-  //convert Excel spreadsheets to MongoDB data
-  function convertData(collection, section) {
-    collection.findOne({ name: req.params.id })
-    .then(questions => {
-      var content = fs.readFileSync(path.join(__dirname, "../models", `${section}.json`), 'utf8');
-      var model = JSON.parse(content);
-      mongoxlsx.xlsx2MongoData(`${section}.xlsx`, model, function(err, data) {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          data = data[0];
-          data = _.omit(data, ["name"]);
-          collection.findOneAndUpdate({ name: req.params.id }, data)
-          .then(questions => {
 
-          })
-          .catch(e => {
-            console.log(e);
-          })
-        }
-      })
-    })
-    .catch(e => {
-      console.log(e);
-    })
-  }
-
-  //split one workbook with multiple worksheets into multiple workbooks
-  function splitWorkbooks(collection, section) {
-    XlsxPopulate.fromFileAsync(req.file.path)
-    .then(workbook => {
-      XlsxPopulate.fromBlankAsync()
-      .then(newWorkbook => {
-        var newSheet = newWorkbook.sheet(0);
-        var usedRange = workbook.sheet(section).usedRange();
-        var oldValues = usedRange.value();
-        newSheet.range(usedRange.address()).value(oldValues);
-        newWorkbook.toFileAsync(`${section}.xlsx`)
-        .then(file => {
-          convertData(collection, section);
-        })
-        .catch(e => {
-          console.log(e);
-        })
-      })
-      .catch(e => {
-        console.log(e);
-      })
-    })
-    .catch(e => {
-      console.log(e);
-    })
-  }
-
-  splitWorkbooks(Customer, "customer");
-  splitWorkbooks(SizingQuestions, "sizing");
-  splitWorkbooks(DesktopNetworkQuestions, "desktop_network");
-  splitWorkbooks(EmailQuestions, "email");
-  splitWorkbooks(ImportQuestions, "import");
-  splitWorkbooks(ConnectorPlatformQuestions, "connector_platform");
-  splitWorkbooks(POCQuestions, "poc");
-  splitWorkbooks(RFEQuestions, "rfe");
-  splitWorkbooks(UsageQuestions, "usage");
-  splitWorkbooks(SupervisionQuestions, "supervision");
-
-  res.redirect(`/index/${req.params.id}`);
-})
-
-
-// ======================================================
-// Export Customer Data in Excel format
-// ======================================================
-router.post("/export/:id", authenticate_session, function (req, res) {
-  //find MongoDB data
-  async function query() {
-    var data = {};
-    data["customer"] = await Customer.find({ name: req.params.id }).exec();
-    data["sizing"] = await SizingQuestions.find({ name: req.params.id }).exec();
-    data["desktop_network"] = await DesktopNetworkQuestions.find({ name: req.params.id }).exec();
-    data["email"] = await EmailQuestions.find({ name: req.params.id }).exec();
-    data["import"] = await ImportQuestions.find({ name: req.params.id }).exec();
-    data["connector_platform"] = await ConnectorPlatformQuestions.find({ name: req.params.id }).exec();
-    data["poc"] = await POCQuestions.find({ name: req.params.id }).exec();
-    data["rfe"] = await RFEQuestions.find({ name: req.params.id }).exec();
-    data["usage"] = await UsageQuestions.find({ name: req.params.id }).exec();
-    data["supervision"] = await SupervisionQuestions.find({ name: req.params.id }).exec();
-    return data;
-  }
-
-  query()
-  .then(data => {
-    XlsxPopulate.fromBlankAsync()
-    .then(newWorkbook => {
-      var count = 0;
-
-      //combine multiple workbooks into one workbook with multiple worksheets
-      function combineWorkbooks(workbook1, workbook2, section) {
-        var newSheet = workbook1.addSheet(section);
-        var usedRange = workbook2.sheets()[0].usedRange();
-        var oldValues = usedRange.value();
-        newSheet.range(usedRange.address()).value(oldValues);
-        count++;
-        if (count == 10) {
-          newWorkbook.deleteSheet("Sheet1");
-          newWorkbook.moveSheet("customer", 0);
-          newWorkbook.moveSheet("sizing", 1);
-          newWorkbook.moveSheet("desktop_network", 2);
-          newWorkbook.moveSheet("email", 3);
-          newWorkbook.moveSheet("import", 4);
-          newWorkbook.moveSheet("connector_platform", 5);
-          newWorkbook.moveSheet("poc", 6);
-          newWorkbook.moveSheet("rfe", 7);
-          newWorkbook.moveSheet("usage", 8);
-          newWorkbook.moveSheet("supervision", 9);
-          newWorkbook.toFileAsync(`${req.params.id}.xlsx`)
-          .then(file => {
-            res.download(`${req.params.id}.xlsx`);
-          })
-          .catch(e => {
-            console.log(e);
-          })
-        }
-      }
-
-      //convert MongoDB data to Excel spreadsheets
-      function convertData(section) {
-        if (section == "customer") {
-          data[section][0] = _.omit(data[section][0].toObject(), ["_id", "__v", "createdAt", "updatedAt", "createdBy", "updatedBy"]);
-        }
-        else {
-          data[section][0] = _.omit(data[section][0].toObject(), ["_id", "__v"]);
-        }
-        var content = fs.readFileSync(path.join(__dirname, "../models", `${section}.json`), 'utf8');
-        var model = JSON.parse(content);
-        mongoxlsx.mongoData2Xlsx(data[section], model, function(err, data) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            XlsxPopulate.fromFileAsync(data.fullPath)
-            .then(workbook => {
-              combineWorkbooks(newWorkbook, workbook, section);
-            })
-            .catch(e => {
-              console.log(e);
-            })
-          }
-        })
-      }
-
-      convertData("customer");
-      convertData("sizing");
-      convertData("desktop_network");
-      convertData("email");
-      convertData("import");
-      convertData("connector_platform");
-      convertData("poc");
-      convertData("rfe");
-      convertData("usage");
-      convertData("supervision");
-    })
-    .catch(e => {
-      console.log(e);
-    })
-  })
-  .catch(e => {
-    console.log(e);
-  })
-})
-
-
-// ======================================================
-// Get Customer History
-// ======================================================
-router.get("/history/:id", authenticate_session, function (req, res) {
-  Customer.findOne({ name: req.params.id })
-  .then(customer => {
-    CustomerVersions.findOne({ refId: customer._id })
-    .then(version => {
-      res.render("history", {versions: version.versions});
-    })
-    .catch(e => {
-      console.log(e);
-    })
-  })
-  .catch(e => {
-    console.log(e);
-  })
-});
-
-
-// ======================================================
-// Get Customer History
-// ======================================================
-router.get("/history/:id/:version", authenticate_session, function (req, res) {
-  async function query() {
-    var questionnaire = {};
-    var refId = await Customer.findOne({ name: req.params.id });
-    if (refId) {
-      questionnaire["sizing_questions"] = await SizingQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["customer"] = await CustomerVersions.findOne({ refId: refId }).exec();
-      questionnaire["desktop_network_questions"] = await DesktopNetworkQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["email_questions"] = await EmailQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["import_questions"] = await ImportQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["connector_platform_questions"] = await ConnectorPlatformQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["poc_questions"] = await POCQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["rfe_questions"] = await RFEQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["usage_questions"] = await UsageQuestionsVersions.findOne({ refId: refId }).exec();
-      questionnaire["supervision_questions"] = await SupervisionQuestionsVersions.findOne({ refId: refId }).exec();
-      return questionnaire;
-    }
-  }
-
-  query()
-  .then(result => {
-    for (var questions in result) {
-      result[questions] = result[questions].versions[req.params.version];
-    }
-    result["version"] = req.params.version;
-    res.render("show_history", result);
-  })
-  .catch(e => {
-    console.log(e);
-  })
-});
-
-module.exports = router;
+// =============================================
+// Export the router
+// =============================================
+module.exports = app 

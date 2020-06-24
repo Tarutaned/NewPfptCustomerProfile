@@ -1,11 +1,13 @@
 <%- include('./partials/header.ejs') %> 
 
+
 <script type="text/javascript" src="./scripts/delete.js"></script>
 <script type="text/javascript" src="./scripts/index.js"></script>
+
+
 <div class="continer">
   <div class="row">
     <div class="col-xl-8 mx-auto text-center">
-
     </div>
   </div>
   <div class="row">
@@ -17,13 +19,20 @@
       <!-- Alerts get added here -->
     </div>
     <div class="col-sm-2" style="background-color:white;">  
-      <a href="./new/" class="btn btn-primary btn-xs float-right"><b>+</b> New Customer</a>
+      <a href="/newcustomer" class="btn btn-primary btn-xs float-right"><b>+</b> New Customer</a>
     </div>
   </div>
+
+  <div class="row mt-2 mb-2">
+    <div class="col-xl-8 mx-auto text-center">
+      <!-- Spacer -->
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-1" style="background-color:white;"></div>
     <div class="col-md-10" style="background-color:white;">
-    <table id="tblCustomers" class="table table-striped custab">
+    <table id="tblCustomers" class="table table-striped">
       <thead class="thead-dark">
         <tr>
           <th onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></th>
@@ -34,22 +43,25 @@
           <th>Action</th>
         </tr>
       </thead>
-      <tbody>
-        <% customers.forEach(function (customer) { %>
-        <tr id="<%= customer.name %>">
-          <td><a href="./index/<%= encodeURIComponent(customer.name) %>"><%= customer.name %></a></td>
-          <td><%= customer.salesRep %></td>
-          <td><%= customer.archivingSe %></td>
-          <td><%= customer.status %></td>
-          <td><%= customer.updatedAt.getMonth() + 1 %>/<%= customer.updatedAt.getDate() %>/<%= customer.updatedAt.getFullYear() %></td>
-          <td class="text-center">
-            <% if(user == 'mengineer' || user == 'nlee' || user == 'vrathee' || user == 'sprokai') { %>
-            <button class="btn" onclick='delete_customer("<%= customer.name %>")'><i class="fa fa-trash"></i></button>
-            <% } %>
-          </td>
-        </tr>
-        <% }); %>
-      </tbody>
+      <% if (!(typeof customers == 'undefined')) { %>
+        <tbody>
+          <% customers.forEach(function (customer) { %>
+          <tr id="<%= customer._doc.name %>">
+            <td><a href="./index/<%= encodeURIComponent(customer._doc.name) %>"><%= customer._doc.name %></a></td>
+            <td><%= customer._doc.salesRep %></td>
+            <td><%= customer._doc.archivingSe %></td>
+            <td><%= customer._doc.status %></td>
+            <td><%= customer._doc.updatedAt.getMonth() + 1 %>/<%= customer.updatedAt.getDate() %>/<%= customer.updatedAt.getFullYear() %></td>
+            <td class="text-center">
+              <% if(user == 'mengineer' || user == 'nlee' || user == 'vrathee' || user == 'sprokai') { %>
+              <button class="btn" onclick='delete_customer("<%= customer.name %>")'><i class="fa fa-trash"></i></button>
+              <% } %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+  
+      <% } %>
     </table>
   </div>
   </div>
