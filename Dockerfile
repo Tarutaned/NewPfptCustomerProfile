@@ -3,12 +3,11 @@ FROM node:14.1.0-stretch
 
 # Set the working directory.
 WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
 
-# This container must be run with a bind mount
+EXPOSE 81
 
-EXPOSE 80
-
-
-ENTRYPOINT /bin/bash
-# CMD npm run dev
+CMD node app.js
 

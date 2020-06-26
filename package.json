@@ -7,6 +7,7 @@
     "babyparse": "^0.4.6",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
+    "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^2.0.3",
     "dotenv": "^8.2.0",
@@ -33,6 +34,8 @@
     "multer-gridfs-storage": "^3.3.0",
     "node": "^8.17.0",
     "nodemailer": "^6.4.2",
+    "passport": "^0.4.1",
+    "passport-ldapauth": "^2.1.4",
     "patch": "0.0.1",
     "serve-favicon": "^2.5.0",
     "xlsx": "^0.14.5",
@@ -50,6 +53,6 @@
   "homepage": "https://github.com/nikko0327/PfptCustomerProfile#readme",
   "scripts": {
     "dev": "env-cmd -f ./config/dev.env nodemon app.js",
-    "prod": "env-cmd -f ./config/prod.env nodemon app.js"
+    "prod": "env-cmd -f ./config/prod.env node app.js"
   }
 }
