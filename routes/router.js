@@ -3,6 +3,7 @@
 // Provides basic routing for the app
 // **************************************************
 
+const fs                      = require('fs')
 const express                 = require('express')
 const app                     = new express.Router()
 const connectEnsureLogin      = require('connect-ensure-login')
@@ -49,11 +50,16 @@ var LdapStrategy = require('passport-ldapauth')
 var OPTS = {
   server: {
     url: process.env.LDAP_URL,
-    bindDN: 'CN=Martin Engineer,OU=Proofpoint Staff,DC=archiveadmin,DC=com',
-    bindCredentials: 'Winter1949',
+    bindDN: process.env.LDAP_bindDN,
+    bindCredentials: process.env.LDAP_bindCredentials,
     searchBase: process.env.LDAP_searchBase,
-    searchFilter: process.env.LDAP_searchFilter
-    // '(sAMAccountName={{username}})'
+    searchFilter: process.env.LDAP_searchFilter,
+    tlsOptions: {
+      ca: [
+        fs.readFileSync('./certs/ProofpointCorporateRootCA.crt'),
+        fs.readFileSync('./certs/ProofpointCorporateSub-OrdinateCA.crt')
+      ]
+    }
   }
 }
 passport.use(new LdapStrategy(OPTS))
