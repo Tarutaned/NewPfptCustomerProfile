@@ -3,42 +3,42 @@
     <div class="row">
         <div class="form-group col-4 response-cell">
             <label>What status do you use for message without issues?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.issue_status %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.issue_status %>"
                 name="supervision_questions[supervisory_workflow][issue_status]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>How do you handle messages with potential violations?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.violation_handling %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.violation_handling %>"
                 name="supervision_questions[supervisory_workflow][violation_handling]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>What type of Escalation Path do you have in place?</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.escalation_path %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.escalation_path %>"
                 name="supervision_questions[supervisory_workflow][escalation_path]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>What documentation within the solution is required?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.potential_violation_doc %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.potential_violation_doc %>"
                 name="supervision_questions[supervisory_workflow][potential_violation_doc]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>How are messages closed when violations have been substantiated?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.messages_closed %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.messages_closed %>"
                 name="supervision_questions[supervisory_workflow][messages_closed]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">What status is used?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.status_used %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.status_used %>"
                 name="supervision_questions[supervisory_workflow][status_used]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">What documentation within the solution is required?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.substantiated_violation_doc %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.substantiated_violation_doc %>"
                 name="supervision_questions[supervisory_workflow][substantiated_violation_doc]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">How do you notify individuals of message violations?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.supervisory_workflow.notify_message_violation %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.supervisory_workflow.notify_message_violation %>"
                 name="supervision_questions[supervisory_workflow][notify_message_violation]">
         </div>
     </div>

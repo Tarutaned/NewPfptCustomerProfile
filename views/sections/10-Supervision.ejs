@@ -10,33 +10,33 @@
             </div>
             <br>
 
-            <form id="supervisionForm" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="supervisionForm" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="supervisionFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="supervision_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="supervision_questions[name]">
                     </div>
 
                     <div class="row">
                         <!-- Single questions here -->
                         <div class="form-group col-4 response-cell">
                             <label>What supervision solution are you currently using for digital communication review?</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= supervision_questions.digital_comm_current %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.supervision_questions.digital_comm_current %>"
                                 name="supervision_questions[digital_comm_current]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>What current pain points do you have with your process and/or supervision solution?</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= supervision_questions.pain_points %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.supervision_questions.pain_points %>"
                                 name="supervision_questions[pain_points]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>What feature/functionality needs do you not have in current supervision solution?</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= supervision_questions.not_haves %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.supervision_questions.not_haves %>"
                                 name="supervision_questions[not_haves]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Which regulatory body/ies oversee your business practices?</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.regulator %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.regulator %>"
                                 name="supervision_questions[regulator]">
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="supervision_questions[comments]" placeholder="5000 characters max" form="supervisionForm"><%= supervision_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="supervision_questions[comments]" placeholder="5000 characters max" form="supervisionForm"><%= result.supervision_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

@@ -10,58 +10,58 @@
             </div>
             <br>
 
-            <form id="sizingForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="sizingForm" autocomplete="off" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="sizingFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="sizing_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="sizing_questions[name]">
                     </div>
 
                     <div class="row">
                         <div class="form-group, col-4 response-cell">
                             <label>Messages per day</label>
-                            <input type="number" class="form-control required" placeholder="No response set" value="<%= sizing_questions.messages_per_day %>"
+                            <input type="number" class="form-control required" placeholder="No response set" value="<%= result.sizing_questions.messages_per_day %>"
                                 name="sizing_questions[messages_per_day]">
                         </div>
                         <div class="form-group, col-4 response-cell">
                             <label>Average message size</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= sizing_questions.avg_message_size %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.sizing_questions.avg_message_size %>"
                                 name="sizing_questions[avg_message_size]">
                         </div>
                         <div class="form-group, col-4 response-cell">
                             <label>Number of mailboxes</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= sizing_questions.number_of_mailboxes %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.sizing_questions.number_of_mailboxes %>"
                                 name="sizing_questions[number_of_mailboxes]">
                         </div>
 
                         <div class="form-group, col-4 response-cell">
                             <label>Exports per month</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= sizing_questions.exports_per_month %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.sizing_questions.exports_per_month %>"
                                 name="sizing_questions[exports_per_month]">
                         </div>
                         <div class="form-group, col-4 response-cell">
                             <label>Average export size</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= sizing_questions.avg_export_size %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.sizing_questions.avg_export_size %>"
                                 name="sizing_questions[avg_export_size]">
                         </div>
                         <div class="form-group, col-4 response-cell">
                             <label>Virtual or physical hardware appliance preference?</label>
-                            <%- make_custom_dropdown("sizing_questions[appliance_preference]",
-                                    sizing_questions.appliance_preference, ["Physical", "Virtual"]) %>
+                            <%- make_custom_dropdown("result.sizing_questions[appliance_preference]",
+                                    result.sizing_questions.appliance_preference, ["Physical", "Virtual"]) %>
                         </div>
                         <div class="form-group, col-4 response-cell">
                             <label>Does the customer have a VMWare environment?</label>
-                            <%- make_custom_dropdown("sizing_questions[has_vmware_env]",
-                                    sizing_questions.has_vmware_env, ["Virtual", "Physical", "None"]) %>
+                            <%- make_custom_dropdown("result.sizing_questions[has_vmware_env]",
+                                    result.sizing_questions.has_vmware_env, ["Virtual", "Physical", "None"]) %>
                         </div>
                         <div class="col-4 response-cell">
                             <label>Number of appliances recommended?</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= sizing_questions.number_of_appliance_recommended %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.sizing_questions.number_of_appliance_recommended %>"
                                 name="sizing_questions[number_of_appliance_recommended]">
                         </div>
                         <div class="form-group, col-4 response-cell">
                             <label>Mail system HA DR footprint?</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= sizing_questions.mail_system_HA_DR_footprint %>" name="sizing_questions[mail_system_HA_DR_footprint]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.sizing_questions.mail_system_HA_DR_footprint %>" name="sizing_questions[mail_system_HA_DR_footprint]">
                         </div>
                     </div>
                     <hr>
@@ -69,7 +69,7 @@
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="sizing_questions[comments]" placeholder="5000 characters max" form="sizingForm"><%= sizing_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="sizing_questions[comments]" placeholder="5000 characters max" form="sizingForm"><%= result.sizing_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

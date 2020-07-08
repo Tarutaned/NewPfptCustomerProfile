@@ -10,41 +10,41 @@
             </div>
             <br>
 
-            <form id="importForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="importForm" autocomplete="off" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="importFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="import_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="import_questions[name]">
                     </div>
 
                     <div class="row">
                         <div class="form-group col-4 response-cell">
                             <label>Data Source</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= import_questions.source_archive %>" name="import_questions[source_archive]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.import_questions.source_archive %>" name="import_questions[source_archive]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Data Volume in GB/TB</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= import_questions.data_volume %>" name="import_questions[data_volume]">
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.import_questions.data_volume %>" name="import_questions[data_volume]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Extraction Vendor</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= import_questions.extraction_vendor %>" name="import_questions[extraction_vendor]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.import_questions.extraction_vendor %>" name="import_questions[extraction_vendor]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Data Format</label>
                             <%- make_custom_dropdown("import_questions[data_format]",
-                                    import_questions.import, ["EML", "PST"]) %>
+                                    result.import_questions.import, ["EML", "PST"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Retention Policy for Import Data</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= import_questions.retention_policy %>" name="import_questions[retention_policy]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.import_questions.retention_policy %>" name="import_questions[retention_policy]">
                         </div>
                     </div>
 
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="import_questions[comments]" placeholder="5000 characters max" form="importForm"><%= import_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="import_questions[comments]" placeholder="5000 characters max" form="importForm"><%= result.import_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

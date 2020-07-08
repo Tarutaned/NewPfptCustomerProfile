@@ -3,22 +3,22 @@
     <div class="row">
         <div class="form-group col-4 response-cell">
             <label>Volume / average size and frequency</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.export.volume %>" name="usage_questions[export][volume]">
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.export.volume %>" name="usage_questions[export][volume]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Preferred Export formats?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= usage_questions.export.preferred_export_format %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.usage_questions.export.preferred_export_format %>"
                 name="usage_questions[export][preferred_export_format]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Where does the data typically go?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= usage_questions.export.where_data_goes %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.usage_questions.export.where_data_goes %>"
                 name="usage_questions[export][where_data_goes]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Does customer expect to auto upload data?</label>
             <%- make_custom_dropdown("usage_questions[export][expect_auto_upload]",
-                    usage_questions.export.expect_auto_upload, ["Yes", "No"]) %>
+                    result.usage_questions.export.expect_auto_upload, ["Yes", "No"]) %>
         </div>
     </div>
 </div>

@@ -46,7 +46,7 @@
 <div class="page-wrapper">
   <nav id="" class="sidebar-wrapper">
     <div class="sidebar-content">
-      <a class="navbar-brand" href="#"><h3><%= customer.name %></h3></a>
+      <a class="navbar-brand" href="#"><h3><%= result.customer.name %></h3></a>
       <div class="sidebar-menu">
         <nav class="nav flex-column nav-pills" id="sidebar" role="tablist" aria-orientation="vertical">
           <a class="nav-link ml-2 my-1 active" id="general-tab" data-toggle="pill" href="#general-content" role="tab" aria-controls="general-content" aria-selected="true">General</a>
@@ -97,48 +97,10 @@
           <div class="tab-pane fade" id="supervision-content" role="tabpanel" aria-labelledby="supervision-tab">
             <% include sections/10-Supervision.ejs %>
           </div>
-          <div id="print-all-content">
-            <% include sections/01-General.ejs %>
-            <% include sections/02-EmailSystems.ejs %>
-            <% include sections/03-Sizing.ejs %>
-            <% include sections/04-ConnectorPlatform.ejs %>
-            <% include sections/05-DesktopNetwork.ejs %>
-            <% include sections/06-Usage.ejs %>
-            <% include sections/07-Import.ejs %>
-            <% include sections/08-POC.ejs %>
-            <% include sections/09-RFE.ejs %>
-            <% include sections/10-Supervision.ejs %>
-          </div>
-          <div id="print-general-content">
-            <% include sections/01-General.ejs %>
-          </div>
-          <div id="print-emailsystems-content">
-            <% include sections/02-EmailSystems.ejs %>
-          </div>
-          <div id="print-sizing-content">
-            <% include sections/03-Sizing.ejs %>
-          </div>
-          <div id="print-connectorplatform-content">
-            <% include sections/04-ConnectorPlatform.ejs %>
-          </div>
-          <div id="print-desktopnetwork-content">
-            <% include sections/05-DesktopNetwork.ejs %>
-          </div>
-          <div id="print-usage-content">
-            <% include sections/06-Usage.ejs %>
-          </div>
-          <div id="print-import-content">
-            <% include sections/07-Import.ejs %>
-          </div>
-          <div id="print-poc-content">
-            <% include sections/08-POC.ejs %>
-          </div>
-          <div id="print-rfe-content">
-            <% include sections/09-RFE.ejs %>
-          </div>
-          <div id="print-supervision-content">
-            <% include sections/10-Supervision.ejs %>
-          </div>
+
+<!--
+  
+-->
         </div>
       </div>
     </div>

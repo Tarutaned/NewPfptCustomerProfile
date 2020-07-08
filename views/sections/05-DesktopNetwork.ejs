@@ -10,94 +10,94 @@
             </div>
             <br>
 
-            <form id="desktopNetworkForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="desktopNetworkForm" autocomplete="off" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="desktopNetworkFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="desktop_network_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="desktop_network_questions[name]">
                     </div>
 
                     <div class="row">
                         <div class="form-group col-4 response-cell">
                             <label>Do you want users to be able to access the user interface outside of your network?</label>
                             <%- make_custom_dropdown("desktop_network_questions[allow_outside_access]",
-                                    desktop_network_questions.allow_outside_access, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.allow_outside_access, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>NAT IP List</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= desktop_network_questions.nat_IP_list %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.desktop_network_questions.nat_IP_list %>"
                                 name="desktop_network_questions[nat_IP_list]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Do you use SSO?</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= desktop_network_questions.use_SSO %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.desktop_network_questions.use_SSO %>"
                                 name="desktop_network_questions[use_SSO]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Do you have an IDP (Identity Provider) that supports SAML 2.0? </label>
                             <%- make_custom_dropdown("desktop_network_questions[have_IDP]",
-                                    desktop_network_questions.have_IDP, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.have_IDP, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Where will the PFPT AD security groups be maintained? </label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= desktop_network_questions.where_security_group %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.desktop_network_questions.where_security_group %>"
                                 name="desktop_network_questions[where_security_group]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Service provider or IDP (Identity Provider) initiated? (We only support Service Provider initiated)
                             </label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= desktop_network_questions.initiated_IDP %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.desktop_network_questions.initiated_IDP %>"
                                 name="desktop_network_questions[initiated_IDP]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Do you require request encryption? </label>
                             <%- make_custom_dropdown("desktop_network_questions[require_request_encryption]",
-                                    desktop_network_questions.require_request_encryption, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.require_request_encryption, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Do you require response signing?</label>
                             <%- make_custom_dropdown("desktop_network_questions[require_response_signing]",
-                                    desktop_network_questions.require_response_signing, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.require_response_signing, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Do you require response encryption?</label>
                             <%- make_custom_dropdown("desktop_network_questions[require_response_encryption]",
-                                    desktop_network_questions.require_response_encryption, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.require_response_encryption, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>If the response is to be encrypted, do you require a 3rd party cert or is a self-signed cert
                                 sufficient?</label>
                             <%- make_custom_dropdown("desktop_network_questions[require_third_party_cert]",
-                                    desktop_network_questions.require_third_party_cert, ["3rd party cert", "Self-signed cert"]) %>
+                                    result.desktop_network_questions.require_third_party_cert, ["3rd party cert", "Self-signed cert"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>What attribute will you be sending as part of the response?</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= desktop_network_questions.response_attributes %>"
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.desktop_network_questions.response_attributes %>"
                                 name="desktop_network_questions[response_attributes]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Do you intend to deploy PFPT's remote authentication? </label>
                             <%- make_custom_dropdown("desktop_network_questions[intend_to_deploy_remote_auth]",
-                                    desktop_network_questions.intend_to_deploy_remote_auth, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.intend_to_deploy_remote_auth, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Are all user accounts on trusted forests? </label>
                             <%- make_custom_dropdown("desktop_network_questions[all_users_trusted]",
-                                    desktop_network_questions.all_users_trusted, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.all_users_trusted, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Are all domain controllers accessible on the same network as the server that Remote Auth will
                                 be installed?
                             </label>
                             <%- make_custom_dropdown("desktop_network_questions[domain_controllers]",
-                                    desktop_network_questions.domain_controllers, ["Yes", "No"]) %>
+                                    result.desktop_network_questions.domain_controllers, ["Yes", "No"]) %>
                         </div>
                     </div>
 
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="desktop_network_questions[comments]" placeholder="5000 characters max" form="desktopNetworkForm"><%= desktop_network_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="desktop_network_questions[comments]" placeholder="5000 characters max" form="desktopNetworkForm"><%= result.desktop_network_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

@@ -9,7 +9,7 @@
         <div class="col-4, response-checkbox">
             <p>
                 <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][heightened_supervision]"
-                    <%- supervision_questions.digital_comm.message_sampling_profiles.heightened_supervision
+                    <%- result.supervision_questions.digital_comm.message_sampling_profiles.heightened_supervision
                     ? "checked" : "" %> />
                 <b> Heightened Supervision</b>
             </p>
@@ -17,21 +17,21 @@
         <div class="col-4, response-checkbox">
             <p>
                 <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][flagged_messages]" <%-
-                    supervision_questions.digital_comm.message_sampling_profiles.flagged_messages
+                    result.supervision_questions.digital_comm.message_sampling_profiles.flagged_messages
                     ? "checked" : "" %> />
                 <b> Flagged Messages</b>
             </p>
         </div>
         <div class="col-4, response-checkbox">
             <p>
-                <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][clean]" <%- supervision_questions.digital_comm.message_sampling_profiles.clean
+                <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][clean]" <%- result.supervision_questions.digital_comm.message_sampling_profiles.clean
                     ? "checked" : "" %> />
                 <b> Clean</b>
             </p>
         </div>
         <div class="col-4, response-checkbox">
             <p>
-                <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][content_type]" <%- supervision_questions.digital_comm.message_sampling_profiles.content_type
+                <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][content_type]" <%- result.supervision_questions.digital_comm.message_sampling_profiles.content_type
                     ? "checked" : "" %> />
                 <b> Content Type</b>
             </p>
@@ -39,7 +39,7 @@
         <div class="col-4, response-checkbox">
             <p>
                 <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][internal_messages]" <%-
-                    supervision_questions.digital_comm.message_sampling_profiles.internal_messages
+                    result.supervision_questions.digital_comm.message_sampling_profiles.internal_messages
                     ? "checked" : "" %> />
                 <b> Internal Messages</b>
             </p>
@@ -47,7 +47,7 @@
         <div class="col-4, response-checkbox">
             <p>
                 <input type="checkbox" name="supervision_questions[digital_comm][message_sampling_profiles][external_messages]" <%-
-                    supervision_questions.digital_comm.message_sampling_profiles.external_messages
+                    result.supervision_questions.digital_comm.message_sampling_profiles.external_messages
                     ? "checked" : "" %> />
                 <b> External Messages</b>
             </p>
@@ -57,32 +57,32 @@
     <div class="row">
         <div class="form-group col-4 response-cell">
             <label>Heightened Supervision sampling rate</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.digital_comm.message_sampling_profiles.heightened_supervision_rate %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.digital_comm.message_sampling_profiles.heightened_supervision_rate %>"
                 name="supervision_questions[digital_comm][message_sampling_profiles][heightened_supervision_rate]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Flagged Messages sampling rate</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.digital_comm.message_sampling_profiles.flagged_messages_rate %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.digital_comm.message_sampling_profiles.flagged_messages_rate %>"
                 name="supervision_questions[digital_comm][message_sampling_profiles][flagged_messages_rate]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Clean sampling rate</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.digital_comm.message_sampling_profiles.clean_rate %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.digital_comm.message_sampling_profiles.clean_rate %>"
                 name="supervision_questions[digital_comm][message_sampling_profiles][clean_rate]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Content Type sampling rate</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.digital_comm.message_sampling_profiles.content_type_rate %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.digital_comm.message_sampling_profiles.content_type_rate %>"
                 name="supervision_questions[digital_comm][message_sampling_profiles][content_type_rate]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Internal Messages sampling rate</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.digital_comm.message_sampling_profiles.internal_messages_rate %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.digital_comm.message_sampling_profiles.internal_messages_rate %>"
                 name="supervision_questions[digital_comm][message_sampling_profiles][internal_messages_rate]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>External Messages sampling rate</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.digital_comm.message_sampling_profiles.external_messages_rate %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.digital_comm.message_sampling_profiles.external_messages_rate %>"
                 name="supervision_questions[digital_comm][message_sampling_profiles][external_messages_rate]">
         </div>
     </div>

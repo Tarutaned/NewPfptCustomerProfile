@@ -57,18 +57,22 @@ var email_schema = new mongoose.Schema({
       },
     },
     active_directory_details: {
-      number_of_forests: {
-          type: String,
-          default: ""
-      },
-      is_using_multi_domains: {
-          type: String,
-          default: ""
-      },
-      structure: {
-          type: String,
-          default: ""
-      },
+        number_of_forests: {
+            type: String,
+            default: "0"
+        },
+        is_using_multi_domains: {
+            type: String,
+            default: "0"
+        },
+        structure: {
+            type: String,
+            default: "0"
+        },
+        ad_objects: {
+            type: String,
+            default: "0"
+        }
     },
     O365_details: {
       AD_size: {

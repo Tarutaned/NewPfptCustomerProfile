@@ -66,16 +66,21 @@ passport.use(new LdapStrategy(OPTS))
 
 
 // ==================================================
-// Display the root page 
-// Show customers created by the current user
+// Display Customers where the current user is listed on the account
 // ==================================================
 app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  Customer.find({ createdBy: req.user.sAMAccountName}).then((customers) => {
-    res.render("mycustomers.ejs", { customers: customers, user: req.user })
+  
+  Customer.find({ $or: [{accManager: req.user.cn}, 
+                { createdBy: req.user.sAMAccountName},
+                { archivingSe: req.user.cn },
+                { salesRep: req.user.cn },
+                { solutionArchitect: req.user.cn } ]}).then((customers) => {
+    return res.render("mycustomers.ejs", { customers: customers, user: req.user })
   }).catch((error) => {
     console.log("An error has occurred.")
     console.log(error)
   })
+  
 })
 
 
@@ -314,8 +319,8 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         console.log("[+] Attempting to update Email Systems Questions...");
         EmailQuestions.findOneAndUpdate({ "name": req.params.id }, req.body.email_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
-            //console.log(req.body.email_questions);
-            console.log("Done");
+            // console.log(req.body.email_questions);
+            console.log("[+] Updated Email Systems Questions.");
             updateVersions({ name: req.body.email_questions["name"] });
             // res.status(200).json("{}");
         }).catch((error) => {
@@ -518,20 +523,6 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 // Display a Customer Profile
 // ======================================================
 app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-
-  // ATTEMPTING TO ESCAPE CALLBACK HELL: ESCAPED B O I S
-
-  // var sizing_query = SizingQuestions.findOne({"name": req.params.id}).exec();
-  // var customer_query = Customer.findOne({"name": req.params.id}).exec();
-  // var desktop_network_query = DesktopNetworkQuestions.findOne({"name": req.params.id}).exec();
-  // var email_ps_questions_query = EmailPSQuestions.findOne({"name": req.params.id}).exec();
-  // var email_se_questions_query = EmailSEQuestions.findOne({"name": req.params.id}).exec();
-  // var import_query = ImportQuestions.findOne({"name": req.params.id}).exec();
-  // var journaling_query = JournalingQuestions.findOne({"name": req.params.id}).exec();
-  // var connector_platform_query = ConnectorPlatformQuestions.findOne({"name": req.params.id}).exec();
-  // var poc_query = POCQuestions.findOne({"name": req.params.id}).exec();
-  // var usage_query = UsageQuestions.findOne({"name": req.params.id}).exec();
-
   // Query every table and grab the results in a blocking manner
   async function query(search_term) {
       var questionnaire = {};
@@ -551,17 +542,15 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
       return questionnaire;
   }
 
-  // RENDER ALL THE THINGS
+  // Render and Display the Customer Details
   query({ "name": req.params.id }).then((result) => {
       if (result["customer"]) {
-        // "result" is in bracket notation. I'd like to change it to object literal notation.
-        // The benefit would be that we can pass more args to the template
-          res.render("show", result);
+        res.render("show", {result, user: req.user})
       } else {
-          res.redirect("/");
+          res.redirect("/")
       }
   }).catch((error) => {
-      console.log(error);
+      console.log(error)
       res.redirect("/")
   });
 });

@@ -10,35 +10,35 @@
             </div>
             <br>
 
-            <form id="rfeForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="rfeForm" autocomplete="off" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="rfeFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="rfe_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="rfe_questions[name]">
                     </div>
                     <div class="row">
                         <div class="form-group col-4 response-cell">
                             <label>Showstoppers (Will not buy w/o)</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= rfe_questions.showstoppers_buy %>" name="rfe_questions[showstoppers_buy]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.rfe_questions.showstoppers_buy %>" name="rfe_questions[showstoppers_buy]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Showstoppers (Will not rollout w/o)</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= rfe_questions.showstoppers_rollout %>" name="rfe_questions[showstoppers_rollout]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.rfe_questions.showstoppers_rollout %>" name="rfe_questions[showstoppers_rollout]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Parity features</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= rfe_questions.parity_features %>" name="rfe_questions[parity_features]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.rfe_questions.parity_features %>" name="rfe_questions[parity_features]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Nice to haves</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= rfe_questions.nice_to_haves %>" name="rfe_questions[nice_to_haves]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.rfe_questions.nice_to_haves %>" name="rfe_questions[nice_to_haves]">
                         </div>
                     </div>
 
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="rfe_questions[comments]" placeholder="5000 characters max" form="rfeForm"><%= rfe_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="rfe_questions[comments]" placeholder="5000 characters max" form="rfeForm"><%= result.rfe_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

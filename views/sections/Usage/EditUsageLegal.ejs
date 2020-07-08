@@ -4,41 +4,41 @@
         <div class="form-group col-4 response-cell">
             <label>Custodian based, ad-hoc, or both?</label>
             <%- make_custom_dropdown("usage_questions[legal_holds][custodian_or_ad_hoc]",
-                    usage_questions.legal_holds.custodian_or_ad_hoc, ["Custodian-based", "Ad-hoc", "Custodian-based and Ad-hoc"]) %>
+                    result.usage_questions.legal_holds.custodian_or_ad_hoc, ["Custodian-based", "Ad-hoc", "Custodian-based and Ad-hoc"]) %>
         </div>
         <div class="form-group col-4 response-cell">
             <label>Number of LH's in current solution</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.legal_holds.number_of_legal_holds %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.legal_holds.number_of_legal_holds %>"
                 name="usage_questions[legal_holds][number_of_legal_holds]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Number of unique custodians</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.legal_holds.number_of_unique_custodians %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.legal_holds.number_of_unique_custodians %>"
                 name="usage_questions[legal_holds][number_of_unique_custodians]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Largest hold (in terms of custodians)</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.legal_holds.largest_hold %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.legal_holds.largest_hold %>"
                 name="usage_questions[legal_holds][largest_hold]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>What LH Notification system is being used today?</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.legal_holds.notification_system %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.legal_holds.notification_system %>"
                 name="usage_questions[legal_holds][notification_system]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Third Party Solutions for LH Management?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= usage_questions.legal_holds.third_party_solutions %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.usage_questions.legal_holds.third_party_solutions %>"
                 name="usage_questions[legal_holds][third_party_solutions]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>API interests? What are some of the use cases?</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.legal_holds.api_use_cases %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.legal_holds.api_use_cases %>"
                 name="usage_questions[legal_holds][api_use_cases]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>Total legal hold data</label>
-            <input type="text" class="form-control required" placeholder="No response set" value="<%= usage_questions.legal_holds.total_legal_hold_data %>"
+            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.usage_questions.legal_holds.total_legal_hold_data %>"
                 name="usage_questions[legal_holds][total_legal_hold_data]">
         </div>
     </div>

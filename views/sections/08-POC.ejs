@@ -10,66 +10,66 @@
             </div>
             <br>
 
-            <form id="pocForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="pocForm" autocomplete="off" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="pocFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="poc_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="poc_questions[name]">
                     </div>
 
                     <div class="row">
                         <div hidden class="form-group col-4 response-cell">
                             <label for="sandbox_poc">Is this a sandbox POC? </label>
                             <%- make_custom_dropdown("poc_questions[is_sandbox_poc]",
-                                    poc_questions.is_sandbox_poc, ["Yes", "No"]) %>
+                                    result.poc_questions.is_sandbox_poc, ["Yes", "No"]) %>
                         </div>
                         <div hidden class="form-group col-4 response-cell">
                             <label>Is this a production-based POC? </label>
                             <%- make_custom_dropdown("poc_questions[is_prod_poc]",
-                                    poc_questions.is_prod_poc, ["Yes", "No"]) %>
+                                    result.poc_questions.is_prod_poc, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                                 <label>Is the POC sandbox or production?</label>
                                 <%- make_custom_dropdown("poc_questions[poc_type]",
-                                        poc_questions.poc_type, ["Sandbox", "Production"]) %>
+                                        result.poc_questions.poc_type, ["Sandbox", "Production"]) %>
                             </div>
                         <div class="form-group col-4 response-cell">
                             <label>What will be tested in the POC?</label>
-                            <input type="text" class="form-control required" placeholder="No response set" id="poc_tests" value="<%= poc_questions.poc_tests %>"
+                            <input type="text" class="form-control required" placeholder="No response set" id="poc_tests" value="<%= result.poc_questions.poc_tests %>"
                                 name="poc_questions[poc_tests]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Has the customer agreed to Success Criteria?</label>
                             <%- make_custom_dropdown("poc_questions[agreed_to_success_criteria]",
-                                    poc_questions.agreed_to_success_criteria, ["Yes", "No"]) %>
+                                    result.poc_questions.agreed_to_success_criteria, ["Yes", "No"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Environments needed (POC, UAT)?</label>
                             <%- make_custom_dropdown("poc_questions[envs_needed]",
-                                    poc_questions.envs_needed, ["POC", "UAT"]) %>
+                                    result.poc_questions.envs_needed, ["POC", "UAT"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>How long do you need them for?</label>
-                            <input type="text" class="form-control" placeholder="No response set" id="how_long_needed" value="<%= poc_questions.how_long_needed %>"
+                            <input type="text" class="form-control" placeholder="No response set" id="how_long_needed" value="<%= result.poc_questions.how_long_needed %>"
                                 name="poc_questions[how_long_needed]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>How to convert the environment and/or data to PROD?</label>
-                            <input type="text" class="form-control" placeholder="No response set" id="how_to_convert_env" value="<%= poc_questions.how_to_convert_env %>"
+                            <input type="text" class="form-control" placeholder="No response set" id="how_to_convert_env" value="<%= result.poc_questions.how_to_convert_env %>"
                                 name="poc_questions[how_to_convert_env]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>Will you be installing appliances in production or in a lab?</label>
                             <%- make_custom_dropdown("poc_questions[installing_in_production_or_lab]",
-                                    poc_questions.installing_in_production_or_lab, ["Production", "Lab"]) %>
+                                    result.poc_questions.installing_in_production_or_lab, ["Production", "Lab"]) %>
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>For PROD, how many environments are needed and locations?</label>
-                            <input type="text" class="form-control" placeholder="No response set" value="<%= poc_questions.how_many_envs %>" name="poc_questions[how_many_envs]">
+                            <input type="text" class="form-control" placeholder="No response set" value="<%= result.poc_questions.how_many_envs %>" name="poc_questions[how_many_envs]">
                         </div>
                         <div class="form-group col-4 response-cell">
                             <label>How many mailboxes will you journal into the POC?</label>
-                            <input type="text" class="form-control required" placeholder="No response set" value="<%= poc_questions.how_many_mailboxes %>"
+                            <input type="text" class="form-control required" placeholder="No response set" value="<%= result.poc_questions.how_many_mailboxes %>"
                                 name="poc_questions[how_many_mailboxes]">
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="poc_questions[comments]" placeholder="5000 characters max" form="pocForm"><%= poc_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="poc_questions[comments]" placeholder="5000 characters max" form="pocForm"><%= result.poc_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

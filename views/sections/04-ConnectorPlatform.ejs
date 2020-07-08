@@ -11,11 +11,11 @@
             </div>
             <br>
 
-            <form id="connectorPlatformForm" autocomplete="off" action="../index/<%= encodeURIComponent(customer.name) %>?_method=PUT" method="POST">
+            <form id="connectorPlatformForm" autocomplete="off" action="../index/<%= encodeURIComponent(result.customer.name) %>?_method=PUT" method="POST">
                 <fieldset id="connectorPlatformFormFieldset" disabled>
                     <div class="form-group col-4 response-cell" hidden>
                         <label for="customerName">Customer Name</label>
-                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= customer.name %>" name="connector_platform_questions[name]">
+                        <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="connector_platform_questions[name]">
                     </div>
 
                     <div class="form-group">
@@ -27,58 +27,58 @@
                         <div class="row">
                             <div class="col-4 response-checkbox">
                                 <p>
-                                    <input type="checkbox" name="connector_platform_questions[facebook]" <%= connector_platform_questions.facebook
+                                    <input type="checkbox" name="connector_platform_questions[facebook]" <%= result.connector_platform_questions.facebook
                                         ? "checked" : "" %> />
                                     <b> Facebook</b>
                                     <label>Number of Users</label>
-                                    <input type="text" class="form-control" placeholder="No response set" id="facebook_number_of_users" value="<%= connector_platform_questions.facebook_number_of_users %>" name="connector_platform_questions[facebook_number_of_users]">
+                                    <input type="text" class="form-control" placeholder="No response set" id="facebook_number_of_users" value="<%= result.connector_platform_questions.facebook_number_of_users %>" name="connector_platform_questions[facebook_number_of_users]">
                                 </p>
                             </div>
                             <div class="col-4 response-checkbox">
                                 <p>
-                                    <input type="checkbox" name="connector_platform_questions[linkedin]" <%= connector_platform_questions.linkedin
+                                    <input type="checkbox" name="connector_platform_questions[linkedin]" <%= result.connector_platform_questions.linkedin
                                         ? "checked" : "" %> />
                                         <b> Linkedin</b>
                                     <label>Number of Users</label>
-                                    <input type="text" class="form-control" placeholder="No response set" id="linkedin_number_of_users" value="<%= connector_platform_questions.linkedin_number_of_users %>" name="connector_platform_questions[linkedin_number_of_users]">
+                                    <input type="text" class="form-control" placeholder="No response set" id="linkedin_number_of_users" value="<%= result.connector_platform_questions.linkedin_number_of_users %>" name="connector_platform_questions[linkedin_number_of_users]">
                                 </p>
                             </div>
                             <div class="col-4 response-checkbox">
                                 <p>
-                                    <input type="checkbox" name="connector_platform_questions[twitter]" <%= connector_platform_questions.twitter
+                                    <input type="checkbox" name="connector_platform_questions[twitter]" <%= result.connector_platform_questions.twitter
                                         ? "checked" : "" %> />
                                     <b> Twitter</b>
                                     <label>Number of Users</label>
-                                    <input type="text" class="form-control" placeholder="No response set" id="twitter_number_of_users" value="<%= connector_platform_questions.twitter_number_of_users %>" name="connector_platform_questions[twitter_number_of_users]">
+                                    <input type="text" class="form-control" placeholder="No response set" id="twitter_number_of_users" value="<%= result.connector_platform_questions.twitter_number_of_users %>" name="connector_platform_questions[twitter_number_of_users]">
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-4 response-checkbox">
                                 <p>
-                                    <input type="checkbox" name="connector_platform_questions[google]" <%= connector_platform_questions.google ?
+                                    <input type="checkbox" name="connector_platform_questions[google]" <%= result.connector_platform_questions.google ?
                                         "checked" : "" %> />
                                     <b> Google+</b>
                                     <label>Number of Users</label>
-                                    <input type="text" class="form-control" placeholder="No response set" id="google_number_of_users" value="<%= connector_platform_questions.google_number_of_users %>" name="connector_platform_questions[google_number_of_users]">
+                                    <input type="text" class="form-control" placeholder="No response set" id="google_number_of_users" value="<%= result.connector_platform_questions.google_number_of_users %>" name="connector_platform_questions[google_number_of_users]">
                                 </p>
                             </div>
                             <div class="col-4 response-checkbox">
                                 <p>
-                                    <input type="checkbox" name="connector_platform_questions[youtube]" <%= connector_platform_questions.youtube
+                                    <input type="checkbox" name="connector_platform_questions[youtube]" <%= result.connector_platform_questions.youtube
                                         ? "checked" : "" %> />
                                     <b> YouTube</b>
                                     <label>Number of Users</label>
-                                    <input type="text" class="form-control" placeholder="No response set" id="youtube_number_of_users" value="<%= connector_platform_questions.youtube_number_of_users %>" name="connector_platform_questions[youtube_number_of_users]">
+                                    <input type="text" class="form-control" placeholder="No response set" id="youtube_number_of_users" value="<%= result.connector_platform_questions.youtube_number_of_users %>" name="connector_platform_questions[youtube_number_of_users]">
                                 </p>
                             </div>
                             <div class="col-4 response-checkbox">
                                 <p>
-                                    <input type="checkbox" name="connector_platform_questions[files]" <%= connector_platform_questions.files
+                                    <input type="checkbox" name="connector_platform_questions[files]" <%= result.connector_platform_questions.files
                                         ? "checked" : "" %> />
                                     <b> Files</b>
                                     <label>Number of Users</label>
-                                    <input type="text" class="form-control" placeholder="No response set" id="files_number_of_users" value="<%= connector_platform_questions.files_number_of_users %>" name="connector_platform_questions[files_number_of_users]">
+                                    <input type="text" class="form-control" placeholder="No response set" id="files_number_of_users" value="<%= result.connector_platform_questions.files_number_of_users %>" name="connector_platform_questions[files_number_of_users]">
                                 </p>
                             </div>
                         </div>
@@ -86,150 +86,150 @@
                     <div class="row">
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[skype_in_cloud]" <%= connector_platform_questions.skype_in_cloud ?
+                                <input type="checkbox" name="connector_platform_questions[skype_in_cloud]" <%= result.connector_platform_questions.skype_in_cloud ?
                                     "checked" : "" %> />
                                 <b> Skype Business</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="skype_in_cloud_number_of_users" value="<%= connector_platform_questions.skype_in_cloud_number_of_users %>" name="connector_platform_questions[skype_in_cloud_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="skype_in_cloud_number_of_users" value="<%= result.connector_platform_questions.skype_in_cloud_number_of_users %>" name="connector_platform_questions[skype_in_cloud_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[skype_on_prem]" <%= connector_platform_questions.skype_on_prem ?
+                                <input type="checkbox" name="connector_platform_questions[skype_on_prem]" <%= result.connector_platform_questions.skype_on_prem ?
                                     "checked" : "" %> />
                                 <b> Skype On-prem</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="skype_on_prem_number_of_users" value="<%= connector_platform_questions.skype_on_prem_number_of_users %>" name="connector_platform_questions[skype_on_prem_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="skype_on_prem_number_of_users" value="<%= result.connector_platform_questions.skype_on_prem_number_of_users %>" name="connector_platform_questions[skype_on_prem_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[lync_on_prem]" <%= connector_platform_questions.lync_on_prem
+                                <input type="checkbox" name="connector_platform_questions[lync_on_prem]" <%= result.connector_platform_questions.lync_on_prem
                                     ? "checked" : "" %> />
                                 <b> Lync On-prem</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="lync_on_prem_number_of_users" value="<%= connector_platform_questions.lync_on_prem_number_of_users %>" name="connector_platform_questions[lync_on_prem_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="lync_on_prem_number_of_users" value="<%= result.connector_platform_questions.lync_on_prem_number_of_users %>" name="connector_platform_questions[lync_on_prem_number_of_users]">
                             </p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[one_drive]" <%= connector_platform_questions.one_drive
+                                <input type="checkbox" name="connector_platform_questions[one_drive]" <%= result.connector_platform_questions.one_drive
                                     ? "checked" : "" %> />
                                 <b> One Drive</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="one_drive_number_of_users" value="<%= connector_platform_questions.one_drive_number_of_users %>" name="connector_platform_questions[one_drive_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="one_drive_number_of_users" value="<%= result.connector_platform_questions.one_drive_number_of_users %>" name="connector_platform_questions[one_drive_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[box]" <%= connector_platform_questions.box
+                                <input type="checkbox" name="connector_platform_questions[box]" <%= result.connector_platform_questions.box
                                     ? "checked" : "" %> />
                                 <b> Box</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="box_number_of_users" value="<%= connector_platform_questions.box_number_of_users %>" name="connector_platform_questions[box_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="box_number_of_users" value="<%= result.connector_platform_questions.box_number_of_users %>" name="connector_platform_questions[box_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[bloomberg]" <%= connector_platform_questions.bloomberg
+                                <input type="checkbox" name="connector_platform_questions[bloomberg]" <%= result.connector_platform_questions.bloomberg
                                     ? "checked" : "" %> />
                                 <b> Bloomberg</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="bloomberg_number_of_users" value="<%= connector_platform_questions.bloomberg_number_of_users %>" name="connector_platform_questions[bloomberg_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="bloomberg_number_of_users" value="<%= result.connector_platform_questions.bloomberg_number_of_users %>" name="connector_platform_questions[bloomberg_number_of_users]">
                             </p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[yammer]" <%= connector_platform_questions.yammer
+                                <input type="checkbox" name="connector_platform_questions[yammer]" <%= result.connector_platform_questions.yammer
                                     ? "checked" : "" %> />
                                 <b> Yammer</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="yammer_number_of_users" value="<%= connector_platform_questions.yammer_number_of_users %>" name="connector_platform_questions[yammer_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="yammer_number_of_users" value="<%= result.connector_platform_questions.yammer_number_of_users %>" name="connector_platform_questions[yammer_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[jive]" <%= connector_platform_questions.jive
+                                <input type="checkbox" name="connector_platform_questions[jive]" <%= result.connector_platform_questions.jive
                                     ? "checked" : "" %> />
                                 <b> Jive</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="jive_number_of_users" value="<%= connector_platform_questions.jive_number_of_users %>" name="connector_platform_questions[jive_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="jive_number_of_users" value="<%= result.connector_platform_questions.jive_number_of_users %>" name="connector_platform_questions[jive_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[chatter]" <%= connector_platform_questions.chatter
+                                <input type="checkbox" name="connector_platform_questions[chatter]" <%= result.connector_platform_questions.chatter
                                     ? "checked" : "" %> />
                                 <b> Chatter</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="chatter_number_of_users" value="<%= connector_platform_questions.chatter_number_of_users %>" name="connector_platform_questions[chatter_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="chatter_number_of_users" value="<%= result.connector_platform_questions.chatter_number_of_users %>" name="connector_platform_questions[chatter_number_of_users]">
                             </p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[slack]" <%= connector_platform_questions.slack
+                                <input type="checkbox" name="connector_platform_questions[slack]" <%= result.connector_platform_questions.slack
                                     ? "checked" : "" %> />
                                 <b> Slack</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="slack_number_of_users" value="<%= connector_platform_questions.slack_number_of_users %>" name="connector_platform_questions[slack_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="slack_number_of_users" value="<%= result.connector_platform_questions.slack_number_of_users %>" name="connector_platform_questions[slack_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[symphony]" <%= connector_platform_questions.symphony
+                                <input type="checkbox" name="connector_platform_questions[symphony]" <%= result.connector_platform_questions.symphony
                                     ? "checked" : "" %> />
                                 <b> Symphony</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="symphony_number_of_users" value="<%= connector_platform_questions.symphony_number_of_users %>" name="connector_platform_questions[symphony_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="symphony_number_of_users" value="<%= result.connector_platform_questions.symphony_number_of_users %>" name="connector_platform_questions[symphony_number_of_users]">
                             </p>
                         </div>
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[teams]" <%= connector_platform_questions.teams
+                                <input type="checkbox" name="connector_platform_questions[teams]" <%= result.connector_platform_questions.teams
                                     ? "checked" : "" %> />
                                 <b> Teams</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="teams_number_of_users" value="<%= connector_platform_questions.teams_number_of_users %>" name="connector_platform_questions[teams_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="teams_number_of_users" value="<%= result.connector_platform_questions.teams_number_of_users %>" name="connector_platform_questions[teams_number_of_users]">
                             </p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[sharepoint]" <%= connector_platform_questions.sharepoint
+                                <input type="checkbox" name="connector_platform_questions[sharepoint]" <%= result.connector_platform_questions.sharepoint
                                     ? "checked" : "" %> />
                                 <b> Sharepoint</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="sharepoint_number_of_users" value="<%= connector_platform_questions.sharepoint_number_of_users %>" name="connector_platform_questions[sharepoint_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="sharepoint_number_of_users" value="<%= result.connector_platform_questions.sharepoint_number_of_users %>" name="connector_platform_questions[sharepoint_number_of_users]">
                             </p>
                         </div>
 
                         <div class="col-4 response-checkbox">
                             <p>
-                                <input type="checkbox" name="connector_platform_questions[zoom]" <%= connector_platform_questions.zoom
+                                <input type="checkbox" name="connector_platform_questions[zoom]" <%= result.connector_platform_questions.zoom
                                     ? "checked" : "" %> />
                                 <b>Zoom</b>
                                 <label>Number of Users</label>
-                                <input type="text" class="form-control" placeholder="No response set" id="zoom_number_of_users" value="<%= connector_platform_questions.zoom_number_of_users %>" name="connector_platform_questions[zoom_number_of_users]">
+                                <input type="text" class="form-control" placeholder="No response set" id="zoom_number_of_users" value="<%= result.connector_platform_questions.zoom_number_of_users %>" name="connector_platform_questions[zoom_number_of_users]">
                             </p>
                         </div>
                     </div>
 
                     <div class="form-group col-4 response-cell">
                         <label>Capture Vendor</label>
-                        <input type="text" class="form-control" placeholder="No response set" id="capture_vendor" value="<%= connector_platform_questions.capture_vendor %>" name="connector_platform_questions[capture_vendor]">
+                        <input type="text" class="form-control" placeholder="No response set" id="capture_vendor" value="<%= result.connector_platform_questions.capture_vendor %>" name="connector_platform_questions[capture_vendor]">
                     </div>
 
                     <br>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" maxlength="5000" rows="5" name="connector_platform_questions[comments]" placeholder="5000 characters max" form="connectorPlatformForm"><%= connector_platform_questions.comments %></textarea>
+                        <textarea class="form-control" maxlength="5000" rows="5" name="connector_platform_questions[comments]" placeholder="5000 characters max" form="connectorPlatformForm"><%= result.connector_platform_questions.comments %></textarea>
                     </div>
                 </fieldset>
             </form>

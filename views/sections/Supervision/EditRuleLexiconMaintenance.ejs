@@ -4,7 +4,7 @@
         <div class="form-group col-4 response-cell">
             <label>How often do you to update/fine-tune lexicons?</label>
             <%- make_custom_dropdown("supervision_questions[rule_lexicon_maintenance][update_frequency]",
-                supervision_questions.rule_lexicon_maintenance.update_frequency,
+                result.supervision_questions.rule_lexicon_maintenance.update_frequency,
                 ["Monthly", "Quarterly", "Semi-Annually", "Annully", "No process in place"]) %>
         </div>
         <div class="form-group col-4 response-cell">
@@ -12,22 +12,22 @@
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Whitelist/Spam rule updating</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.rule_lexicon_maintenance.whitelist_spam_updating %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.rule_lexicon_maintenance.whitelist_spam_updating %>"
                 name="supervision_questions[rule_lexicon_maintenance][whitelist_spam_updating]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Lexicon Updating - False Positives</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.rule_lexicon_maintenance.false_positives %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.rule_lexicon_maintenance.false_positives %>"
                 name="supervision_questions[rule_lexicon_maintenance][false_positives]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Lexicon Updating - New Regulations</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.rule_lexicon_maintenance.new_regulations %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.rule_lexicon_maintenance.new_regulations %>"
                 name="supervision_questions[rule_lexicon_maintenance][new_regulations]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Lexicon Updating - New Risks</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.rule_lexicon_maintenance.new_risks %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.rule_lexicon_maintenance.new_risks %>"
                 name="supervision_questions[rule_lexicon_maintenance][new_risks]">
         </div>
     </div>

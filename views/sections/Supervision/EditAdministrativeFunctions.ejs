@@ -3,27 +3,27 @@
     <div class="row">
         <div class="form-group col-4 response-cell">
             <label>How many Administrators do you currently have in your supervision solution?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.administrative_functions.admin_count %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.administrative_functions.admin_count %>"
                 name="supervision_questions[administrative_functions][admin_count]">
         </div>
         <div class="form-group col-4 response-cell">
             <label>What type of oversight do the Administrators provide (if applicable)?</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.administrative_functions.admin_oversight %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.administrative_functions.admin_oversight %>"
                 name="supervision_questions[administrative_functions][admin_oversight]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Aging Reviews (Are reviews current and up-to-date?)</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.administrative_functions.aging_reviews %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.administrative_functions.aging_reviews %>"
                 name="supervision_questions[administrative_functions][aging_reviews]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Evidence of Supervision (Are reviewers current with their reviews?)</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.administrative_functions.evidence_of_supervision %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.administrative_functions.evidence_of_supervision %>"
                 name="supervision_questions[administrative_functions][evidence_of_supervision]">
         </div>
         <div class="form-group col-4 response-cell">
             <label style="margin-left: 3em;">Quality Review (Are Processes being followed?)</label>
-            <input type="text" class="form-control" placeholder="No response set" value="<%= supervision_questions.administrative_functions.quality_review %>"
+            <input type="text" class="form-control" placeholder="No response set" value="<%= result.supervision_questions.administrative_functions.quality_review %>"
                 name="supervision_questions[administrative_functions][quality_review]">
         </div>
     </div>
