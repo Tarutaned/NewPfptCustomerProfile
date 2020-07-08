@@ -76,6 +76,40 @@ var CustomerSchema = new mongoose.Schema({
             default: "Salesforce"
         }
     },
+    interest: {
+        archiving: {
+            type: String,
+            default: "No"
+        },
+        ediscovery: {
+            type: String,
+            default: "No"
+        },
+        analytics: {
+            type: String,
+            default: "No"
+        },
+        supervision: {
+            type: String,
+            default: "No"
+        },
+        connectors: {
+            type: String,
+            default: "No"
+        },
+        uat: {
+            type: String,
+            default: "No"
+        },
+        imports: {
+            type: String,
+            default: "No"
+        },
+        pcgm: {
+            type: String,
+            default: "No"
+        },
+    },
     shipreq: {
         type: String,
         default: ""

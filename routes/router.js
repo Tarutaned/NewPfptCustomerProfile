@@ -100,7 +100,7 @@ app.get('/login', (req, res) => {
 // Process the Login Form
 // ==================================================
 app.post('/login', passport.authenticate('ldapauth', {session: true, failureRedirect: '/'}), function(req, res) {
-  console.log("[+] Processing login form")
+  console.log("[+] Login: " + req.user.sAMAccountName)
   return res.redirect('/');
 })
 
@@ -132,7 +132,7 @@ app.get('/logout', function(req, res) {
   }
 
   if(req.session.passport) {
-    console.log("[+] Logout User: " + req.session.passport.user.sAMAccountName)
+    console.log("[+] Logout: " + req.session.passport.user.sAMAccountName)
     try {
       req.logout()
       req.session.destroy()
@@ -142,7 +142,7 @@ app.get('/logout', function(req, res) {
     }
     // double check
     if(typeof req.session === 'undefined') {
-      console.log('[+] The user was logged out.')
+      console.log("[+] The user is logged out.")
     }
   }
   res.redirect('/')
@@ -243,12 +243,13 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 // Updates a customer profile
 // ======================================================
 app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  
   // Update General Questions
   if (req.body.customer != undefined && req.body.customer != null) {
-      console.log("[+] Attempting to update General questions: " + req.params.id);
+      console.log("[+] Attempting to update General questions for: " + req.params.id);
       // Determine if each HTML Checkbox is "on" or "undefined"
-      const customer_info_chk_box_names = ["existing_archive_prospect", "existing_archive_customer", "existing_security_customer"];
+      const customer_info_chk_box_names = ["existing_archive_prospect", "existing_archive_customer", "existing_security_customer"]
+      
+      // See if any of the customer. checkboxes are "unchecked"
       customer_info_chk_box_names.forEach(function(chk_box_name){
         if(!req.body.customer[chk_box_name])
         {
@@ -256,6 +257,10 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
           req.body.customer[chk_box_name] = "false"
         }
       })
+
+    
+
+
 
 
       async function updateID() {
@@ -519,7 +524,6 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
 
 // ======================================================
-// SHOW ROUTE
 // Display a Customer Profile
 // ======================================================
 app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
@@ -557,10 +561,35 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
 
 // ======================================================
+// Version 1.3
+// Display a Customer Details page
+// ======================================================
+app.get("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  console.log("[+] " + req.user.sAMAccountName + " is viewing " + req.params.id)
+  Customer.findOne({name:req.params.id}, function (err, doc){
+    if(err) {
+      return res.send("Something went wrong")
+    }
+      // return res.send(doc)
+      return res.render("customerdetail.ejs", {customer: doc, user: req.user})
+  })
+})
+
+
+// ======================================================
+// Version 1.3
+// Update a Customer Profile
+// ======================================================
+app.post("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) { 
+  res.send("It works")
+})
+
+
+// ======================================================
 // Delete a customer profile
 // ======================================================
 app.delete("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  console.log("[+] Deleting customer " + req.params.id);
+  console.log("[+] " + req.user.sAMAccountName + "Deleting customer " + req.params.id);
 
   async function delete_customer(search_term) {
       var refId = await Customer.findOne({ name: req.params.id });
