@@ -107,7 +107,7 @@ app.post('/login', (req, res, next) => {
   console.log(getTimeStamp() + "Attempted login: " + req.body.username)
   next()
 }, passport.authenticate('ldapauth', {session: true, failureRedirect: '/'}), function(req, res) {
-  console.log(getTimeStamp() + "Login: " + req.user.sAMAccountName)
+  console.log(getTimeStamp() + "Login Successful for: " + req.user.sAMAccountName)
   return res.redirect('/');
 })
 
