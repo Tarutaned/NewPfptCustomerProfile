@@ -38,16 +38,17 @@ var append = "";
 // Passport LDAP Strategy
 // ==================================================
 passport.serializeUser(function(user, done) {
-  console.log("[+] Serialize User: " + user.sAMAccountName)
+  console.log(getTimeStamp() + "Serialize User: " + user.sAMAccountName)
   done(null, user);
 });
 passport.deserializeUser(function(user, done) {
   // all the user info is currently stored in the "id" in the session
   // The session info is stored in the Mongo DB
-  console.log("[+] De-Serialize User: " + user.sAMAccountName)
+  console.log(getTimeStamp() + "De-Serialize User: " + user.sAMAccountName)
   return done(null, user);
 });
 var LdapStrategy = require('passport-ldapauth')
+const { nextTick } = require('process')
 var OPTS = {
   server: {
     url: process.env.LDAP_URL,
@@ -70,7 +71,7 @@ passport.use(new LdapStrategy(OPTS))
 // Display Customers where the current user is listed on the account
 // ==================================================
 app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  console.log("[+] Displaying MyCustomers page for: " + req.user.sAMAccountName)
+  console.log(getTimeStamp() + "Displaying MyCustomers page for: " + req.user.sAMAccountName)
   Customer.find({ $or: [{accManager: req.user.cn}, 
                 { createdBy: req.user.sAMAccountName},
                 { archivingSe: req.user.cn },
@@ -90,10 +91,10 @@ app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
 // ==================================================
 app.get('/login', (req, res) => {
   if(!(typeof req.user === 'undefined')) {
-    console.log("[+] " + req.user.sAMAccountName + " is already logged in.")
+    console.log(getTimeStamp() + req.user.sAMAccountName + " is already logged in.")
     return res.redirect("/")
   }
-  console.log("[+] Displaying the login page.")
+  console.log(getTimeStamp() + "Displaying the login page.")
   res.render('login.ejs')
 })
 
@@ -101,8 +102,12 @@ app.get('/login', (req, res) => {
 // ==================================================
 // Process the Login Form
 // ==================================================
-app.post('/login', passport.authenticate('ldapauth', {session: true, failureRedirect: '/'}), function(req, res) {
-  console.log("[+] Login: " + req.user.sAMAccountName)
+app.post('/login', (req, res, next) => { 
+  // Middleware to log the login attempt
+  console.log(getTimeStamp() + "Attempted login: " + req.body.username)
+  next()
+}, passport.authenticate('ldapauth', {session: true, failureRedirect: '/'}), function(req, res) {
+  console.log(getTimeStamp() + "Login: " + req.user.sAMAccountName)
   return res.redirect('/');
 })
 
@@ -134,17 +139,17 @@ app.get('/logout', function(req, res) {
   }
 
   if(req.session.passport) {
-    console.log("[+] Logout: " + req.session.passport.user.sAMAccountName)
+    console.log(getTimeStamp() + "Logout: " + req.session.passport.user.sAMAccountName)
     try {
       req.logout()
       req.session.destroy()
     }
     catch (e) {
-      console.log("[-] Logout Error: " + e)
+      console.log(getTimeStamp() + "Logout Error: " + e)
     }
     // double check
     if(typeof req.session === 'undefined') {
-      console.log("[+] The user is logged out.")
+      console.log(getTimeStamp() + "The user is logged out.")
     }
   }
   res.redirect('/')
@@ -178,7 +183,7 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   if (req == undefined || req == null) {
       console.log('[+] Cannot create new customer.  The req is empty.');
   } else {
-      console.log("[+] Trying to create new customer...");
+      console.log(getTimeStamp() + "Trying to create new customer...");
 
       Customer.create(req.body.customer)
       .then(customer => {
@@ -226,7 +231,7 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
           SupervisionQuestionsVersions.create({ refId: customer._id, versions: [questions] });
         })
         res.redirect("/index");
-        console.log("[+] Created customer '" + req.body.customer["name"]);
+        console.log(getTimeStamp() + "Created customer '" + req.body.customer["name"]);
       })
       .catch(error => {
         if (error["code"] == 11000) {
@@ -247,7 +252,7 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   // Update General Questions
   if (req.body.customer != undefined && req.body.customer != null) {
-      console.log("[+] Attempting to update General questions for: " + req.params.id);
+      console.log(getTimeStamp() + "Attempting to update General questions for: " + req.params.id);
       // Determine if each HTML Checkbox is "on" or "undefined"
       const customer_info_chk_box_names = ["existing_archive_prospect", "existing_archive_customer", "existing_security_customer"]
       
@@ -267,7 +272,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
       async function updateID() {
           await Customer.findOneAndUpdate({ name: req.params.id }, req.body.customer).exec();
-          console.log("[+] Updated: " + req.params.id);
+          console.log(getTimeStamp() + "Updated: " + req.params.id);
       }
 
       // Redirect
@@ -284,7 +289,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
       }).catch((error) => {
           console.log(error);
           if (error["code"] == 11000) { // Dupe ID
-              console.log("[+] Duplicate key for customer: " + req.body.customer["name"]);
+              console.log(getTimeStamp() + "Duplicate key for customer: " + req.body.customer["name"]);
               res.status(409);
               res.send("This customer name already exists.");
           } else {
@@ -295,7 +300,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating sizing questions
     if (req.body.sizing_questions != undefined && req.body.sizing_questions != null) {
-        console.log("[+] Attempting to update Sizing Questions...");
+        console.log(getTimeStamp() + "Attempting to update Sizing Questions...");
         SizingQuestions.findOneAndUpdate({ name: req.params.id }, req.body.sizing_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -309,7 +314,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating desktop network questions
     if (req.body.desktop_network_questions != undefined && req.body.desktop_network_questions != null) {
-        console.log("[+] Attempting to update Desktop Network Questions...");
+        console.log(getTimeStamp() + "Attempting to update Desktop Network Questions...");
         DesktopNetworkQuestions.findOneAndUpdate({ name: req.params.id }, req.body.desktop_network_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -323,11 +328,11 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating Email Questions
     if (req.body.email_questions != undefined && req.body.email_questions != null) {
-        console.log("[+] Attempting to update Email Systems Questions...");
+        console.log(getTimeStamp() + "Attempting to update Email Systems Questions...");
         EmailQuestions.findOneAndUpdate({ "name": req.params.id }, req.body.email_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             // console.log(req.body.email_questions);
-            console.log("[+] Updated Email Systems Questions.");
+            console.log(getTimeStamp() + "Updated Email Systems Questions.");
             updateVersions({ name: req.body.email_questions["name"] });
             // res.status(200).json("{}");
         }).catch((error) => {
@@ -338,7 +343,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating Import Questions
     if (req.body.import_questions != undefined && req.body.import_questions != null) {
-        console.log("[+] Attempting to update Import information...");
+        console.log(getTimeStamp() + "Attempting to update Import information...");
         ImportQuestions.findOneAndUpdate({ "name": req.params.id }, req.body.import_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -352,7 +357,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating Connector Platform Questions
     if (req.body.connector_platform_questions != undefined && req.body.connector_platform_questions != null) {
-        console.log("[+] Update - Connector Platform - " + req.params.id);
+        console.log(getTimeStamp() + "Update - Connector Platform - " + req.params.id);
         name = "connector_platform_questions[facebook_number_of_users]"
         
         // Need to determine if each HTML Checkbox is "on" or "undefined"
@@ -361,9 +366,9 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
           let checkedValue = req.body.connector_platform_questions[chk_box_name];
             if(checkedValue) { 
               // Runs if the box is not undefined
-              // console.log("[+] The " + chk_box_name + " box was checked")
+              // console.log(getTimeStamp() + "The " + chk_box_name + " box was checked")
           } else { 
-            // console.log("[+] The " + chk_box_name + " box was NOT checked")
+            // console.log(getTimeStamp() + " The " + chk_box_name + " box was NOT checked")
             // if the HTML Checkbox is undefined, then add it to req.body.connector_platform_questions
             req.body.connector_platform_questions[chk_box_name] = "false"
           }
@@ -382,7 +387,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating POC Questions
     if (req.body.poc_questions != undefined && req.body.poc_questions != null) {
-        console.log("[+] Attempting to update POC information...");
+        console.log(getTimeStamp() + "Attempting to update POC information...");
         POCQuestions.findOneAndUpdate({ name: req.params.id }, req.body.poc_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -396,7 +401,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating RFE Questions
     if (req.body.rfe_questions != undefined && req.body.rfe_questions != null) {
-        console.log("[+] Attempting to update RFE information...");
+        console.log(getTimeStamp() + "Attempting to update RFE information...");
         RFEQuestions.findOneAndUpdate({ name: req.params.id }, req.body.rfe_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -410,7 +415,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating Usage Questions
     if (req.body.usage_questions != undefined && req.body.usage_questions != null) {
-        console.log("[+] Attempting to update Usage Questions...");
+        console.log(getTimeStamp() + "Attempting to update Usage Questions...");
         UsageQuestions.findOneAndUpdate({ name: req.params.id }, req.body.usage_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -424,7 +429,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Updating Finserv Supervision Questions
     if (req.body.supervision_questions != undefined && req.body.supervision_questions != null) {
-        console.log("[+] Attempting to update Finserv Supervision Questions...");
+        console.log(getTimeStamp() + "Attempting to update Finserv Supervision Questions...");
         SupervisionQuestions.findOneAndUpdate({ name: req.params.id }, req.body.supervision_questions).then(() => {
             //res.redirect( append + "/index/" + encodeURIComponent(req.params.id));
             console.log("Done");
@@ -567,7 +572,7 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 // Display a Customer Details page
 // ======================================================
 app.get("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  console.log("[+] " + req.user.sAMAccountName + " is viewing " + req.params.id)
+  console.log(getTimeStamp() + req.user.sAMAccountName + "is viewing " + req.params.id)
   Customer.findOne({name:req.params.id}, function (err, doc){
     if(err) {
       return res.send("Something went wrong")
@@ -591,7 +596,7 @@ app.post("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, re
 // Delete a customer profile
 // ======================================================
 app.delete("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  console.log("[+] " + req.user.sAMAccountName + "Deleting customer " + req.params.id);
+  console.log(getTimeStamp() + req.user.sAMAccountName + "Deleting customer " + req.params.id);
 
   async function delete_customer(search_term) {
       var refId = await Customer.findOne({ name: req.params.id });
@@ -626,6 +631,18 @@ app.delete("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res
 });
 
 
+// =============================================
+// Get Timestamp
+// =============================================
+function getTimeStamp() {
+  const date = new Date();
+  return '['+ date.getFullYear() + '-' +
+      (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+      date.getDate().toString().padStart(2, '0') + ':' +
+      date.getHours().toString().padStart(2, '0') + ':' +
+      date.getMinutes().toString().padStart(2, '0') + ':' +
+      date.getSeconds().toString().padStart(2, '0') + '] ';
+}
 
 
 
