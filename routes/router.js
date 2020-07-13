@@ -38,13 +38,14 @@ var append = "";
 // Passport LDAP Strategy
 // ==================================================
 passport.serializeUser(function(user, done) {
-  console.log("[+] Serialize the User: " + user)
+  console.log("[+] Serialize User: " + user.sAMAccountName)
   done(null, user);
 });
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(user, done) {
   // all the user info is currently stored in the "id" in the session
   // The session info is stored in the Mongo DB
-  return done(null, id);
+  console.log("[+] De-Serialize User: " + user.sAMAccountName)
+  return done(null, user);
 });
 var LdapStrategy = require('passport-ldapauth')
 var OPTS = {
@@ -69,7 +70,7 @@ passport.use(new LdapStrategy(OPTS))
 // Display Customers where the current user is listed on the account
 // ==================================================
 app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  
+  console.log("[+] Displaying MyCustomers page for: " + req.user.sAMAccountName)
   Customer.find({ $or: [{accManager: req.user.cn}, 
                 { createdBy: req.user.sAMAccountName},
                 { archivingSe: req.user.cn },
@@ -89,9 +90,10 @@ app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
 // ==================================================
 app.get('/login', (req, res) => {
   if(!(typeof req.user === 'undefined')) {
-    console.log("[+] " + req.user.username + " is already logged in.")
-    return res.render('index.ejs', {user: req.user})
+    console.log("[+] " + req.user.sAMAccountName + " is already logged in.")
+    return res.redirect("/")
   }
+  console.log("[+] Displaying the login page.")
   res.render('login.ejs')
 })
 
