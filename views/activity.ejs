@@ -1,6 +1,22 @@
 <%- include('./partials/header.ejs') %> 
 
 <div class="container">
+  <div class="row">
+    <div class="btn-group">
+      <a href="/activity" class="btn btn-primary">All</a>
+      <a href="/activity/1" class="btn btn-primary">Today</a>
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+           Other
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/activity/10">Last 10 days</a>
+          <a class="dropdown-item" href="/activity/30">Last 30 days</a>
+          <a class="dropdown-item" href="/activity/60">Last 60 days</a>
+        </div>
+      </div>
+    </div> 
+  </div>
 
  
 

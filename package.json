@@ -27,6 +27,7 @@
     "ldapjs": "^1.0.2",
     "lodash": "^4.17.15",
     "method-override": "^2.3.10",
+    "moment": "^2.27.0",
     "mongo-xlsx": "^1.0.12",
     "mongoose": "^4.13.20",
     "mongoose-version": "^1.1.0",

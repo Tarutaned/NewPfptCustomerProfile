@@ -8,6 +8,7 @@ const express                 = require('express')
 const app                     = new express.Router()
 const connectEnsureLogin      = require('connect-ensure-login')
 const passport                = require('passport')
+const moment                  = require('moment')
 const User                    = require('../models/user')
 var {Customer}                = require("../models/customer")
 var {CustomerVersions}        = require("../models/customer")
@@ -629,8 +630,6 @@ app.delete("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res
 // =============================================
 app.get("/activity", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log(getTimeStamp() + req.user.sAMAccountName + " is displaying Activity Report page.")
-  
-  
   Customer.find().then((customers) => {
     return res.render("activity.ejs", { customers: customers, user: req.user })
   }).catch((error) => {
@@ -638,11 +637,26 @@ app.get("/activity", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
     console.log(error)
     return res.render("error.ejs", {error})
   })  
+})
 
+app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => { 
+  console.log(getTimeStamp() + req.user.sAMAccountName + " is displaying Activity Report page for " + req.params.days + " days.")
+  // TO DO
+  // Make sure that the date is an integer
 
+  var theDate = moment().subtract(req.params.days, 'days')
 
-
-
+  
+  Customer.find(
+    {
+      updatedAt:{'$gte': theDate}
+    }).then((customers) => {
+      return res.render("activity.ejs", { customers: customers, user: req.user })
+    }).catch( (error) => {
+      console.log("An error has occurred.")
+      console.log(error)
+      return res.render("error.ejs", {error}) }
+    )
 })
 
 
