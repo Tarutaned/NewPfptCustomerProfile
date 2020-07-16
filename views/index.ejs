@@ -9,13 +9,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-1" style="background-color:white;"></div>
-    <div class="col-sm-2" style="background-color:white;">
-      <input class="form-control" id="txtFilter" onkeyup="filterTable()" style="display: inline-block;" type="text" placeholder="Search for names..." aria-label="Search">
-    </div>
-    <div class="col-sm-6" style="background-color:white;" id="alert-list">
-      <!-- Alerts get added here -->
-    </div>
+    
     <div class="col-sm-2" style="background-color:white;">  
       <a href="./new/" class="btn btn-primary btn-xs float-right"><b>+</b> New Customer</a>
     </div>
@@ -23,15 +17,48 @@
   <div class="row">
     <div class="col-md-1" style="background-color:white;"></div>
     <div class="col-md-10" style="background-color:white;">
+
     <table id="tblCustomers" class="table table-striped custab">
       <thead class="thead-dark">
         <tr>
-          <th onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></th>
-          <th onclick="sortTable(1)">Sales Rep<i class="fa fa-fw fa-sort"></i></th>
-          <th onclick="sortTable(2)">Archiving SE<i class="fa fa-fw fa-sort"></i></th>
-          <th onclick="sortTable(3)">Status<i class="fa fa-fw fa-sort"></i></th>
-          <th onclick="sortTable(4)">Updated Date<i class="fa fa-fw fa-sort"></i></th>
+          <th>
+            <p onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></p> 
+          </th>
+          <th>
+            <p onclick="sortTable(1)">Sales Rep <i class="fa fa-fw fa-sort"></i></p> 
+          </th>
+          <th>
+            <p onclick="sortTable(2)">Archiving SE<i class="fa fa-fw fa-sort"></i></p> 
+
+          </th>
+          <th>
+            <p onclick="sortTable(3)">Status<i class="fa fa-fw fa-sort"></i></p> 
+          </th>
+          <th>
+            <p onclick="sortTable(4)">Updated Date<i class="fa fa-fw fa-sort"></i></p> 
+          </th>
           <th>Action</th>
+        </tr>
+        <tr id="filtersRow">
+          <th>
+            <input class="form-control" id="txtFilter0" onkeyup="filterTable(0)" style="display: inline-block;" type="text" placeholder="Filter Customer Name..." aria-label="Search">
+          </th>
+          <th>
+            <input class="form-control" id="txtFilter1" onkeyup="filterTable(1)" style="display: inline-block;" type="text" placeholder="Filter Sales Rep..." aria-label="Search">
+          </th>
+          <th>
+            <input class="form-control" id="txtFilter2" onkeyup="filterTable(2)" style="display: inline-block;" type="text" placeholder="Filter Archiving SE..." aria-label="Search">
+          </th>
+          <th>
+            <input class="form-control" id="txtFilter3" onkeyup="filterTable(3)" style="display: inline-block;" type="text" placeholder="Filter Status..." aria-label="Search">
+          </th>
+          <th>
+            <input class="form-control" id="txtFilter4" onkeyup="filterTable(4)" style="display: inline-block;" type="text" placeholder="Filter Date..." aria-label="Search">
+          </th>
+          <th>
+            <p onclick="hideFilterRow()"><i class="fa fa-filter" aria-hidden="true"></i>
+            </p>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -56,24 +83,39 @@
 </div>
 
 <script>
-  function filterTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("txtFilter");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("tblCustomers");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[0];
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
+  function filterTable(rowid) {
+      var input, filter, table, tr, td, i, txtValue;
+      if (rowid == 0) {
+        input = document.getElementById("txtFilter0");
+      }
+      if (rowid == 1) {
+        input = document.getElementById("txtFilter1");
+      }
+      if (rowid == 2) {
+        input = document.getElementById("txtFilter2");
+      }
+      if (rowid == 3) {
+        input = document.getElementById("txtFilter3");
+      }
+      if (rowid == 4) {
+        input = document.getElementById("txtFilter4");
+      }
+      
+      filter = input.value.toUpperCase();
+      table = document.getElementById("tblCustomers");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[rowid];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
         }
       }
     }
-  }
 
     function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -88,8 +130,8 @@
       switching = false;
       rows = table.rows;
       /*Loop through all table rows (except the
-      first, which contains table headers):*/
-      for (i = 1; i < (rows.length - 1); i++) {
+      first 2, which contains table headers):*/
+      for (i = 2; i < (rows.length - 2); i++) {
         //start by saying there should be no switching:
         shouldSwitch = false;
         /*Get the two elements you want to compare,
