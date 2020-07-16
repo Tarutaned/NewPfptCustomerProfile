@@ -39,13 +39,13 @@ var append = "";
 // Passport LDAP Strategy
 // ==================================================
 passport.serializeUser(function(user, done) {
-  console.log(getTimeStamp() + "Serialize User: " + user.sAMAccountName)
+  // console.log(getTimeStamp() + "Serialize User: " + user.sAMAccountName)
   done(null, user);
 });
 passport.deserializeUser(function(user, done) {
   // all the user info is currently stored in the "id" in the session
   // The session info is stored in the Mongo DB
-  console.log(getTimeStamp() + "De-Serialize User: " + user.sAMAccountName)
+  // console.log(getTimeStamp() + "De-Serialize User: " + user.sAMAccountName)
   return done(null, user);
 });
 var LdapStrategy = require('passport-ldapauth')
@@ -250,12 +250,12 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 // Updates a customer profile
 // ======================================================
 app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+
   // Update General Questions
   if (req.body.customer != undefined && req.body.customer != null) {
       console.log(getTimeStamp() + "Attempting to update General questions for: " + req.params.id);
       // Determine if each HTML Checkbox is "on" or "undefined"
       const customer_info_chk_box_names = ["existing_archive_prospect", "existing_archive_customer", "existing_security_customer"]
-      
       // See if any of the customer. checkboxes are "unchecked"
       customer_info_chk_box_names.forEach(function(chk_box_name){
         if(!req.body.customer[chk_box_name])
@@ -265,8 +265,12 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         }
       })
       async function updateID() {
-          await Customer.findOneAndUpdate({ name: req.params.id }, req.body.customer).exec();
-          console.log(getTimeStamp() + "Updated: " + req.params.id);
+        // Set the updatedBy field
+        console.log("Setting updatedBy to: " + req.body.customer.updatedBy)
+        
+        
+        await Customer.findOneAndUpdate({ name: req.params.id }, req.body.customer).exec();
+        console.log(getTimeStamp() + "Updated: " + req.params.id);
       }
 
       // Redirect
@@ -552,11 +556,12 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
       if (result["customer"]) {
         res.render("show.ejs", {result, user: req.user})
       } else {
-          res.render('error.ejs', {error: "Cannot find this customer name"})
+          console.log(getTimeStamp() + req.user.sAMAccountName + " attempted to access index/" + req.params.id )
+          res.render('error.ejs', {error: "Cannot find this customer name", details: "Try finding a customer on the index page", user: req.user.sAMAccountName})
       }
   }).catch((error) => {
       console.log(error)
-      res.render('error.ejs', {error})
+      res.render('error.ejs', {error, user: req.user.sAMAccountName})
   });
 });
 
@@ -633,9 +638,9 @@ app.get("/activity", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   Customer.find().then((customers) => {
     return res.render("activity.ejs", { customers: customers, user: req.user })
   }).catch((error) => {
-    console.log("An error has occurred.")
+    console.log("An error has occurred for: " + req.user.sAMAccountName)
     console.log(error)
-    return res.render("error.ejs", {error})
+    return res.render("error.ejs", {error, user: req.user.sAMAccountName})
   })  
 })
 
@@ -655,7 +660,7 @@ app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
     }).catch( (error) => {
       console.log("An error has occurred.")
       console.log(error)
-      return res.render("error.ejs", {error}) }
+      return res.render("error.ejs", {error, user: req.user.sAMAccountName}) }
     )
 })
 

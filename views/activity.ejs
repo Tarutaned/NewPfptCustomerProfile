@@ -1,7 +1,10 @@
 <%- include('./partials/header.ejs') %> 
 
 <div class="container">
-  <div class="row">
+  <div class="row justify-content-center">
+    <h1 class="text-center display-4 my-4">Activity Report</h1>
+  </div>
+  <div class="row justify-content-end">
     <div class="btn-group">
       <a href="/activity" class="btn btn-primary">All</a>
       <a href="/activity/1" class="btn btn-primary">Today</a>
@@ -18,18 +21,14 @@
     </div> 
   </div>
 
- 
-
-
     <div class="row">
         <div class="col-md-12">
-            <h1 class="text-center display-4 my-4">Activity Report</h1>
             <% if (!locals.customers) { %>
                 <p>No report data</p>
             <% } else { %>
                 <div class="table-responsive-lg">
                     <table id="tblReport" class="table table-hover">
-                        <thead>
+                      <thead class="thead-light">
                             <tr>
                                 <th>
                                     <p onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></p> 
