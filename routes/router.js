@@ -265,10 +265,6 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         }
       })
       async function updateID() {
-        // Set the updatedBy field
-        console.log("Setting updatedBy to: " + req.body.customer.updatedBy)
-        
-        
         await Customer.findOneAndUpdate({ name: req.params.id }, req.body.customer).exec();
         console.log(getTimeStamp() + "Updated: " + req.params.id);
       }
