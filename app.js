@@ -155,10 +155,10 @@ app.use(methodOverride("_method"));
 
 //including routes. Seperating the routes to different file, so it will be cleaner.
 var routes = require("./routes/router");
-var filesRoute = require("./routes/files.js")
+// var filesRoute = require("./routes/files.js")
 var apiEndpoints = require ("./routes/api")
 app.use(routes);
-app.use(filesRoute)
+// app.use(filesRoute)
 app.use(apiEndpoints)
 
 
