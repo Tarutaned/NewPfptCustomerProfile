@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
 </head>
 <body>
@@ -32,6 +33,7 @@
         <a class="dropdown-item" href="/userprofile">My User Profile</a>
         <a class="dropdown-item" href="/">My Customers</a>
         <a class="dropdown-item" href="/new">New Customer</a>
+        <a class="dropdown-item" href="/activity">Activity Report</a>
         <a class="dropdown-item" href="/logout">Logout <strong><%= user.sAMAccountName %></strong></a>
         <% } else { %>  
         <a class="dropdown-item" href="/login">Login</a>
@@ -43,3 +45,27 @@
 </ul>
 </nav> 
 <br>
+
+<!-- Notifications -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <% if (locals.error) { %>
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <%= error %>
+                </div>
+            <% } %>
+            <% if (locals.success) { %>
+                <div class="alert alert-success alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <%= success %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+
+<br>
+

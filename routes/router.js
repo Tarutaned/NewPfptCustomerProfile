@@ -81,8 +81,7 @@ app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   }).catch((error) => {
     console.log("An error has occurred.")
     console.log(error)
-  })
-  
+  })  
 })
 
 
@@ -264,12 +263,6 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
           req.body.customer[chk_box_name] = "false"
         }
       })
-
-    
-
-
-
-
       async function updateID() {
           await Customer.findOneAndUpdate({ name: req.params.id }, req.body.customer).exec();
           console.log(getTimeStamp() + "Updated: " + req.params.id);
@@ -556,13 +549,13 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   // Render and Display the Customer Details
   query({ "name": req.params.id }).then((result) => {
       if (result["customer"]) {
-        res.render("show", {result, user: req.user})
+        res.render("show.ejs", {result, user: req.user})
       } else {
-          res.redirect("/")
+          res.render('error.ejs', {error: "Cannot find this customer name"})
       }
   }).catch((error) => {
       console.log(error)
-      res.redirect("/")
+      res.render('error.ejs', {error})
   });
 });
 
@@ -632,6 +625,28 @@ app.delete("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res
 
 
 // =============================================
+// Activity Report
+// =============================================
+app.get("/activity", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  console.log(getTimeStamp() + req.user.sAMAccountName + " is displaying Activity Report page.")
+  
+  
+  Customer.find().then((customers) => {
+    return res.render("activity.ejs", { customers: customers, user: req.user })
+  }).catch((error) => {
+    console.log("An error has occurred.")
+    console.log(error)
+    return res.render("error.ejs", {error})
+  })  
+
+
+
+
+
+})
+
+
+// =============================================
 // Get Timestamp
 // =============================================
 function getTimeStamp() {
@@ -643,7 +658,6 @@ function getTimeStamp() {
       date.getMinutes().toString().padStart(2, '0') + ':' +
       date.getSeconds().toString().padStart(2, '0') + '] ';
 }
-
 
 
 // =============================================

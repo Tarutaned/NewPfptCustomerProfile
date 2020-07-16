@@ -1,0 +1,137 @@
+<%- include('./partials/header.ejs') %> 
+
+<div class="container">
+
+ 
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center display-4 my-4">Activity Report</h1>
+            <% if (!locals.customers) { %>
+                <p>No report data</p>
+            <% } else { %>
+                <div class="table-responsive-lg">
+                    <table id="tblReport" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <p onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></p> 
+                                    <input class="form-control" id="txtFilter0" onkeyup="filterTable(0)" style="display: inline-block;" type="text" placeholder="Search..." aria-label="Search">
+                                </th>
+                                <th>
+                                    <p onclick="sortTable(1)">Modified By <i class="fa fa-fw fa-sort"></i></p> 
+                                    <input class="form-control" id="txtFilter1" onkeyup="filterTable(1)" style="display: inline-block;" type="text" placeholder="Search..." aria-label="Search">
+                                </th>
+                                <th>
+                                    <p onclick="sortTable(2)">Modified Date <i class="fa fa-fw fa-sort"></i></p> 
+                                    <input class="form-control" id="txtFilter2" onkeyup="filterTable(2)" style="display: inline-block;" type="text" placeholder="Search..." aria-label="Search">
+                                </th>
+                            </tr>
+                          </thead>
+                          <% customers.forEach(customer => { %>
+                            <tr>
+                                <td><a href="/index/<%= customer.name %>"><%= customer.name %></a></td>
+                                <td><%= customer.updatedBy %></td>
+                                <td><%= customer.updatedAt %></td>
+                            </tr>
+                          <% }) %>
+                </div>
+            <% } %> 
+        </div>
+    </div>
+</div>
+
+
+<!-- Script -->
+<script>
+    function filterTable(rowid) {
+      var input, filter, table, tr, td, i, txtValue;
+      if (rowid == 0) {
+        input = document.getElementById("txtFilter0");
+      }
+      if (rowid == 1) {
+        input = document.getElementById("txtFilter1");
+      }
+      if (rowid == 2) {
+        input = document.getElementById("txtFilter2");
+      }
+      
+      filter = input.value.toUpperCase();
+      table = document.getElementById("tblReport");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[rowid];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  
+      function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("tblReport");
+      switching = true;
+      //Set the sorting direction to ascending:
+      dir = "asc"; 
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++) {
+          //start by saying there should be no switching:
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+          /*check if the two rows should switch place,
+          based on the direction, asc or desc:*/
+          if (dir == "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch= true;
+              break;
+            }
+          } else if (dir == "desc") {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          //Each time a switch is done, increase this count by 1:
+          switchcount ++;      
+        } else {
+          /*If no switching has been done AND the direction is "asc",
+          set the direction to "desc" and run the while loop again.*/
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+  </script>
+
+
+
+  
+
+
+<%- include('./partials/footer.ejs') %> 
