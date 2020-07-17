@@ -137,13 +137,11 @@ var CustomerSchema = new mongoose.Schema({
     },
     createdBy: {
       type: String,
-      default: "",
-      required: true
+      default: ""
     },
     updatedBy: {
       type: String,
-      default: "",
-      required: true
+      default: ""
     }
 },
 {

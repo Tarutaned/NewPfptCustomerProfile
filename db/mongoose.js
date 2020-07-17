@@ -7,7 +7,8 @@ const mongoose = require('mongoose')
 
 const databaseUrl = process.env.MONGO_DB_URL || "mongodb://localhost:27017/NewCustomerProfile"
 console.log("[+] Connecting to DB: " + databaseUrl)
-mongoose.Promise = require('bluebird')
+// bluebird breaks the "version update" functionliay when updating a customer
+// mongoose.Promise = require('bluebird')
 mongoose.connect(
     databaseUrl, 
     { 

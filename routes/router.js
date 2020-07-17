@@ -270,11 +270,14 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         console.log(getTimeStamp() + "Updated: " + req.params.id);
       }
 
-      // Redirect
+      
+      // This function is needed to create a 2nd DB requset because the first one didn't write the required info !!!
+      // TO DO:
+      // Get rid of this and make one DB request with all the required info
       updateID().then(() => {
           Customer.findOne({ name: req.params.id })
           .then(customer => {
-            customer.updatedBy = req.session.user;
+            customer.updatedBy = req.user.sAMAccountName;
             customer.save();
           })
           .catch(e => {
@@ -438,6 +441,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 
     // Update Versions
     function updateVersions(search_term) {
+      console.log(getTimeStamp() + "Updating the Versions arary for: " + search_term.name)
       Customer.findOne(search_term)
       .then(customer => {
         //update the version array in the versioned collection
@@ -446,6 +450,8 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
           version.versions.push(customer);
           version.save();
         })
+
+        
         SizingQuestions.findOne(search_term)
         .then(questions => {
           SizingQuestionsVersions.findOne({ refId: customer._id })
@@ -454,6 +460,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
             version.save();
           })
         })
+
         DesktopNetworkQuestions.findOne(search_term)
         .then(questions => {
           DesktopNetworkQuestionsVersions.findOne({ refId: customer._id })
@@ -462,6 +469,8 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
             version.save();
           })
         })
+
+        
         EmailQuestions.findOne(search_term)
         .then(questions => {
           EmailQuestionsVersions.findOne({ refId: customer._id })
