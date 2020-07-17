@@ -184,12 +184,13 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
       console.log('[+] Cannot create new customer.  The req is empty.');
   } else {
       console.log(getTimeStamp() + "Trying to create new customer...");
+      const newCustomer = req.body.customer
+      newCustomer.createdBy = req.user.sAMAccountName
+      newCustomer.updatedBy = req.user.sAMAccountName
+      console.log(newCustomer)
 
-      Customer.create(req.body.customer)
+      Customer.create(newCustomer)
       .then(customer => {
-        //update the created by field and the updated by field
-        customer.createdBy = req.session.user;
-        customer.updatedBy = req.session.user;
         customer.save();
 
         //update the version array in the versioned collection

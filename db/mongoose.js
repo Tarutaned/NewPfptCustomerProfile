@@ -11,8 +11,7 @@ mongoose.Promise = require('bluebird')
 mongoose.connect(
     databaseUrl, 
     { 
-        useMongoClient: true, 
-        useCreateIndex: true
+        useMongoClient: true
     }).then(
     () => {
         console.log('[+] Database is connected')
