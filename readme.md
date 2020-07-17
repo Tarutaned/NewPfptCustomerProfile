@@ -23,5 +23,5 @@ Proofpoint Sales Website to track new clients.
 3. Build the Docker container
    * `sudo docker build -t acp:1.7 .`
 4. Run the Docker container
-   * `sudo docker run -d -p 80:81 --name acp acp:1.7
+   * `sudo docker run -d -p 80:81 --name acp acp:1.7`
 
