@@ -10,7 +10,7 @@ Proofpoint Sales Website to track new clients.
    * `git clone https://github.com/nikko0327/NewPfptCustomerProfile.git`
 2. Create and edit a .env file
    * `nano .env`
-   * ```
+   ```
    PORT=81
    MONGO_DB_URL='mongodb://yourMongoServer:27018/NewCustomerProfile'
    JWT_SECRET='aVeryLongStringOfRandomCharacters'
