@@ -28,8 +28,8 @@
         Menu
     </a>
     <div class="dropdown-menu">
-        <a class="dropdown-item" href="/index">Customer Index</a>
         <% if (locals.user) { %>
+        <a class="dropdown-item" href="/index">Customer Index</a>
         <a class="dropdown-item" href="/userprofile">My User Profile</a>
         <a class="dropdown-item" href="/">My Customers</a>
         <a class="dropdown-item" href="/new">New Customer</a>
@@ -37,9 +37,7 @@
         <a class="dropdown-item" href="/logout">Logout <strong><%= user.sAMAccountName %></strong></a>
         <% } else { %>  
         <a class="dropdown-item" href="/login">Login</a>
-        <a class="dropdown-item" href="/signup">Signup</a>
-        <% } %>
-        
+       <% } %>
     </div>
     </li>
 </ul>

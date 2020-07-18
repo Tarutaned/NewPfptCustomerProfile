@@ -62,10 +62,17 @@ var OPTS = {
         fs.readFileSync('./certs/ProofpointCorporateRootCA.crt'),
         fs.readFileSync('./certs/ProofpointCorporateSub-OrdinateCA.crt')
       ]
-    }
+    },
+    passReqToCallback: true,
   }
 }
-passport.use(new LdapStrategy(OPTS))
+passport.use(new LdapStrategy(OPTS, function(user, done) {
+  console.log("[+] Login " + user.sAMAccountName)
+  if (!user) {
+    return done(null, false, {message: 'Unable to login!'})
+  }
+  return done(null, user)
+}))
 
 
 // ==================================================
@@ -106,10 +113,28 @@ app.post('/login', (req, res, next) => {
   // Middleware to log the login attempt
   console.log(getTimeStamp() + "Attempted login: " + req.body.username)
   next()
-}, passport.authenticate('ldapauth', {session: true, failureRedirect: '/'}), function(req, res) {
+}, passport.authenticate('ldapauth', {
+    session: true, 
+    failureFlash: true, 
+    failureRedirect: "/error"}), function(req, res, next) {
   console.log(getTimeStamp() + "Login Successful for: " + req.user.sAMAccountName)
   return res.redirect('/');
 })
+
+
+// ==================================================
+// A Test page
+// ==================================================
+app.get('/error', (req, res) => {
+
+  res.render('error.ejs', { message: req.flash('error') })
+})
+
+
+app.get('/flash', function(req, res){
+  req.flash('error', 'Hi there!')
+  res.redirect('/error');
+});
 
 
 // ==================================================

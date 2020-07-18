@@ -4,12 +4,12 @@
 // **************************************************
 
 const express                 = require('express')
-const app                     = new express.Router()
+const router                     = new express.Router()
 
 // =============================================
 // Health Check Endpoint
 // =============================================
-app.get("/api/health/", (req, res) => {
+router.get("/api/health/", (req, res) => {
     // TO DO
     // Check DB Connection before responding
     res.status(200).send("ok")
@@ -18,4 +18,4 @@ app.get("/api/health/", (req, res) => {
 // =============================================
 // Export the router
 // =============================================
-module.exports = app 
+module.exports = router 

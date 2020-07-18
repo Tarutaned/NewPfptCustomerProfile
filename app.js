@@ -7,6 +7,7 @@ const favicon = require('serve-favicon')
 const MongoStore = require("connect-mongo")(session)
 const helmet = require('helmet')
 const app = express()
+const flash = require('connect-flash')
 
 // ======================================================
 // Mongoose Config
@@ -40,6 +41,8 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
+app.use(flash())
 
 // Setup Passport
 const passport = require('passport')
