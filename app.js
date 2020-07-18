@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express")
 const bodyParser = require("body-parser")
 const methodOverride = require("method-override")
@@ -8,6 +9,18 @@ const MongoStore = require("connect-mongo")(session)
 const helmet = require('helmet')
 const app = express()
 const flash = require('connect-flash')
+
+// ======================================================
+// Prod or Dev
+// ======================================================
+if(process.env.PROD === 'true') {
+    console.log("[+] Running a Prod Server !")
+}
+else {
+    console.log("[+] Running a Dev server !")
+}
+
+
 
 // ======================================================
 // Mongoose Config
