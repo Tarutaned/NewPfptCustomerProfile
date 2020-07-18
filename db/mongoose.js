@@ -1,16 +1,21 @@
 // ======================================================
-// Mongo DB
+// Mongooose Setup
 // ======================================================
 
-
 const mongoose = require('mongoose')
+const multer = require('multer')
+const GridFsStorage = require('multer-gridfs-storage')
+const Grid = require('gridfs-stream')
+const crypto = require('crypto')
+// const conn = mongoose.createConnection(connectionURI)
+var ObjectId = require('mongodb').ObjectID;
 
-const databaseUrl = process.env.MONGO_DB_URL || "mongodb://localhost:27017/NewCustomerProfile"
-console.log("[+] Connecting to DB: " + databaseUrl)
+const connectionURI = process.env.MONGO_DB_URL || "mongodb://localhost:27017/NewCustomerProfile"
+console.log("[+] Connecting to DB: " + connectionURI)
 // bluebird breaks the "version update" functionliay when updating a customer
 // mongoose.Promise = require('bluebird')
 mongoose.connect(
-    databaseUrl, 
+    connectionURI, 
     { 
         useMongoClient: true
     }).then(
@@ -29,6 +34,12 @@ mongoose.connect(
 const db = mongoose.connection
 //handling mongo error
 db.on("error", console.error.bind(console, "[+] DB Connection Error - "))
+
+
+
+// ======================================================
+// Grid FS Setup
+// ======================================================
 
 
 module.exports = db
