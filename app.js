@@ -20,13 +20,10 @@ else {
     console.log("[+] Running a Dev server !")
 }
 
-
-
 // ======================================================
 // Mongoose Config
 // ======================================================
 const db = require('./db/mongoose.js')
-
 
 // ======================================================
 // Express Configuration 

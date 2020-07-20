@@ -1,6 +1,5 @@
 <%- include('./partials/header.ejs') %> 
 
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -15,7 +14,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <% if (message) { %>
+            <% if (locals.message) { %>
                 <div class="alert alert-danger alert-dismissible fade show">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <p><%= message %></p>
@@ -24,6 +23,5 @@
         </div>
     </div>
 </div>
-
 
 <%- include('./partials/footer.ejs') %> 
