@@ -4,10 +4,14 @@
     <div class="row">
         <div class="col-md-6 m-auto">
 
-            <div class="card bg-secondary text-white">
+        <div id="accordion">
+            <div class="card bg-light text-muted">
                 <div class="card-header">
-                    <strong>Upload a File for <%= locals.result.customer.name %></strong>
+                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                        <strong>Upload a File for <%= locals.result.customer.name %></strong>
+                      </a>
                 </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordion">
                 <div class="card-body">
                     <form action="/upload" method="post" enctype="multipart/form-data">
                         <div class="custom-file mb-3">
@@ -15,10 +19,12 @@
                             <label for="file" class="custom-file-label">Choose File</label>
                         </div>
                         <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
-                        <input type="submit" class="btn btn-primary btn-block">
+                        <input type="submit" class="btn btn-primary btn-block" value="Upload">
                     </form>
                 </div>
             </div>
+            </div>
+        </div>
         </div>
     </div>
 
