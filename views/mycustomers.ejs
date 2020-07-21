@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs') %> 
 
 
-<% if(customers.length < 1) { %>
+<% if(! locals.customers) { %>
   <p> You don't have any customers associated with yor account</p>
   <p>Check out the <a href="/index"><strong>Customer Index</strong></a> page.</p>
 <% } else { %>

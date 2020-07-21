@@ -3,11 +3,10 @@
 // Provides basic routing for the app
 // **************************************************
 
-const fs                      = require('fs')
+
 const express                 = require('express')
 const app                     = new express.Router()
 const connectEnsureLogin      = require('connect-ensure-login')
-const passport                = require('passport')
 const moment                  = require('moment')
 const User                    = require('../models/user')
 var {Customer}                = require("../models/customer")
@@ -30,49 +29,12 @@ var {DesktopNetworkQuestionsVersions}     = require("../models/desktop_network")
 var {ConnectorPlatformQuestions}          = require("../models/connector_platform")
 var {ConnectorPlatformQuestionsVersions}  = require("../models/connector_platform")
 var {SupervisionQuestionsVersions}        = require("../models/supervision")
-
+const passport = require("../auth/auth")
 
 // append is the base URL
 var append = "";
 
-// ==================================================
-// Passport LDAP Strategy
-// ==================================================
-passport.serializeUser(function(user, done) {
-  // console.log(getTimeStamp() + "Serialize User: " + user.sAMAccountName)
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  // all the user info is currently stored in the "id" in the session
-  // The session info is stored in the Mongo DB
-  // console.log(getTimeStamp() + "De-Serialize User: " + user.sAMAccountName)
-  return done(null, user);
-});
-var LdapStrategy = require('passport-ldapauth')
-const { nextTick } = require('process')
-var OPTS = {
-  server: {
-    url: process.env.LDAP_URL,
-    bindDN: process.env.LDAP_bindDN,
-    bindCredentials: process.env.LDAP_bindCredentials,
-    searchBase: process.env.LDAP_searchBase,
-    searchFilter: process.env.LDAP_searchFilter,
-    tlsOptions: {
-      ca: [
-        fs.readFileSync('./certs/ProofpointCorporateRootCA.crt'),
-        fs.readFileSync('./certs/ProofpointCorporateSub-OrdinateCA.crt')
-      ]
-    },
-    passReqToCallback: true,
-  }
-}
-passport.use(new LdapStrategy(OPTS, function(user, done) {
-  console.log("[+] Login " + user.sAMAccountName)
-  if (!user) {
-    return done(null, false, {message: 'Unable to login!'})
-  }
-  return done(null, user)
-}))
+
 
 
 // ==================================================
@@ -109,17 +71,23 @@ app.get('/login', (req, res) => {
 // ==================================================
 // Process the Login Form
 // ==================================================
-app.post('/login', (req, res, next) => { 
-  // Middleware to log the login attempt
-  console.log(getTimeStamp() + "Attempted login: " + req.body.username)
-  next()
-}, passport.authenticate('ldapauth', {
-    session: true, 
-    failureFlash: true, 
-    failureRedirect: "/error"}), function(req, res, next) {
-  console.log(getTimeStamp() + "Login Successful for: " + req.user.sAMAccountName)
-  return res.redirect('/');
-})
+app.post('/login', function(req, res, next) {
+  console.log(getTimeStamp() + "Processing Login Page.")
+  passport.authenticate('ldapauth', function(err, user, info) {
+    if (err) { 
+      return res.render('error.ejs', {message: err})}
+    if (!user) { 
+      return res.render('error.ejs', {message: info.message} )}
+    req.logIn(user, function(err) {
+      if (err) { 
+        return res.render('error.ejs', {message: err})
+       }
+       return res.redirect("/")
+    });
+  })(req, res, next);
+});
+
+
 
 
 // ==================================================
@@ -130,9 +98,8 @@ app.get('/error', (req, res) => {
   res.render('error.ejs', { message: req.flash('error') })
 })
 
-
 app.get('/flash', function(req, res){
-  req.flash('error', 'Hi there!')
+  req.flash('error', 'This is a test error')
   res.redirect('/error');
 });
 
@@ -588,11 +555,11 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         res.render("show.ejs", {result, user: req.user})
       } else {
           console.log(getTimeStamp() + req.user.sAMAccountName + " attempted to access index/" + req.params.id )
-          res.render('error.ejs', {error: "Cannot find this customer name", details: "Try finding a customer on the index page", user: req.user.sAMAccountName})
+          res.render('error.ejs', {message: "Cannot find this customer name", details: "Try finding a customer on the index page", user: req.user.sAMAccountName})
       }
   }).catch((error) => {
       console.log(error)
-      res.render('error.ejs', {error, user: req.user.sAMAccountName})
+      res.render('error.ejs', {message: error, user: req.user.sAMAccountName})
   });
 });
 

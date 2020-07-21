@@ -61,6 +61,20 @@
       var fileName = $(this).val().split("\\").pop();
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+
+    // Perform the action for the Delete button - Delete a file
+    function delete_file(fileID) {
+        $.ajax({
+            url:'/delete/'+fileID,
+            data: {},
+            type: 'POST',
+            success: function() {
+                console.log("File Deleted: " + fileID)
+            }
+        })
+    }
+
+    // Load the list of files and display it in a table
     $(document).ready(
         function() {
             var cn = $('#customername').val()
@@ -76,7 +90,7 @@
                             newRow = newRow + '<td>' + value.createdAt + '</td>'
                             newRow = newRow + '<td>' + value.uploadedBy + '</td>'
                             newRow = newRow + '<td><form method="POST" action="/delete/'+ value.fileID + '">'
-                            newRow = newRow + '<button type="submit" class="button btn btn-danger btn-block">'
+                            newRow = newRow + '<button type="submit" class="button btn btn-danger btn-block" >'
                             newRow = newRow + 'Delete</button></form></td></tr>'
                         $("tbody#tableBody").append(newRow)
                     })

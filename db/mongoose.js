@@ -37,9 +37,6 @@ db.on("error", console.error.bind(console, "[+] DB Connection Error - "))
 
 
 
-// ======================================================
-// Grid FS Setup
-// ======================================================
 
 
 module.exports = db
