@@ -1,0 +1,51 @@
+
+<%- include('./partials/header.ejs') %> 
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center display-4 my-4">The List of Files</h1>
+         
+        <% if (!locals.files) { %>
+            <p>No files exist</p>
+            <p> Upload a file <a href="/">here</a><p></p>
+        <% } else { %>
+        <div class="table-responsive-lg">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                      <th>File ID</th>
+                      <th>Uploaded</th>
+                      <th>Filename</th>
+                      <th>Type</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                <% files.forEach(element => { %>
+                    <tr>
+                        <td> <a href="/files/<%= element.filename %>"><%= element._id %></a> </td>
+                        <td><%= element.uploadDate.toDateString() %></td>
+                        <td> <a href="/getfile/<%= element._id %>"><%= element.filename %></a> </td>
+                        <td> 
+                            <% if (element.contentType == 'image/jpeg' || element.contentType == 'image/png') { %> 
+                                <a href="/image/<%= element.filename %>" class="btn btn-primary btn-block"><%= element.contentType %></a>
+                            <% } else { %>
+                                <a href="#" class="btn btn-secondary btn-block disabled"><%= element.contentType %></a>
+                            <% } %>
+                        </td>
+                        <td> 
+                            <form method="POST" action="/delete/<%= element._id %>">
+                                <button type="submit" class="button btn btn-danger btn-block">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </table>
+        </div>
+        <% } %>
+            
+        </div>
+    </div>
+</div>
+<%- include('./partials/footer.ejs') %> 

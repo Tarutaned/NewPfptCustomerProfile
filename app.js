@@ -42,10 +42,12 @@ app.use(function (req, res, next) {
     next()
 })
 
+session_secret = process.env.JWT_SECRET || "6cxfWPptu8JJ31hv5v9IyE8LIYKMN837XW0FdsUvFaXTO4kc8mfD1BfwusiG"
+
 // Setup express-session
 app.use(session({
     store: new MongoStore({ mongooseConnection: db }),
-    secret: 'supersecretcode',
+    secret: session_secret,
     ttl: (120),
     cookie: { maxAge: 3600000 },  // 1 hour in Milliseconds
     resave: false,
@@ -61,7 +63,7 @@ app.use(passport.session())
 
 // Set Routers
 app.use(require("./routes/router"))
-
+app.use(require("./routes/files"))
 app.use(require("./routes/api"))
 app.use(require("./routes/errorhandlers"))
 

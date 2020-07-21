@@ -679,10 +679,7 @@ app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log(getTimeStamp() + req.user.sAMAccountName + " is displaying Activity Report page for " + req.params.days + " days.")
   // TO DO
   // Make sure that the date is an integer
-
   var theDate = moment().subtract(req.params.days, 'days')
-
-  
   Customer.find(
     {
       updatedAt:{'$gte': theDate}
@@ -694,6 +691,22 @@ app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       return res.render("error.ejs", {error, user: req.user.sAMAccountName}) }
     )
 })
+
+// =============================================
+// API Endpoint
+// get a customer
+// =============================================
+app.post('/getCustomer', (req, res) => {
+  console.log("Searching for customer: " + req.body.search)
+  Customer.find({name: {$regex: req.body.search }}).then((result) => {
+    console.log("Result Count: " + result.length)
+    return res.send(result)
+  }).catch((error) => {
+    return res.send("no customer found")
+  })
+})
+
+
 
 
 // =============================================
