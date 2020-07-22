@@ -10,7 +10,7 @@ var ObjectId = require('mongodb').ObjectID;
 const customerfile = require('../models/customerfile')
 const Customer = require("../models/customer")
 const moment = require('moment')
-
+const connectEnsureLogin      = require('connect-ensure-login')
 
 
 // ======================================================
@@ -55,11 +55,11 @@ const storage = new GridFsStorage({
 
 // @route POST /upload
 // @desc Uploads file to DB
-router.post('/upload', upload.single('file'), (req, res) => {
+router.post('/upload', connectEnsureLogin.ensureLoggedIn(), upload.single('file'), (req, res) => {
   console.log('[+] Post upload: ' + req.file.originalname)
   if (!(req.file === undefined)) {
     const cf = new customerfile( {
-      fileID: res.req.file.id,
+      fileID: res.req.file.id,  // FIX THIS !!!?!?!?!
       filename: req.file.originalname,
       customerID: req.body.customername,
       uploadedBy: req.user.sAMAccountName
@@ -86,11 +86,27 @@ router.post('/upload', upload.single('file'), (req, res) => {
 })
 
 
+
+// ======================================================
+// Test function
+// ======================================================
+router.post('/test', (req, res) => {
+  console.log('[+] Test Function')
+  console.log(Object.keys(req.body))
+  // console.log(res.req.file.id)
+  // console.log(req.file.originalname)
+  
+  console.log('[+] CustomerName: ' + req.customername)
+  console.log('[+] Username: ' + req.user.sAMAccountName)
+  res.send({"customername":req.customername, "username":req.user.sAMAccountName})
+})
+
+
 // ======================================================
 // GET
 // Lists all files associated with a customerID
 // ======================================================
-router.post('/listfiles/:customername', (req, res) => {
+router.post('/listfiles/:customername', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   customerfile.find({customerID: req.params.customername}).then((list) => {
     return res.send(list)
   }).catch((e) => {
@@ -130,7 +146,7 @@ router.get('/files', (req, res) => {
 // API Endpoint
 // Returns a List of Files for a Customer
 // =============================================
-router.get('/getFiles/:customername', (req, res) => {
+router.get('/getFiles/:customername', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   customerfile.find({customerID: req.params.customername}).then((result) => {
     if(!result) {
       return res.render('error.ejs', {message: "Nothing found", user: req.user})
@@ -160,7 +176,7 @@ router.get('/files/:filename', (req, res) => {
 
 // @route /GET /image
 // @desc Display an image
-router.get('/image/:filename', (req, res) => {
+router.get('/image/:filename', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log('[+] Get image: ' + req.params.filename)
   gfs.files.findOne({filename: req.params.filename}, (err, file) => {
     if(err) { return res.status(500).json({ err }) }
@@ -188,7 +204,7 @@ router.get('/image/:filename', (req, res) => {
 
 // @route /GET /file
 // @desc Download a File by ID
-router.get('/getfile/:_id', (req, res) => {
+router.get('/getfile/:_id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log('[+] Get file id: ' + req.params._id)
   gfs.files.findOne({_id: ObjectId(req.params._id)}, (err, file) => {
     if(err) {return res.status(500).json( {err})}
@@ -201,8 +217,7 @@ router.get('/getfile/:_id', (req, res) => {
     else {
       // the file exists
       const readstream = gfs.createReadStream(file);
-      console.log('[+] User is downloading: ' + file.filename)
-      console.log(encodeURIComponent(file.filename))
+      console.log('[+] User is downloading a ' + file.contentType + ' file, named: ' + file.filename)
       // Set the File Type and Filename before sending the stream
       res.writeHead(200, {
         "Content-Type": file.contentType,
@@ -218,7 +233,7 @@ router.get('/getfile/:_id', (req, res) => {
 // API Endpoint
 // Delete One File
 // =============================================
-router.post('/delete/:id', (req, res) => {
+router.post('/delete/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log('[+] Delete file where id=' + req.params.id)
 
   // This has 2 parts

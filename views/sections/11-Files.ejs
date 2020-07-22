@@ -61,7 +61,6 @@
       var fileName = $(this).val().split("\\").pop();
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
-
     // Perform the action for the Delete button - Delete a file
     function delete_file(fileID) {
         $.ajax({
@@ -73,7 +72,6 @@
             }
         })
     }
-
     // Load the list of files and display it in a table
     $(document).ready(
         function() {
