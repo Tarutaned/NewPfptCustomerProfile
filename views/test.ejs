@@ -92,12 +92,46 @@
           <button type="button" class="btn btn-link">Link</button> 
         </div>
       </div>
+      <div class="col-md-6 m-auto">
+        <div id="accordion">
+            <div class="card bg-light text-muted">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                        <strong>Upload a File for Customer1</strong>
+                    </a>
+                </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                <div class="card-body">
+                    <form id="frmUpload" action="/upload" method="post" enctype="multipart/form-data">
+                        <div class="custom-file mb-3">
+                            <input type="file" name="file" id="file" class="custom-file-input" required/>
+                            <label for="file" class="custom-file-label">Choose File</label>
+                        </div>
+                        <input type="hidden" id="customername" name="customername" value="Customer1"/>
+                        <input id="btnUpload" class="btn btn-primary btn-block" value="Upload">
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
     </div>
  
     <script>
-         jQuery(":button").click(function() {
-        alert("You clicked the button.")
-    })
+      // Make the filename appear on the Select box
+      $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop()
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName)
+      })
+
+      jQuery("#btnUpload").click(function() {
+        var form = document.getElementById('frmUpload')
+        var formData = new FormData(form)
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', '/upload', true)
+        xhr.send(formData)
+        alert("Data sent.")
+      })
     </script>
  
  

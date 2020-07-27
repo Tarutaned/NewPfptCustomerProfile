@@ -3,28 +3,27 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 m-auto">
-
-        <div id="accordion">
-            <div class="card bg-light text-muted">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                        <strong>Upload a File for <%= locals.result.customer.name %></strong>
-                      </a>
+            <div id="accordion">
+                <div class="card bg-light text-muted">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                            <strong>Upload a File for <%= locals.result.customer.name %></strong>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+                        <form id="frmUpload" action="javascript:uploadFile()" method="post" enctype="multipart/form-data">
+                            <div class="custom-file mb-3">
+                                <input type="file" name="file" id="file" class="custom-file-input" required/>
+                                <label for="file" class="custom-file-label" id="custom-file-label">Choose File</label>
+                            </div>
+                            <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
+                            <input type="submit" id="btnUpload" class="btn btn-primary btn-block" value="Upload">
+                        </form>
+                    </div>
                 </div>
-                <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                <div class="card-body">
-                    <form action="/upload" method="post" enctype="multipart/form-data">
-                        <div class="custom-file mb-3">
-                            <input type="file" name="file" id="file" class="custom-file-input" required/>
-                            <label for="file" class="custom-file-label">Choose File</label>
-                        </div>
-                        <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
-                        <input type="submit" class="btn btn-primary btn-block" value="Upload">
-                    </form>
                 </div>
             </div>
-            </div>
-        </div>
         </div>
     </div>
 
@@ -56,30 +55,21 @@
 
 
 <script>
-   // Add the following code if you want the name of the file appear on select
+   // Make the filename appear on the Select box
     $(".custom-file-input").on("change", function() {
       var fileName = $(this).val().split("\\").pop();
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
-    // Perform the action for the Delete button - Delete a file
-    function delete_file(fileID) {
-        $.ajax({
-            url:'/delete/'+fileID,
-            data: {},
-            type: 'POST',
-            success: function() {
-                console.log("File Deleted: " + fileID)
-            }
-        })
-    }
-    // Load the list of files and display it in a table
+
+
+    
     $(document).ready(
         loadFileList()
         )
 
     // Delete a file
     $(document).on('click', '.btn-danger', function(){ 
-        delConfirm = confirm("Are you sure you want to delete: " + this.id);
+        delConfirm = confirm("Delete file?");
         if(delConfirm) {
             var delRequest = new XMLHttpRequest()
             delRequest.open('POST', '/delete/' + this.id)
@@ -88,8 +78,11 @@
         }
     });
 
-
+    // Load the list of files and display it in a table
     function loadFileList() {
+            //alert("loading file list")
+            // Clear the tableBody
+            $("#tableBody").empty();
             // Create the table body
             var cn = $('#customername').val()
             console.log("Customer Name = " + cn)
@@ -113,6 +106,22 @@
             })
         }
 
+
+    // Upload the file when user clicks btnUpload
+    jQuery("#btnUpload").click(function() {
+        var form = document.getElementById('frmUpload')
+        var formData = new FormData(form)
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', '/upload', true)
+        xhr.onload = function() {
+            // alert("uploaded")
+            jQuery("#custom-file-label").html("Choose File")
+            loadFileList()
+        }
+        xhr.send(formData)
+      })
+
+ 
 
 
 </script>
