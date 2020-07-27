@@ -133,15 +133,11 @@ router.get('/getfile/:_id', (req, res) => {
       })
     }
     else {
+      console.log(Object.keys(file))
       // the file exists
       const readstream = gfs.createReadStream(file);
-      // Set the File Type and Filename before sending the stream
-      // res.writeHead(200, {
-      //   "Content-Type": file.contentType,
-      //   "Content-Disposition": "attachment; filename*=" + encodeURIComponent(file.filename)
-      // });
       res.setHeader("Content-Type", file.contentType)
-      res.setHeader("Content-Disposition", "attachment; filename*=" + encodeURIComponent(file.filename))
+      res.setHeader("Content-Disposition", "attachment; filename=" + encodeURIComponent(file.filename))
       readstream.pipe(res);
     }
   })
