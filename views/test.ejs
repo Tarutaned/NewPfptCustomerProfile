@@ -1,13 +1,107 @@
-<%- include('./partials/header.ejs') %> 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Archive Customer Profiles</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/sidebar.css">
+    
+</head>
+<body>
+  
+  
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <% if (message) { %>
-                <p><%= message %></p>
-            <% } %>
-        </div>
+  <div class="header1">
+    <div class="container-fluid">
+    <div class="row justify-content-between">
+      <div class="col-xs-4>
+        <div style="position: top; background:#FFFFFF !important" class="jumbotron-fluid">
+          <img src="/images/Proofpoint-logo-K.jpg" alt="Proofpoint Logo" style="max-height: 70px;">
+      </div>
+      <div class="col-xl-3" style="background-color:white;">
+
+      </div>
     </div>
-</div>
+  </div>
+  </div>
+    <div class="header2">
+      <div class="row justify-content-between">
+        <div class="col-xl-4 ml-2">
+          <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+          <label for="openSidebarMenu" class="sidebarIconToggle">
+            <div class="spinner diagonal part-1"></div>
+            <div class="spinner horizontal"></div>
+            <div class="spinner diagonal part-2"></div>
+          </label>
+          <div id="sidebarMenu">
+            <ul class="sidebarMenuInner">
+              <li><a href="/">Customer Index</a></li>
+              <li><a href="/">My Customers</a></li>
+              <li><a href="/new">New Customer</a></li>
+              <li><a href="/activity">Activity Report</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+   
 
-<%- include('./partials/footer.ejs') %>         
+ 
+    <div class="jumbotron text-center">
+      <h1>My First Bootstrap Page</h1>
+      <p>Resize this responsive page to see the effect!</p> 
+    </div>
+      
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+          <h3>Column 1</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+        </div>
+        <div class="col-sm-4">
+          <h3>Column 2</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+        </div>
+        <div class="col-sm-4">
+          <h3>Column 3</h3>        
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <h2>Button Styles</h2>
+          <button type="button" class="btn">Basic</button>
+          <button type="button" class="btn btn-primary">Primary</button>
+          <button type="button" class="btn btn-secondary">Secondary</button>
+          <button type="button" class="btn btn-success">Success</button>
+          <button type="button" class="btn btn-info">Info</button>
+          <button type="button" class="btn btn-warning">Warning</button>
+          <button type="button" class="btn btn-danger">Danger</button>
+          <button type="button" class="btn btn-dark">Dark</button>
+          <button type="button" class="btn btn-light">Light</button>
+          <button type="button" class="btn btn-link">Link</button> 
+        </div>
+      </div>
+    </div>
+ 
+    <script>
+         jQuery(":button").click(function() {
+        alert("You clicked the button.")
+    })
+    </script>
+ 
+ 
+    
+
+</body>
+</html>

@@ -30,8 +30,11 @@ const db = require('./db/mongoose.js')
 // ======================================================
 app.use(helmet())
 app.use(favicon(__dirname + '/public/favicon.ico'))
+app.use(express.static(__dirname + "/public/"))
+// app.use(express.static("public"))
+
 app.set("view engine", "ejs")
-app.use(express.static(__dirname + "/public"))
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressSanitizer())
 app.use(methodOverride("_method"))
@@ -65,6 +68,7 @@ app.use(passport.session())
 app.use(require("./routes/router"))
 app.use(require("./routes/files"))
 app.use(require("./routes/api"))
+app.use(require("./routes/feature"))
 app.use(require("./routes/errorhandlers"))
 
 // Run the app

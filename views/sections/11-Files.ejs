@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <form action="/upload" method="post" enctype="multipart/form-data">
                         <div class="custom-file mb-3">
-                            <input type="file" name="file" id="file" class="custom-file-input" />
+                            <input type="file" name="file" id="file" class="custom-file-input" required/>
                             <label for="file" class="custom-file-label">Choose File</label>
                         </div>
                         <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
@@ -34,7 +34,7 @@
         <div class="col-md-10 m-auto">
             <h6 class="text-center display-4 my-4">File List</h6>
             <div class="table-responsive-lg">
-                <table class="table table-hover">
+                <table class="table table-hover" id="tblFileList">
                     <thead>
                         <tr>
                           <th>Filename</th>
@@ -56,7 +56,7 @@
 
 
 <script>
-    // Add the following code if you want the name of the file appear on select
+   // Add the following code if you want the name of the file appear on select
     $(".custom-file-input").on("change", function() {
       var fileName = $(this).val().split("\\").pop();
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
@@ -74,7 +74,23 @@
     }
     // Load the list of files and display it in a table
     $(document).ready(
-        function() {
+        loadFileList()
+        )
+
+    // Delete a file
+    $(document).on('click', '.btn-danger', function(){ 
+        delConfirm = confirm("Are you sure you want to delete: " + this.id);
+        if(delConfirm) {
+            var delRequest = new XMLHttpRequest()
+            delRequest.open('POST', '/delete/' + this.id)
+            delRequest.send()
+            jQuery(this).parent().parent().remove()
+        }
+    });
+
+
+    function loadFileList() {
+            // Create the table body
             var cn = $('#customername').val()
             console.log("Customer Name = " + cn)
             $.ajax({
@@ -84,15 +100,19 @@
                 success: function(data) {
                     console.log(data)
                     jQuery.each(data, function(index, value) {
-                        var newRow = '<tr><td>' + value.filename + '</td>'
+                        var newRow = '<tr id="' + value.fileID + '">'
+                            newRow = newRow + '<td><a href="/getfile/' + value.fileID + '">' + value.filename + '</a></td>'
                             newRow = newRow + '<td>' + value.createdAt + '</td>'
                             newRow = newRow + '<td>' + value.uploadedBy + '</td>'
-                            newRow = newRow + '<td><form method="POST" action="/delete/'+ value.fileID + '">'
-                            newRow = newRow + '<button type="submit" class="button btn btn-danger btn-block" >'
-                            newRow = newRow + 'Delete</button></form></td></tr>'
+                            newRow = newRow + '<td>'
+                            newRow = newRow + '<button type="button" id="' + value.fileID + '" class="btn btn-danger">Delete</button>'
+                            newRow = newRow + '</td></tr>'
                         $("tbody#tableBody").append(newRow)
                     })
                 }
             })
-        })
+        }
+
+
+
 </script>

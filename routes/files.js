@@ -88,21 +88,6 @@ router.post('/upload', connectEnsureLogin.ensureLoggedIn(), upload.single('file'
 
 
 // ======================================================
-// Test function
-// ======================================================
-router.post('/test', (req, res) => {
-  console.log('[+] Test Function')
-  console.log(Object.keys(req.body))
-  // console.log(res.req.file.id)
-  // console.log(req.file.originalname)
-  
-  console.log('[+] CustomerName: ' + req.customername)
-  console.log('[+] Username: ' + req.user.sAMAccountName)
-  res.send({"customername":req.customername, "username":req.user.sAMAccountName})
-})
-
-
-// ======================================================
 // GET
 // Lists all files associated with a customerID
 // ======================================================
@@ -122,7 +107,7 @@ router.post('/echo', (req, res) => {
 
 // @route GET /files
 // @desc Display all files in JSON
-router.get('/files', (req, res) => {
+router.get('/files', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log('[+] Get Files')
   gfs.files.find().toArray( (err, files) => {
     if(err) {
@@ -135,7 +120,7 @@ router.get('/files', (req, res) => {
     }
     else {
       // Files exist
-      return res.render('files.ejs', {files})
+      return res.render('files.ejs', {files, user: req.user})
     }
   })
 })
@@ -204,7 +189,7 @@ router.get('/image/:filename', connectEnsureLogin.ensureLoggedIn(), (req, res) =
 
 // @route /GET /file
 // @desc Download a File by ID
-router.get('/getfile/:_id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+router.get('/getfile/:_id', (req, res) => {
   console.log('[+] Get file id: ' + req.params._id)
   gfs.files.findOne({_id: ObjectId(req.params._id)}, (err, file) => {
     if(err) {return res.status(500).json( {err})}
@@ -217,12 +202,15 @@ router.get('/getfile/:_id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
     else {
       // the file exists
       const readstream = gfs.createReadStream(file);
-      console.log('[+] User is downloading a ' + file.contentType + ' file, named: ' + file.filename)
+      console.log('[+] User is downloading: ' + file.filename)
+      console.log('[+] URL Encoded filename: ' + encodeURIComponent(file.filename))
       // Set the File Type and Filename before sending the stream
-      res.writeHead(200, {
-        "Content-Type": file.contentType,
-        "Content-Disposition": "attachment; filename*=" + encodeURIComponent(file.filename)
-      });
+      // res.writeHead(200, {
+      //   "Content-Type": file.contentType,
+      //   "Content-Disposition": "attachment; filename*=" + encodeURIComponent(file.filename)
+      // });
+      res.setHeader("Content-Type", file.contentType)
+      res.setHeader("Content-Disposition", "attachment; filename*=" + encodeURIComponent(file.filename))
       readstream.pipe(res);
     }
   })
@@ -249,7 +237,7 @@ router.post('/delete/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
 
   // Delete from Grid FS
 
-  console.log('[+] Delete from GridFS' + req.params.id)
+  console.log('[+] Delete from GridFS: ' + req.params.id)
   gfs.remove({_id: req.params.id, root: 'uploads'}, (err, gridStore) => {
     if(err) {
       return res.status(404).json({ err: err})
