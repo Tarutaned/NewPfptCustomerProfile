@@ -1,25 +1,21 @@
 <style type="text/css">
     @charset "utf-8";
-    @import url//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
+    div.main{
+        background: #0264d6; /* Old browsers */
+        background: -moz-radial-gradient(center, ellipse cover,  #0264d6 1%, #1c2b5a 100%); /* FF3.6+ */
+        background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#0264d6), color-stop(100%,#1c2b5a)); /* Chrome,Safari4+ */
+        background: -webkit-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Opera 12+ */
+        background: -ms-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* IE10+ */
+        background: radial-gradient(ellipse at center,  #0264d6 1%,#1c2b5a 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+        height:calc(100vh);
+        width:100%;
+    }
 
-
-
-div.main{
-    background: #0264d6; /* Old browsers */
-background: -moz-radial-gradient(center, ellipse cover,  #0264d6 1%, #1c2b5a 100%); /* FF3.6+ */
-background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#0264d6), color-stop(100%,#1c2b5a)); /* Chrome,Safari4+ */
-background: -webkit-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Chrome10+,Safari5.1+ */
-background: -o-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Opera 12+ */
-background: -ms-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* IE10+ */
-background: radial-gradient(ellipse at center,  #0264d6 1%,#1c2b5a 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-height:calc(100vh);
-width:100%;
-}
-
-[class*="fontawesome-"]:before {
-  font-family: 'FontAwesome', sans-serif;
-}
+    [class*="fontawesome-"]:before {
+    font-family: 'FontAwesome', sans-serif;
+    }
 
 /* ---------- GENERAL ---------- */
 
@@ -34,21 +30,7 @@ width:100%;
 
 }
 
-body {
 
-    color: #606468;
-  font: 87.5%/1.5em 'Open Sans', sans-serif;
-  margin: 0;
-}
-
-a {
-    color: #eee;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
 
 input {
     border: none;
@@ -59,24 +41,7 @@ input {
     -webkit-appearance: none;
 }
 
-p {
-    line-height: 1.5em;
-}
 
-.clearfix {
-  *zoom: 1;
-
-  &:before,
-  &:after {
-    content: ' ';
-    display: table;
-  }
-
-  &:after {
-    clear: both;
-  }
-
-}
 
 .container {
   left: 50%;
@@ -94,21 +59,18 @@ p {
     display:inline-block;
     width:40%;
 }
-#login{
+
+
+#login {
 border-right:1px solid #fff;
   padding: 0px 22px;
-  width: 59%;
-}
-.logo{
-color:#fff;
-font-size:50px;
-  line-height: 125px;
+  width: 60%;
 }
 
-#login form span.fa {
+#login form span.fa-user {
     background-color: #fff;
-    border-radius: 3px 0px 0px 3px;
-    color: #000;
+    border-radius: 5px 0px 0px 5px;
+    color: #37474f;
     display: block;
     float: left;
     height: 50px;
@@ -118,8 +80,39 @@ font-size:50px;
     width: 50px;
 }
 
+#login form span.fa-lock {
+    background-color: #fff;
+    border-radius: 5px 0px 0px 5px;
+    color: #37474f;
+    display: block;
+    float: left;
+    height: 50px;
+    font-size:24px;
+    line-height: 50px;
+    text-align: center;
+    width: 50px;
+}
+
+#login form span.fa-eye {
+    background-color: #fff;
+    border-radius: 0px 5px 5px 0px;
+    color: #37474f;
+    display: block;
+    float: left;
+    height: 50px;
+    font-size:24px;
+    line-height: 50px;
+    text-align: center;
+    width: 50px;
+}
+
+#login form #username {
+    border-radius: 0px 5px 5px 0px;
+}
+
 span.fa-eye, span.fa-eye-slash {
     float: right !important;
+    
 }
 
 #login form input {
@@ -133,7 +126,7 @@ fieldset{
 }
 #login form input[type="text"], input[type="password"] {
     background-color: #fff;
-    border-radius: 0px 3px 3px 0px;
+    border-radius: 0px 0px 0px 0px;
     color: #000;
     margin-bottom: 1em;
     padding: 0 16px;
@@ -148,17 +141,17 @@ fieldset{
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
-  background-color: #000000;
+  background-color: #263238;
   color: #eee;
   font-weight: bold;
   /* margin-bottom: 2em; */
   text-transform: uppercase;
   padding: 5px 10px;
-  height: 30px;
+  height: 40px;
 }
 
 #login form input[type="submit"]:hover {
-    background-color: #0264d6;
+    background-color: #111;
 }
 
 #login > p {
@@ -173,9 +166,14 @@ fieldset{
   width: 600px;
 }
 </style>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 <script type="text/javascript" src="./scripts/login.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
@@ -183,33 +181,20 @@ fieldset{
 <div class="main">
     <div class="container">
 
-        <!-- Notifications -->
-        <% if (locals.errors) { %>
-            <% for(leti=0; i<errors.length; i++) { %>
-                <div class="row">
-                    <div class="col-md-12">
-                            <div class="alert alert-danger alert-dismissible fade show">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <%= errors[i] %>
-                            </div>
-                    </div>
-                </div>
-            <% } %>
-        <% } %>
-
-
-
-
-
-
-
         <center>
             <div class="middle">
                 <div id="login">
                     <form action="/login" method="post">
                         <fieldset class="clearfix">
-                            <p><span class="fa fa-user"></span><input id="username" name="username" type="text" placeholder="Username" required></p> <!-- JS because of IE support; better: placeholder="Username" -->
-                            <p><span class="fa fa-lock"></span><input id="password" name="password" type="password" placeholder="Password" required><span id="show_password" class="fa fa-eye"></span></p> <!-- JS because of IE support; better: placeholder="Password" -->
+                            <p>
+                                <span class="fa fa-user"></span>
+                                <input id="username" name="username" type="text" placeholder="Username" required>
+                            </p> <!-- JS because of IE support; better: placeholder="Username" -->
+                            <p>
+                                <span class="fa fa-lock"></span>
+                                <input id="password" name="password" type="password" placeholder="Password" required>
+                                <span id="show_password" class="fa fa-eye"></span>
+                            </p> <!-- JS because of IE support; better: placeholder="Password" -->
                             <div>
                                 <span><input type="submit" value="Sign In"></span>
                             </div>
@@ -219,8 +204,9 @@ fieldset{
                     </form>
                     <div class="clearfix"></div>
                 </div> <!-- end login -->
-                <div class="logo">proofpoint
-                    <div class="clearfix"></div>
+                <div class="logo pl-4">
+                    <img src="/images/Proofpoint-logo-Reversed.png" alt="Proofpoint" style="width:400px;">
+
                 </div>
             </div>
         </center>
