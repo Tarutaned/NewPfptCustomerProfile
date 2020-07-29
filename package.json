@@ -53,7 +53,7 @@
   },
   "homepage": "https://github.com/nikko0327/PfptCustomerProfile#readme",
   "scripts": {
-    "dev": "env-cmd -f ./config/dev.env nodemon app.js",
+    "dev": "nodemon app.js",
     "prod": "env-cmd -f ./config/prod.env node app.js"
   }
 }

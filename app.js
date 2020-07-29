@@ -1,5 +1,7 @@
 require('dotenv').config()
 const express = require("express")
+const https = require("https")
+const fs = require("fs")
 const bodyParser = require("body-parser")
 const methodOverride = require("method-override")
 const expressSanitizer = require("express-sanitizer")
@@ -61,6 +63,7 @@ app.use(flash())
 
 // Setup Passport
 const passport = require('passport')
+const { env } = require('process')
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -72,7 +75,18 @@ app.use(require("./routes/feature"))
 app.use(require("./routes/errorhandlers"))
 
 // Run the app
-var port = process.env.PORT || 80
-app.listen(port, function () {
-    console.log(`[+] Server is listening on port ${port}`)
-})
+ var port = process.env.PORT || 80
+// app.listen(port, function () {
+//     console.log(`[+] Server is listening on port ${port}`)
+// })
+
+  
+
+const options = {
+    key: fs.readFileSync(__dirname + process.env.HTTPS_KEYFILE),
+    cert: fs.readFileSync(__dirname + process.env.HTTPS_CERTFILE),
+    passphrase: process.env.HTTPS_PASSPHRASE
+}
+
+console.log("[+] Running server on port: " + port)
+https.createServer(options, app).listen(port)
