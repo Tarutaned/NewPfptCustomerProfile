@@ -68,7 +68,7 @@
         )
 
     // Delete a file
-    $(document).on('click', '.btn-danger', function(){ 
+    $(document).on('click', '.btn-delete-file', function(){ 
         delConfirm = confirm("Delete file?");
         if(delConfirm) {
             var delRequest = new XMLHttpRequest()
@@ -98,7 +98,7 @@
                             newRow = newRow + '<td>' + value.createdAt + '</td>'
                             newRow = newRow + '<td>' + value.uploadedBy + '</td>'
                             newRow = newRow + '<td>'
-                            newRow = newRow + '<button type="button" id="' + value.fileID + '" class="btn btn-danger">Delete</button>'
+                            newRow = newRow + '<button type="button" id="' + value.fileID + '" class="btn btn-danger btn-delete-file">Delete</button>'
                             newRow = newRow + '</td></tr>'
                         $("tbody#tableBody").append(newRow)
                     })

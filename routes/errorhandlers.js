@@ -1,3 +1,6 @@
+// This is an error handler for Express itself.
+// If an express error happens, then this code will run
+
 const express = require("express");
 const router = new express.Router()
 

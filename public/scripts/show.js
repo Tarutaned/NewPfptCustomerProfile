@@ -150,65 +150,65 @@ $(document).ready(() => {
     //alert(window.location.host);
 
     // This one is for loading uploaded diagrams
-    $.ajax({
-        type: "GET",
-        //timeout: 3000,
-        url: `http://${window.location.hostname}/customerprofile/uploads/` + encodeURIComponent(customer_name),
-        success: function (res) {
-            if (Array.isArray(res)) {
-                res.forEach(item => {
-                    //console.log(item);
-                    switch (item.metadata.diagram) {
-                        case '1': {
-                            $('#diagram1').append(`
-                            <div class="row">
-                                <a href="../files/${item.filename}">
-                                    <p class="truncate">${item.metadata.originalname}</p>
-                                </a>&emsp;&emsp;
-                                <div style="float: right !important;">
-                                    <i class="fa fa-trash" aria-hidden="true"
-                                        onclick="delete_diagram(this, '../files/${item._id}?_method=DELETE');"></i>
-                                </div>
-                            </div>`);
-                            break;
-                        }
-                        case '2': {
-                            $('#diagram2').append(`
-                            <div class="row">
-                                <a href="../files/${item.filename}">
-                                    <p class="truncate">${item.metadata.originalname}</p>
-                                </a>&emsp;&emsp;
-                                <div style="float: right !important;">
-                                <i class="fa fa-trash" aria-hidden="true"
-                                    onclick="delete_diagram(this, '../files/${item._id}?_method=DELETE');"></i>
-                                </div>
-                            </div>`);
-                            break;
-                        }
-                        case '3': {
-                            $('#diagram3').append(`
-                            <div class="row">
-                                <a href="../files/${item.filename}">
-                                    <p class="truncate">${item.metadata.originalname}</p>
-                                </a>&emsp;&emsp;
-                                <div style="float: right !important;">
-                                    <i class="fa fa-trash" aria-hidden="true"
-                                        onclick="delete_diagram(this, '../files/${item._id}?_method=DELETE');"></i>
-                                </div>
-                            </div>`);
-                            break;
-                        }
-                        default: break;
-                    }
-                });
-            } else {
-                console.log("GET received no array of items");
-            }
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-        }
-    });
+    // $.ajax({
+    //     type: "GET",
+    //     //timeout: 3000,
+    //     url: `http://${window.location.hostname}/customerprofile/uploads/` + encodeURIComponent(customer_name),
+    //     success: function (res) {
+    //         if (Array.isArray(res)) {
+    //             res.forEach(item => {
+    //                 //console.log(item);
+    //                 switch (item.metadata.diagram) {
+    //                     case '1': {
+    //                         $('#diagram1').append(`
+    //                         <div class="row">
+    //                             <a href="../files/${item.filename}">
+    //                                 <p class="truncate">${item.metadata.originalname}</p>
+    //                             </a>&emsp;&emsp;
+    //                             <div style="float: right !important;">
+    //                                 <i class="fa fa-trash" aria-hidden="true"
+    //                                     onclick="delete_diagram(this, '../files/${item._id}?_method=DELETE');"></i>
+    //                             </div>
+    //                         </div>`);
+    //                         break;
+    //                     }
+    //                     case '2': {
+    //                         $('#diagram2').append(`
+    //                         <div class="row">
+    //                             <a href="../files/${item.filename}">
+    //                                 <p class="truncate">${item.metadata.originalname}</p>
+    //                             </a>&emsp;&emsp;
+    //                             <div style="float: right !important;">
+    //                             <i class="fa fa-trash" aria-hidden="true"
+    //                                 onclick="delete_diagram(this, '../files/${item._id}?_method=DELETE');"></i>
+    //                             </div>
+    //                         </div>`);
+    //                         break;
+    //                     }
+    //                     case '3': {
+    //                         $('#diagram3').append(`
+    //                         <div class="row">
+    //                             <a href="../files/${item.filename}">
+    //                                 <p class="truncate">${item.metadata.originalname}</p>
+    //                             </a>&emsp;&emsp;
+    //                             <div style="float: right !important;">
+    //                                 <i class="fa fa-trash" aria-hidden="true"
+    //                                     onclick="delete_diagram(this, '../files/${item._id}?_method=DELETE');"></i>
+    //                             </div>
+    //                         </div>`);
+    //                         break;
+    //                     }
+    //                     default: break;
+    //                 }
+    //             });
+    //         } else {
+    //             console.log("GET received no array of items");
+    //         }
+    //     },
+    //     error: function (xhr, status, error) {
+    //         console.log(error);
+    //     }
+    // });
 
     //var editing_customer = false;
     $('#editCustomerLink').click(function () {

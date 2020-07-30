@@ -71,7 +71,6 @@ app.use(passport.session())
 app.use(require("./routes/router"))
 app.use(require("./routes/files"))
 app.use(require("./routes/api"))
-app.use(require("./routes/feature"))
 app.use(require("./routes/errorhandlers"))
 
 // Run the app

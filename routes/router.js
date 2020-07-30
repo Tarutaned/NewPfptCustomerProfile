@@ -160,6 +160,7 @@ app.get("/index", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   })
 })
 
+
 // ======================================================
 // Display the New Customer Page
 // ======================================================
@@ -581,12 +582,39 @@ app.get("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res
 
 
 // ======================================================
-// Version 1.3
-// Update a Customer Profile
+// API Endpoint
+// Return a list of connectors for a Customer
 // ======================================================
-app.post("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) { 
-  res.send("It works")
+app.get("/getConnectors/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  console.log(getTimeStamp() + req.user.sAMAccountName + " getConnectors: " + req.params.id)
+  ConnectorPlatformQuestions.findOne({name:req.params.id}, (err, doc) => {
+    if(err) {
+      return res.render("error.ejs", {err, user: req.user.sAMAccountName})
+    }
+    return res.send(doc)
+  })
 })
+
+
+// ======================================================
+// API Endpoint
+// Return a list of connectors for a Customer
+// ======================================================
+app.get("/addConnector/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  console.log(getTimeStamp() + req.user.sAMAccountName + " setConnectors: " + req.params.id)
+  ConnectorPlatformQuestions.findOneAndUpdate({name: req.parms.id}, { $push: {
+    connectors: { 
+      "name": "Testing",
+      "users": "32343",
+      "licences": "23432",
+      "dailyMessages": "32343"
+    }
+  }})
+
+})
+
+
+
 
 
 // ======================================================

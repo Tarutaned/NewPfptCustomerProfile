@@ -142,6 +142,12 @@ var CustomerSchema = new mongoose.Schema({
     updatedBy: {
       type: String,
       default: ""
+    },
+    // an array of connectors
+    // each connector is an object
+    connectors: { 
+        type : Array , 
+        "default" : [] 
     }
 },
 {
@@ -155,28 +161,5 @@ var CustomerVersionsSchema = new mongoose.Schema({
 var Customer = mongoose.model("Customer", CustomerSchema);
 var CustomerVersions = mongoose.model("CustomerVersions", CustomerVersionsSchema);
 
-// Customer.create({
-//     name: "Kearney",
-//     status: "OLD",
-//     salesRep: "1One",
-//     archivingSe: "2Two",
-//     accManager: "3Three",
-//     location: "4Four",
-//     supervision: "5Five",
-//     natIp: "6Six",
-//     contacts: "7Seven"
-// });
-//
-// var newCustomer = new Customer({
-//     _id: "Tesla"
-// });
-//
-// newCustomer.save(function (error, result) {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         console.log("Successfully created customer: " + result["_id"]);
-//     }
-// });
 
 module.exports = {Customer, CustomerVersions};
