@@ -37,7 +37,8 @@ app.use(express.static(__dirname + "/public/"))
 
 app.set("view engine", "ejs")
 
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(expressSanitizer())
 app.use(methodOverride("_method"))
 app.locals = require('./routes/locals.js')

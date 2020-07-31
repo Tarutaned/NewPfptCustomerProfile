@@ -6,11 +6,13 @@
   <p>Check out the <a href="/index"><strong>Customer Index</strong></a> page.</p>
 <% } else { %>
   <div class="row">
-      <div class="col-md-1" style="background-color:white;"></div>
-      <div class="col-md-10" style="background-color:white;">
+      
+      <div class="col-md-10 mx-auto" style="background-color:white;">
         <h1 class="text-center display-4 my-4">My Customer List</h1>
-      <table id="tblCustomers" class="table table-striped custab">
-        <thead class="thead-dark">
+      </div>
+      <div class="col-md-10 mx-auto" style="background-color:white;">
+      <table id="tblCustomers" class="table table-hover">
+        <thead class="thead-light">
           <tr>
             <th onclick="sortTable(0)">Customer Name <i class="fa fa-fw fa-sort"></i></th>
             <th onclick="sortTable(1)">Sales Rep<i class="fa fa-fw fa-sort"></i></th>

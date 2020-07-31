@@ -20,6 +20,10 @@ router.get('/api/getConnectors/:customerName', (req, res) => {
 
 })
 
+router.post('/api/setConnectors/:customerName', (req, res) => {
+  
+})
+
 
 
 

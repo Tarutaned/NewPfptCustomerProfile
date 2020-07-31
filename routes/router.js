@@ -30,6 +30,7 @@ var {ConnectorPlatformQuestions}          = require("../models/connector_platfor
 var {ConnectorPlatformQuestionsVersions}  = require("../models/connector_platform")
 var {SupervisionQuestionsVersions}        = require("../models/supervision")
 const passport = require("../auth/auth")
+var mongoose = require('mongoose');
 
 // append is the base URL
 var append = "";
@@ -584,34 +585,82 @@ app.get("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res
 // ======================================================
 // API Endpoint
 // Return a list of connectors for a Customer
+// GET
+// Input: CustomerName
+// Output: List of connectors 
+// Example Output: [{type, users, licences, dailymessages}, {...}]
 // ======================================================
 app.get("/getConnectors/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log(getTimeStamp() + req.user.sAMAccountName + " getConnectors: " + req.params.id)
-  ConnectorPlatformQuestions.findOne({name:req.params.id}, (err, doc) => {
+  Customer.findOne({name:req.params.id}, {_id: 0, connectors: 1}, (err, doc) => {
     if(err) {
-      return res.render("error.ejs", {err, user: req.user.sAMAccountName})
+      console.log(err)
+      
+      return res.send("error")
     }
-    return res.send(doc)
+    return res.send(doc.connectors)
   })
 })
 
 
 // ======================================================
 // API Endpoint
-// Return a list of connectors for a Customer
+// Add Connector information for a customer
+// POST
+// Input: Type, TotalUsers, LicencedUsers, DailyMessages
+// Output: Returns the newConnector ID or HTTP 500
 // ======================================================
-app.get("/addConnector/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  console.log(getTimeStamp() + req.user.sAMAccountName + " setConnectors: " + req.params.id)
-  ConnectorPlatformQuestions.findOneAndUpdate({name: req.parms.id}, { $push: {
-    connectors: { 
-      "name": "Testing",
-      "users": "32343",
-      "licences": "23432",
-      "dailyMessages": "32343"
+app.post("/addConnector/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  console.log(getTimeStamp() + req.user.sAMAccountName + " addConnector: " + req.params.id)
+  const newConnector = req.body
+  newConnector.id = mongoose.Types.ObjectId();
+  Customer.findOneAndUpdate({name: "Customer1"}, {$push: {connectors: newConnector}}, function (error, success) {
+    if(error) {
+      return res.sendStatus(500)
     }
-  }})
-
+    else {
+      console.log(getTimeStamp() + req.user.sAMAccountName + " added a Connector to: " + req.params.id)
+      return res.send(newConnector.id)
+    }
+  })
 })
+
+
+// ======================================================
+// API Endpoint
+// Delete Connector information for a customer
+// POST
+// URL: CustomerName
+// Input: Type, TotalUsers, LicencedUsers, DailyMessages
+// Output: Response status code 200 or 500
+// ======================================================
+app.post('/delConnector/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  console.log(getTimeStamp() + req.user.sAMAccountName + " delConnector: " + req.params.id)
+  console.log(req.body)
+  Customer.update({name: req.params.id}, { $pull: { connectors: { id: new mongoose.Types.ObjectId(req.body.delConnectorID)} }}, function (error, success) {
+    if(error) {
+      console.log(error)
+      return res.sendStatus(500)
+    } else {
+      console.log(getTimeStamp() + req.user.sAMAccountName + " deleted a Connector: " + req.body.delConnectorID)
+      return res.sendStatus(200)
+    }
+  } )
+
+
+  // userAccounts.update( 
+  //   { userId: usr.userId },
+  //   { $pull: { connections : { _id : connId } } },
+  //   { safe: true },
+  //   function removeConnectionsCB(err, obj) {
+  //       ...
+  //   });
+  
+
+}) 
+
+
+
 
 
 

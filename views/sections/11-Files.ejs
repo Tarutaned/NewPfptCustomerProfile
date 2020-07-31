@@ -3,14 +3,14 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 m-auto">
-            <div id="accordion">
+            <div id="file-select-accordion">
                 <div class="card bg-light text-muted">
                     <div class="card-header">
                         <a class="card-link" data-toggle="collapse" href="#collapseOne">
                             <strong>Upload a File for <%= locals.result.customer.name %></strong>
                         </a>
                     </div>
-                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div id="collapseOne" class="collapse show" data-parent="#file-select-accordion">
                     <div class="card-body">
                         <form id="frmUpload" action="javascript:uploadFile()" method="post" enctype="multipart/form-data">
                             <div class="custom-file mb-3">
@@ -65,7 +65,7 @@
     
     $(document).ready(
         loadFileList()
-        )
+    )
 
     // Delete a file
     $(document).on('click', '.btn-delete-file', function(){ 
@@ -85,13 +85,13 @@
             $("#tableBody").empty();
             // Create the table body
             var cn = $('#customername').val()
-            console.log("Customer Name = " + cn)
+            // console.log("Customer Name = " + cn)
             $.ajax({
                 url: '/getFiles/' + cn,
                 data: {},
                 type: 'GET',
                 success: function(data) {
-                    console.log(data)
+                    // console.log(data)
                     jQuery.each(data, function(index, value) {
                         var newRow = '<tr id="' + value.fileID + '">'
                             newRow = newRow + '<td><a href="/getfile/' + value.fileID + '">' + value.filename + '</a></td>'

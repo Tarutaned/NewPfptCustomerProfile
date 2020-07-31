@@ -1,0 +1,167 @@
+<!-- Displaying connector platform questions -->
+<!-- Do not format this file in Visual Studio Code, will bork page. -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 m-auto">
+            <h6 class="text-center display-4 my-4">Connector List</h6>
+        </div>
+    </div>
+    
+        <div id="connectorPlatform" class="display-header">
+            <div id="connectorPlatformContainer">
+                    <table class="table table-hover" id="tblConnectorList">
+                        <thead class="thead-light">
+                            <tr>
+                              <th>Connector</th>
+                              <th>Total Users</th>
+                              <th>Licenced Users</th>
+                              <th>Daily Messages</th>
+                              <th>Action</th>
+                            </tr>
+                            <tr>
+                                <form id="frmAddConnector" action="javascript:addConnector()" enctype="multipart/form-data"></form>
+                                    <th>
+                                        <div class="dropdown">
+                                            <select class="form-control" id="addConnectorType">
+                                                <option value="" selected disabled>Type</option>
+                                                <option value="LinkedIn">Linked In</option>
+                                                <option value="Facebook">Facebook</option>
+                                                <option value="MS Teams">MS Teams</option>
+                                                <option value="Slack">Slack</option>
+                                            </select>
+                                    </th>
+                                    <th>
+                                        <input type="number" min="0" class="form-control" placeholder="Total Users" id="addConnectorUsers" required>
+                                    </th>
+                                    <th>
+                                        <input type="number" min="0" class="form-control" placeholder="Licenced Users" id="addConnectorLicences" required>
+                                    </th>
+                                    <th>
+                                        <input type="number" min="0" class="form-control" placeholder="Messages Per day" id="addConnectorMessagesPerDay" required>
+                                    </th>
+                                    <th>
+                                        <button type="submit" min="0" id="btnAddConnector" type="button" class="btn btn-primary btn-block">Add</button>
+                                    </th>
+                                </form>
+                            </tr>
+                          </thead>
+                          <tbody id="tblBodyConnector">
+
+                          </tbody>
+    
+                    </table>
+                    <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
+            </div>
+        </div>
+    <hr class="rainbow">
+</div>
+
+  
+
+
+
+
+<script>
+
+    // ==================================================
+    // Delete Connector
+    // ==================================================
+    $(document).on('click', '.btn-delete-connector', function(){ 
+        // delConfirm = confirm("Delete Connector?");
+        delConfirm = true
+        if(delConfirm) {
+            delData = {
+                "delConnectorID": this.id,
+                "customer": $('#customername').val()
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/delConnector/' + $('#customername').val(),
+                data: delData,
+                success: function(data) { 
+                    //alert(data)
+                    
+                },
+                error: function(err) { 
+                    alert(err.statusText)
+                }
+            })
+            jQuery(this).parent().parent().remove()
+        }
+    });
+
+
+
+    // ==================================================
+    // Add Connector
+    // ==================================================
+    jQuery("#btnAddConnector").click(function() {
+        var form = document.getElementById('frmAddConnector')
+        var formData = new FormData(form)
+        var cn = $('#customername').val()
+        var addConnectorType = $('#addConnectorType').val()
+        $('#addConnectorType').val("")
+        var addConnectorUsers = $('#addConnectorUsers').val()
+        $('#addConnectorUsers').val("")
+        var addConnectorLicences = $('#addConnectorLicences').val()
+        $('#addConnectorLicences').val("")
+        var addConnectorMessagesPerDay = $('#addConnectorMessagesPerDay').val()
+        $('#addConnectorMessagesPerDay').val("")
+
+        var newConnector = {
+            type: addConnectorType,
+            users: addConnectorUsers,
+            licences: addConnectorLicences,
+            dailymessages: addConnectorMessagesPerDay
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/addConnector/'+cn,
+            data: newConnector,
+            success: function(newItem) {
+                var newRow = '<tr>'
+                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorType + '" readonly></td>'
+                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorUsers + '" readonly></td>'
+                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorLicences + '" readonly></td>'
+                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorMessagesPerDay + '" readonly></td>'
+                newRow += '<td><button type="button" id="' + newItem + '" class="btn btn-danger btn-block btn-delete-connector">Delete</button></td>'
+                newRow += '</tr>'
+                $("tbody#tblBodyConnector").append(newRow)                
+            }
+        })
+    })
+
+
+
+    $(document).ready(function(){
+
+
+        // ==================================================
+        // Load All Connectors
+        // ==================================================
+        $.ajax({
+            type: 'GET',
+            url: '/getConnectors/' + $('#customername').val(),
+            success: function(data) {
+                $.each(data, function(i, item){
+                    var newRow = '<tr>'
+                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.type + '" readonly></td>'
+                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.users + '" readonly></td>'
+                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.licences + '" readonly></td>'
+                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.dailymessages + '" readonly></td>'
+                    newRow += '<td><button type="button" id="' + item.id + '" class="btn btn-sm btn-danger btn-block btn-delete-connector">Delete</button></td>'
+                    newRow += '</tr>'
+                    $("tbody#tblBodyConnector").append(newRow)
+                })
+            },
+            error: function() {
+                alert('Error loading connectors list')
+            }
+        })
+     })
+
+
+
+   
+</script>
