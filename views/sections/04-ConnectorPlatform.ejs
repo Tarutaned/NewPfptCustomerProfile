@@ -24,10 +24,27 @@
                                         <div class="dropdown">
                                             <select class="form-control" id="addConnectorType">
                                                 <option value="" selected disabled>Type</option>
-                                                <option value="LinkedIn">Linked In</option>
+                                                <option value="Bloomberg">Bloomberg</option>
+                                                <option value="Box">Box</option>
+                                                <option value="Chatter">Chatter</option>
                                                 <option value="Facebook">Facebook</option>
-                                                <option value="MS Teams">MS Teams</option>
+                                                <option value="Files">Files</option>
+                                                <option value="Google">Google+</option>
+                                                <option value="Jive">Jive</option>
+                                                <option value="LinkedIn">LinkedIn</option>
+                                                <option value="Lync">Lync</option>
+                                                <option value="OneDrive">OneDrive</option>
+                                                <option value="Sharepoint">Sharepoint</option>
+                                                <option value="Skype for Business">Skype for Business</option>
+                                                <option value="Skype On-Prem">Skype On-Prem</option>
                                                 <option value="Slack">Slack</option>
+                                                <option value="Symphony">Symphony</option>
+                                                <option value="Teams">Teams</option>
+                                                <option value="Twitter">Twitter</option>
+                                                <option value="Yammer">Yammer</option>
+                                                <option value="YouTube">YouTube</option>
+                                                <option value="Zoom">Zoom</option>
+                                                
                                             </select>
                                     </th>
                                     <th>
@@ -97,6 +114,40 @@
     // Add Connector
     // ==================================================
     jQuery("#btnAddConnector").click(function() {
+
+        var addType = document.getElementById('addConnectorType')
+        var addUsers = document.getElementById('addConnectorUsers')
+        var addLicences = document.getElementById('addConnectorLicences')
+        var addMessages = document.getElementById('addConnectorMessagesPerDay')
+
+        // check if the drop down is selected
+
+        
+        var selectedValue = addType.options[addType.selectedIndex].value;
+        if (selectedValue == "")
+        {
+            alert("Please select a connector")
+            return
+        }
+
+        if (addUsers == "")
+        {
+            return
+        }
+
+        if (addLicences == "") 
+        {
+            return
+        }
+
+        if (addMessages == "")
+        {
+            return
+        }
+
+
+
+
         var form = document.getElementById('frmAddConnector')
         var formData = new FormData(form)
         var cn = $('#customername').val()
