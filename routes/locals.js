@@ -1,5 +1,5 @@
 // ==========================================================================================
-// Javascript that is made available to the EJS template to use as a local. variable
+// This Javascript is made available to the EJS template to use as a local variable
 // ==========================================================================================
 
 // Create a Drop Down box

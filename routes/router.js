@@ -614,12 +614,13 @@ app.post("/addConnector/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) =>
   console.log(getTimeStamp() + req.user.sAMAccountName + " addConnector: " + req.params.id)
   const newConnector = req.body
   newConnector.id = mongoose.Types.ObjectId();
-  Customer.findOneAndUpdate({name: "Customer1"}, {$push: {connectors: newConnector}}, function (error, success) {
+  Customer.findOneAndUpdate({name: req.params.id}, {$push: {connectors: newConnector}}, function (error, success) {
     if(error) {
       return res.sendStatus(500)
     }
     else {
       console.log(getTimeStamp() + req.user.sAMAccountName + " added a Connector to: " + req.params.id)
+      console.log(newConnector)
       return res.send(newConnector.id)
     }
   })
