@@ -2,8 +2,12 @@
 <!-- Do not format this file in Visual Studio Code, will bork page. -->
 <div class="container">
     <div class="row">
-        <div class="col-md-10 m-auto">
+        <div class="col-md-10 p-5 m-auto">
             <h6 class="text-center display-4 my-4">Connector List</h6>
+            <div class="alert alert-danger alert-dismissible fade show invisible" id="theAlert">
+                <button type="button" class="close" id="close">&times;</button>
+                <p>Please select a connector type</p>
+              </div>
         </div>
     </div>
     
@@ -80,6 +84,16 @@
 
 <script>
 
+    $(
+        function() 
+        {
+            $('#close').on('click', function() {
+                $('#theAlert').addClass('invisible')
+            })
+        }
+    )
+
+
     // ==================================================
     // Delete Connector
     // ==================================================
@@ -119,6 +133,7 @@
         var addUsers = document.getElementById('addConnectorUsers')
         var addLicences = document.getElementById('addConnectorLicences')
         var addMessages = document.getElementById('addConnectorMessagesPerDay')
+        var showAlert = document.getElementById('theAlert')
 
         // check if the drop down is selected
 
@@ -126,7 +141,9 @@
         var selectedValue = addType.options[addType.selectedIndex].value;
         if (selectedValue == "")
         {
-            alert("Please select a connector")
+            
+            $('#theAlert').removeClass('invisible');
+            
             return
         }
 
@@ -145,7 +162,7 @@
             return
         }
 
-
+        $('#theAlert').addClass('invisible');
 
 
         var form = document.getElementById('frmAddConnector')
@@ -176,7 +193,7 @@
                 newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorUsers + '" readonly></td>'
                 newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorLicences + '" readonly></td>'
                 newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorMessagesPerDay + '" readonly></td>'
-                newRow += '<td><button type="button" id="' + newItem + '" class="btn btn-danger btn-block btn-delete-connector">Delete</button></td>'
+                newRow += '<td><button type="button" id="' + newItem + '" class="btn btn-sm btn-danger btn-block btn-delete-connector">Delete</button></td>'
                 newRow += '</tr>'
                 $("tbody#tblBodyConnector").append(newRow)                
             }
