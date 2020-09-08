@@ -181,7 +181,6 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
       const newCustomer = req.body.customer
       newCustomer.createdBy = req.user.sAMAccountName
       newCustomer.updatedBy = req.user.sAMAccountName
-      console.log(newCustomer)
 
       Customer.create(newCustomer)
       .then(customer => {
