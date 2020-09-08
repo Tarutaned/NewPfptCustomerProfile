@@ -16,8 +16,8 @@
                         <label for="customerName">Customer Name</label>
                         <input type="text" readonly class="form-control" placeholder="No response set" value="<%= result.customer.name %>" name="usage_questions[name]">
                     </div>
-                    <% include Usage/EditUsageLegal.ejs %>
-                    <% include Usage/EditUsageExport.ejs %>
+                    <%- include('Usage/EditUsageLegal.ejs') -%>
+                    <%- include('Usage/EditUsageExport.ejs') -%>
 
                     <!-- Outlook view manager -->
 

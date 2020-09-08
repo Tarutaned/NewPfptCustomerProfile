@@ -1,4 +1,4 @@
-<% include partials/header %>
+<%- include('partials/header') -%>
 <style>
 .sidebar-wrapper {
   height: 100%;
@@ -70,37 +70,37 @@
       <div class="container">
         <div class="tab-content" id="content">
           <div class="tab-pane fade show active" id="general-content" role="tabpanel" aria-labelledby="general-tab">
-            <% include sections/01-General.ejs %>
+            <%- include('sections/01-General.ejs') -%>
           </div>
           <div class="tab-pane fade" id="emailsystems-content" role="tabpanel" aria-labelledby="emailsystems-tab">
-            <% include sections/02-EmailSystems.ejs %>
+            <%- include('sections/02-EmailSystems.ejs') -%>
           </div>
           <div class="tab-pane fade" id="sizing-content" role="tabpanel" aria-labelledby="sizing-tab">
-            <% include sections/03-Sizing.ejs %>
+            <%- include('sections/03-Sizing.ejs') -%>
           </div>
           <div class="tab-pane fade" id="connectorplatform-content" role="tabpanel" aria-labelledby="connectorplatform-tab">
-            <% include sections/04-ConnectorPlatform.ejs %>
+            <%- include('sections/04-ConnectorPlatform.ejs') -%>
           </div>
           <div class="tab-pane fade" id="desktopnetwork-content" role="tabpanel" aria-labelledby="desktopnetwork-tab">
-            <% include sections/05-DesktopNetwork.ejs %>
+            <%- include('sections/05-DesktopNetwork.ejs') -%>
           </div>
           <div class="tab-pane fade" id="usage-content" role="tabpanel" aria-labelledby="usage-tab">
-            <% include sections/06-Usage.ejs %>
+            <%- include('sections/06-Usage.ejs') -%>
           </div>
           <div class="tab-pane fade" id="import-content" role="tabpanel" aria-labelledby="import-tab">
-            <% include sections/07-Import.ejs %>
+            <%- include('sections/07-Import.ejs') -%>
           </div>
           <div class="tab-pane fade" id="poc-content" role="tabpanel" aria-labelledby="poc-tab">
-            <% include sections/08-POC.ejs %>
+            <%- include('sections/08-POC.ejs') -%>
           </div>
           <div class="tab-pane fade" id="rfe-content" role="tabpanel" aria-labelledby="rfe-tab">
-            <% include sections/09-RFE.ejs %>
+            <%- include('sections/09-RFE.ejs') -%>
           </div>
           <div class="tab-pane fade" id="supervision-content" role="tabpanel" aria-labelledby="supervision-tab">
-            <% include sections/10-Supervision.ejs %>
+            <%- include('sections/10-Supervision.ejs') -%>
           </div>
           <div class="tab-pane fade" id="files-content" role="tabpanel" aria-labelledby="files-tab">
-            <% include sections/11-Files.ejs %>
+            <%- include('sections/11-Files.ejs') -%>
           </div>
         </div>
       </div>
@@ -111,4 +111,4 @@
   <script type="text/javascript" src="/scripts/show.js"></script>
   <script type="text/javascript" src="/scripts/sync_inputs.js"></script>
 
-    <%- include('./partials/footer.ejs') %> 
+    <%- include('partials/footer.ejs') %> 

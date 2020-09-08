@@ -1,5 +1,4 @@
-<% include partials/header %>
-
+<%- include('partials/header') -%>
 <% if (error_message != undefined && error_message != null) { %>
     <script>
         alert("<%= error_message %>");
@@ -159,5 +158,6 @@
     </div>
 </div>
 
-<% include partials/footer %>
 <script type="text/javascript" src="../scripts/new.js"></script>
+<%- include('partials/footer') -%>
+
