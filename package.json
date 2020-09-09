@@ -28,7 +28,7 @@
     "method-override": "^3.0.0",
     "moment": "^2.27.0",
     "mongo-xlsx": "^1.0.12",
-    "mongoose": "^4.13.21",
+    "mongoose": "^5.10.3",
     "mongoose-version": "^1.1.0",
     "multer": "^1.4.2",
     "multer-gridfs-storage": "^4.2.0",

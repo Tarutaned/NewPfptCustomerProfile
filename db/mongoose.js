@@ -17,7 +17,9 @@ console.log("[+] Connecting to DB: " + connectionURI)
 mongoose.connect(
     connectionURI, 
     { 
-        useMongoClient: true
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
     }).then(
     () => {
         console.log('[+] Database is connected')

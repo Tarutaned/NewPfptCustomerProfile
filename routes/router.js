@@ -619,7 +619,6 @@ app.post("/addConnector/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) =>
     }
     else {
       console.log(getTimeStamp() + req.user.sAMAccountName + " added a Connector to: " + req.params.id)
-      console.log(newConnector)
       return res.send(newConnector.id)
     }
   })

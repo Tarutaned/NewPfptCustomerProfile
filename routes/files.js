@@ -19,7 +19,12 @@ const connectEnsureLogin      = require('connect-ensure-login')
 // const conn = require('../db/mongoose.js')
 
 const connectionURI = process.env.MONGO_DB_URL || "mongodb://localhost:27017/NewCustomerProfile"
-const conn = mongoose.createConnection(connectionURI)
+const conn = mongoose.createConnection(connectionURI, 
+  { 
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+})
 
 // Init gfs
 let gfs
