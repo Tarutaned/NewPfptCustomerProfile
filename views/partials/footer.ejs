@@ -5,5 +5,25 @@
   <p>© 2017 Proofpoint, Inc, All rights reserved 2020.</p>>
 </nav>
 -->
+
+<script>
+  $(document).ready(function() {
+    // Automatically hide the Success alert after 2 seconds
+    $("#success-alert").fadeTo(1000, 500).slideUp(500, function() {
+      $("#success-alert").slideUp(500);
+    });
+
+    // Automatically hide the Info alert 
+    $("#info-alert").fadeTo(3000, 500).slideUp(500, function() {
+      $("#info-alert").slideUp(500);
+    });
+
+    // Automatically hide the Error alert after 10 seconds
+    $("#error-alert").fadeTo(10000, 500).slideUp(500, function() {
+      $("#error-alert").slideUp(500);
+    });
+  }) // document ready
+</script>
+
 </body>
 </html>

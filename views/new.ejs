@@ -1,12 +1,4 @@
 <%- include('partials/header') -%>
-<% if (error_message != undefined && error_message != null) { %>
-    <script>
-        alert("<%= error_message %>");
-        if (!window.location.href.endsWith('/')) {
-            window.location.href += '/';
-        }
-    </script>
-<% } %>
 
 <div class="container-fluid pt-3">
 <div class="row">

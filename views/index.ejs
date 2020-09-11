@@ -1,7 +1,5 @@
 <%- include('./partials/header.ejs') %> 
 
-<script type="text/javascript" src="./scripts/delete.js"></script>
-<script type="text/javascript" src="./scripts/index.js"></script>
 <div class="continer">
   <div class="row">
     <div class="col-xl-8 mx-auto text-center">
@@ -37,7 +35,6 @@
           <th>
             <p onclick="sortTable(4)">Updated Date<i class="fa fa-fw fa-sort"></i></p> 
           </th>
-          <th>Action</th>
         </tr>
         <tr id="filtersRow">
           <th>
@@ -55,10 +52,6 @@
           <th>
             <input class="form-control" id="txtFilter4" onkeyup="filterTable(4)" style="display: inline-block;" type="text" placeholder="Filter Date..." aria-label="Search">
           </th>
-          <th>
-            <p onclick="hideFilterRow()"><i class="fa fa-filter" aria-hidden="true"></i>
-            </p>
-          </th>
         </tr>
       </thead>
       <tbody>
@@ -69,11 +62,6 @@
           <td><%= customer.archivingSe %></td>
           <td><%= customer.status %></td>
           <td><%= customer.updatedAt.getMonth() + 1 %>/<%= customer.updatedAt.getDate() %>/<%= customer.updatedAt.getFullYear() %></td>
-          <td class="text-center">
-            <% if(user == 'mengineer' || user == 'nlee' || user == 'vrathee' || user == 'sprokai') { %>
-            <button class="btn" onclick='delete_customer("<%= customer.name %>")'><i class="fa fa-trash"></i></button>
-            <% } %>
-          </td>
         </tr>
         <% }); %>
       </tbody>

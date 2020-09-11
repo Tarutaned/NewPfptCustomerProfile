@@ -42,15 +42,29 @@ var append = "";
 // Display Customers where the current user is listed on the account
 // ==================================================
 app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  console.log(getTimeStamp() + "Displaying MyCustomers page for: " + req.user.sAMAccountName)
+  console.log(getTimeStamp() + req.user.sAMAccountName + " GET /") 
   Customer.find({ $or: [{accManager: req.user.cn}, 
                 { createdBy: req.user.sAMAccountName},
                 { archivingSe: req.user.cn },
                 { salesRep: req.user.cn },
-                { solutionArchitect: req.user.cn } ]}).then((customers) => {
-    return res.render("mycustomers.ejs", { customers: customers, user: req.user })
+                { solutionArchitect: req.user.cn },
+                { accManager: req.user.cn },
+                { tpm: req.user.cn },
+                { tam: req.user.cn },
+                { solutionArchitect: req.user.cn },
+                { supervisionConsultant: req.user.cn }
+              ]}).then((customers) => {
+                  if (customers.length >= 1) {
+                    // Display the MyCustomers page if current user has customers
+                    return res.render("mycustomers.ejs", { customers: customers, user: req.user })
+                  }
+                  else {
+                    // Display the Customer Index page if current user dosn't have customers
+                    req.flash('info-alert', "Redirecting to Index Page because you don't have any customers linked to your account.")
+                    return res.redirect("/index");
+                  }
   }).catch((error) => {
-    console.log("An error has occurred.")
+    console.log(getTimeStamp() + "Error GET /")
     console.log(error)
   })  
 })
@@ -60,11 +74,11 @@ app.get("/", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
 // Display the Login page
 // ==================================================
 app.get('/login', (req, res) => {
+  console.log(getTimeStamp() + "GET /login")
   if(!(typeof req.user === 'undefined')) {
     console.log(getTimeStamp() + req.user.sAMAccountName + " is already logged in.")
     return res.redirect("/")
   }
-  console.log(getTimeStamp() + "Displaying the login page.")
   res.render('login.ejs')
 })
 
@@ -92,10 +106,10 @@ app.post('/login', function(req, res, next) {
 
 
 // ==================================================
-// A Test page
+// Display Error information
 // ==================================================
 app.get('/error', (req, res) => {
-
+  console.log(getTimeStamp() + "GET /error " + req.user.sAMAccountName)
   res.render('error.ejs', { message: req.flash('error') })
 })
 
@@ -109,30 +123,33 @@ app.get('/flash', function(req, res){
 // Display the Profile page
 // ==================================================
 app.get('/userprofile', connectEnsureLogin.ensureLoggedIn(),(req, res) => {
+  console.log(getTimeStamp() + "GET /userprofile " + req.user.sAMAccountName)
   const sessionInfo = { expires: req.session.cookie._expires,
                         expiresIn: req.session.cookie.maxAge / 1000}
   res.render('userprofile.ejs', {user: req.user, sessionInfo})
 })
 
 
-// ==================================================
-// Return the current User info
-// ==================================================
-app.get('/user', connectEnsureLogin.ensureLoggedIn(),
-  (req, res) => res.send({user: req.user})
-)
-
-
 // =============================================
 // Logout
 // =============================================
 app.get('/logout', function(req, res) {
-  if(typeof req.session.passport == 'undefined') {
-    return res.redirect('/')  // not logged in
+  console.log(getTimeStamp() + "GET /logout ")
+  
+  // if the user is not logged in
+  if(typeof req.user == 'undefined') {
+    return res.redirect('/')
   }
 
+  // if the user is not logged in
+  if(typeof req.session.passport == 'undefined') {
+    return res.redirect('/')  
+  }
+
+  // if the user is currently logged in
+  // then kill the session
   if(req.session.passport) {
-    console.log(getTimeStamp() + "Logout: " + req.session.passport.user.sAMAccountName)
+    var userSAM = req.session.passport.user.sAMAccountName
     try {
       req.logout()
       req.session.destroy()
@@ -142,7 +159,7 @@ app.get('/logout', function(req, res) {
     }
     // double check
     if(typeof req.session === 'undefined') {
-      console.log(getTimeStamp() + "The user is logged out.")
+      console.log(getTimeStamp() + userSAM + " is logged out")
     }
   }
   res.redirect('/')
@@ -153,20 +170,46 @@ app.get('/logout', function(req, res) {
 // Render the Customer List
 // ======================================================
 app.get("/index", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  console.log(getTimeStamp() + "GET /index " + req.user.sAMAccountName)
   Customer.find({}).then((customers) => {
-      res.render("index", { customers: customers, user: req.user})
+    var successMessage = "Listing " + Object.keys(customers).length + " customers"
+    //res.render("index", {customers: customers, success: successMessage, user: req.user})
+    res.render('index.ejs', { message: req.flash('info-alert'),
+                              customers: customers, 
+                              success: successMessage, 
+                              user: req.user })
   }).catch((error) => {
-      console.log("An error has occurred.")
+      console.log(getTimeStamp() + req.user.sAMAccountName + " Error GET /index")
       console.log(error)
   })
 })
+
+// ======================================================
+// Test Render the Customer List
+// ======================================================
+app.get("/test", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  console.log(getTimeStamp() + "GET /test " + req.user.sAMAccountName)
+  Customer.find({}).then((customers) => {
+    var successMessage = "There are " + Object.keys(customers).length + " customers found"
+    req.flash('error', "testing")
+    res.render("test", {customers: customers, success: successMessage, user: req.user})
+      
+  }).catch((error) => {
+    req.flash('error', error)
+    res.render('error.ejs', {error: error, user: req.user.sAMAccountName})
+    console.log(error)
+  })
+})
+
+
 
 
 // ======================================================
 // Display the New Customer Page
 // ======================================================
 app.get("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  res.render("new", { error_message: undefined, user: req.user });
+  console.log(getTimeStamp() + "GET /new " + req.user.sAMAccountName)
+  res.render("new", { user: req.user });
 });
 
 
@@ -231,7 +274,7 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         if (error["code"] == 11000) {
             console.log("-- Duplicate entry for customer: '" + req.body.customer["name"] + "'");
             // Send pop up alert to HTML here
-            res.render('new', { error_message: "Duplicate entry for customer: " + req.body.customer["name"] });
+            res.render('new', { error: "The Customer Name already exists: " + req.body.customer["name"] });
         } else {
             console.log(error);
         }
@@ -531,6 +574,7 @@ app.put("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 // Display a Customer Profile
 // ======================================================
 app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  console.log(getTimeStamp() + req.user.sAMAccountName + " is viewing " + req.params.id)
   // Query every table and grab the results in a blocking manner
   async function query(search_term) {
       var questionnaire = {};
@@ -556,29 +600,17 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
         res.render("show.ejs", {result, user: req.user})
       } else {
           console.log(getTimeStamp() + req.user.sAMAccountName + " attempted to access index/" + req.params.id )
-          res.render('error.ejs', {message: "Cannot find this customer name", details: "Try finding a customer on the index page", user: req.user.sAMAccountName})
+          const theMessage = "Cannot find \"" + req.params.id + "\" in the database. Try finding a customer on the index page"
+          req.flash('error', theMessage)
+          res.render('error.ejs', {message: theMessage, user: req.user.sAMAccountName})
       }
   }).catch((error) => {
       console.log(error)
+      req.flash('error', error)
       res.render('error.ejs', {message: error, user: req.user.sAMAccountName})
   });
 });
 
-
-// ======================================================
-// Version 1.3
-// Display a Customer Details page
-// ======================================================
-app.get("/customer/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  console.log(getTimeStamp() + req.user.sAMAccountName + "is viewing " + req.params.id)
-  Customer.findOne({name:req.params.id}, function (err, doc){
-    if(err) {
-      return res.send("Something went wrong")
-    }
-      // return res.send(doc)
-      return res.render("customerdetail.ejs", {customer: doc, user: req.user})
-  })
-})
 
 
 // ======================================================
@@ -712,8 +744,9 @@ app.get("/activity", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   Customer.find().then((customers) => {
     return res.render("activity.ejs", { customers: customers, user: req.user })
   }).catch((error) => {
-    console.log("An error has occurred for: " + req.user.sAMAccountName)
+    console.log(getTimeStamp() + "Error GET /activity")
     console.log(error)
+    req.flash('error', error)
     return res.render("error.ejs", {error, user: req.user.sAMAccountName})
   })  
 })
@@ -729,7 +762,7 @@ app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
     }).then((customers) => {
       return res.render("activity.ejs", { customers: customers, user: req.user })
     }).catch( (error) => {
-      console.log("An error has occurred.")
+      console.log(getTimeStamp() + "Error GET /activity/:days")
       console.log(error)
       return res.render("error.ejs", {error, user: req.user.sAMAccountName}) }
     )

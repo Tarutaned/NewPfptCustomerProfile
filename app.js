@@ -41,14 +41,14 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(expressSanitizer())
 app.use(methodOverride("_method"))
+app.use(flash())
 app.locals = require('./routes/locals.js')
+session_secret = process.env.JWT_SECRET || "6cxfWPptu8JJ31hv5v9IyE8LIYKMN837XW0FdsUvFaXTO4kc8mfD1BfwusiG"
 app.use(function (req, res, next) {
     // Disables back button from showing contents when logged out.
     res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0')
     next()
 })
-
-session_secret = process.env.JWT_SECRET || "6cxfWPptu8JJ31hv5v9IyE8LIYKMN837XW0FdsUvFaXTO4kc8mfD1BfwusiG"
 
 // Setup express-session
 app.use(session({
@@ -59,8 +59,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-
-app.use(flash())
 
 // Setup Passport
 const passport = require('passport')
