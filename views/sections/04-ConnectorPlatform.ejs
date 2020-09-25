@@ -1,93 +1,150 @@
 <!-- Displaying connector platform questions -->
 <!-- Do not format this file in Visual Studio Code, will bork page. -->
+
+<!-- The custom style is needed for the autocomplete text box -->
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    
+
+    
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .btn {
+        padding: 10px;
+    }
+
+    input {
+      border: 1px solid #d4d4d4;;
+      background-color: #ffffff;
+      padding: 10px;
+      font-size: 16px;
+      border-radius:0.25em;
+    }
+    
+    input[type=text] {
+      background-color: #ffffff;
+      border: 1px solid #d4d4d4;
+      width: 100%;
+      border-radius:0.25em;
+    }
+ 
+    
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff; 
+      border-bottom: 1px solid #d4d4d4; 
+    }
+    
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #e9e9e9; 
+    }
+    
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: DodgerBlue !important; 
+      color: #ffffff; 
+    }
+
+
+</style>
+
+
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12 p-1 m-auto">
-            <div class="alert alert-danger alert-dismissible fade show invisible" id="theAlert">
-                <button type="button" class="close" id="close">&times;</button>
-                <p id="alertText"></p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-            <div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h4 class="mb-0">Connectors</h4>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-hover" id="tblConnectorList">
-                                    <thead class="thead-light">
-                                        <tr>
-                                        <th>Connector</th>
-                                        <th>Total Users</th>
-                                        <th>Licenced Users</th>
-                                        <th>Daily Messages</th>
-                                        <th>Action</th>
-                                        </tr>
-                                        <tr>
-                                            <form id="frmAddConnector" action="javascript:addConnector()" enctype="multipart/form-data"></form>
-                                                <th>
-                                                    <div class="dropdown">
-                                                        <select class="form-control" id="addConnectorType">
-                                                            <option value="" selected disabled>Type</option>
-                                                            <option value="Bloomberg">Bloomberg</option>
-                                                            <option value="Box">Box</option>
-                                                            <option value="Chatter">Chatter</option>
-                                                            <option value="Facebook">Facebook</option>
-                                                            <option value="Files">Files</option>
-                                                            <option value="Google">Google+</option>
-                                                            <option value="Jive">Jive</option>
-                                                            <option value="LinkedIn">LinkedIn</option>
-                                                            <option value="Lync">Lync</option>
-                                                            <option value="OneDrive">OneDrive</option>
-                                                            <option value="Sharepoint">Sharepoint</option>
-                                                            <option value="Skype for Business">Skype for Business</option>
-                                                            <option value="Skype On-Prem">Skype On-Prem</option>
-                                                            <option value="Slack">Slack</option>
-                                                            <option value="Symphony">Symphony</option>
-                                                            <option value="Teams">Teams</option>
-                                                            <option value="Twitter">Twitter</option>
-                                                            <option value="Yammer">Yammer</option>
-                                                            <option value="YouTube">YouTube</option>
-                                                            <option value="Zoom">Zoom</option>
-                                                            
-                                                        </select>
-                                                </th>
-                                                <th>
-                                                    <input type="number" min="0" class="form-control" placeholder="Total Users" id="addConnectorUsers" required>
-                                                </th>
-                                                <th>
-                                                    <input type="number" min="0" class="form-control" placeholder="Licenced Users" id="addConnectorLicences" required>
-                                                </th>
-                                                <th>
-                                                    <input type="number" min="0" class="form-control" placeholder="Messages Per day" id="addConnectorMessagesPerDay" required>
-                                                </th>
-                                                <th>
-                                                    <button type="submit" min="0" id="btnAddConnector" type="button" class="btn btn-primary btn-block">Add</button>
-                                                </th>
-                                            </form>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tblBodyConnector">
-
-                                    </tbody>
-                
-                                </table>
-                                <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
-                        </div>
-                    </div>
-                </div>
-            
-    </div>
-</div>
-
-  
-
+	<div class="row">
+		<div class="col-md-12 mt-2 p-1 m-auto">
+			<div class="alert alert-danger alert-dismissible fade show invisible" id="theAlert">
+				<button type="button" class="close" id="close">&times;</button>
+				<p id="alertText"/>
+			</div>
+		</div>
+	</div>
+	<div class="row p-2">
+		<div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
+			<div class="card h-100">
+				<div class="card-header">
+					<h4 class="mb-0">Add</h4>
+				</div>
+				<div class="card-body p-1">
+					<table class="table table-borderless">
+						<tr>
+							<form id="frmAddConnector" autocomplete="off" action="javascript:addConnector()" enctype="multipart/form-data"/>
+							<tr>
+								<td>
+									<div class="autocomplete" style="width:300px;">
+										<input id="addConnectorType" type="text" name="addConnectorType" placeholder="Connector Type">
+										</div>
+									</td>
+									<td>
+										<input type="number" min="0" type="text" placeholder="Total Users" id="addConnectorUsers" >
+										</td>
+										<td>
+											<input type="number" min="0" type="text" placeholder="Licenced Users" id="addConnectorLicences" >
+											</td>
+											<td>
+												<input type="number" min="0" type="text" placeholder="Messages Per day" id="addConnectorMessagesPerDay" >
+												</td>
+												<td>
+													<button type="submit" min="0" id="btnAddConnector" type="button" class="btn btn-primary btn-block">Add</button>
+												</td>
+											</form>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
+							<div class="card h-100">
+								<div class="card-header">
+									<h4 class="mb-0">Connectors</h4>
+								</div>
+								<div class="card-body p-0">
+									<table class="table table-hover" id="tblConnectorList">
+										<thead class="thead-light">
+											<tr>
+												<th>Type</th>
+												<th>Total Users</th>
+												<th>Licenced Users</th>
+												<th>Daily Messages</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody id="tblBodyConnector">
+										</tbody>
+									</table>
+									<input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 
 
 <script>
+
+    var connectorList = ["Bloomberg", "Box", "Chatter", "Facebook", "Files", "Google", "Jive", "LinkedIn", "Lync", "OneDrive", "Sharepoint", "Skype for Business", "Skype On-Prem", "Slack", "Symphony", "Teams", "Twitter", "Yammer", "YouTube", "Zoom"]
 
     // Handle the Alert Close Button Event
     $(function() {
@@ -140,9 +197,8 @@
         var addMessages = document.getElementById('addConnectorMessagesPerDay')
         var showAlert = document.getElementById('theAlert')
 
-        // check if the drop down is selected
-        var selectedConnector = addType.options[addType.selectedIndex].value;
-        if (selectedConnector == "") {
+        // Check if Connector Type is empty
+        if (addType.value == "") {
             // Make the alert visible
             $('#alertText').empty()
             $('#alertText').append("Please select a connector type")
@@ -150,11 +206,15 @@
            
         }
 
-        if (addUsers.value > addLicences.value) {
+        // Check for licences
+        numberOfUsers = parseFloat(addUsers.value)
+        numberOfLicences = parseFloat(addLicences.value)
+        if (numberOfUsers > numberOfLicences) {
             // Make the alert visible
             $('#alertText').empty()
-            $('#alertText').append("Warning! You need more licences for the " + selectedConnector + " connector.")
-            $('#theAlert').removeClass('invisible');            
+            $('#alertText').append("Warning! You need more licences for the " + addType.value + " connector.")
+            $('#theAlert').removeClass('invisible');   
+            console.log("Adding: " + addUsers.value + " With licences = " + addLicences.value)       
         }
 
        
@@ -185,10 +245,10 @@
             data: newConnector,
             success: function(newItem) {
                 var newRow = '<tr>'
-                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorType + '" readonly></td>'
-                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorUsers + '" readonly></td>'
-                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorLicences + '" readonly></td>'
-                newRow += '<td><input type="text" class="form-control-plaintext" value="' + addConnectorMessagesPerDay + '" readonly></td>'
+                newRow += '<td><p class="font-weight-bold">' + addConnectorType + '</p></td>'
+                newRow += '<td><p>' + addConnectorUsers + '</p></td>'
+                newRow += '<td><p>' + addConnectorLicences + '</p></td>'
+                newRow += '<td><p>' + addConnectorMessagesPerDay + '</p></td>'
                 newRow += '<td><button type="button" id="' + newItem + '" class="btn btn-sm btn-danger btn-block btn-delete-connector">Delete</button></td>'
                 newRow += '</tr>'
                 $("tbody#tblBodyConnector").append(newRow)                
@@ -210,10 +270,10 @@
             success: function(data) {
                 $.each(data, function(i, item){
                     var newRow = '<tr>'
-                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.type + '" readonly></td>'
-                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.users + '" readonly></td>'
-                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.licences + '" readonly></td>'
-                    newRow += '<td><input type="text" class="form-control-plaintext" value="' + item.dailymessages + '" readonly></td>'
+                        newRow += '<td><p class="font-weight-bold">' + item.type + '</p></td>'
+                        newRow += '<td><p>' + item.users + '</p></td>'
+                        newRow += '<td><p>' + item.licences + '</p></td>'
+                        newRow += '<td><p>' + item.dailymessages + '</p></td>'
                     newRow += '<td><button type="button" id="' + item.id + '" class="btn btn-sm btn-danger btn-block btn-delete-connector">Delete</button></td>'
                     newRow += '</tr>'
                     $("tbody#tblBodyConnector").append(newRow)
@@ -225,6 +285,109 @@
         })
      })
 
+
+    // ==================================================
+    // Code for Autocomplete
+    // https://www.w3schools.com/howto/howto_js_autocomplete.asp
+    // ==================================================
+    function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+        for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+autocomplete(document.getElementById("addConnectorType"), connectorList);
 
 
    
