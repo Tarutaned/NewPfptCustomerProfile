@@ -1,80 +1,85 @@
 <!-- Displaying connector platform questions -->
 <!-- Do not format this file in Visual Studio Code, will bork page. -->
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-10 p-5 m-auto">
-            <h6 class="text-center display-4 my-4">Connector List</h6>
+        <div class="col-md-12 p-1 m-auto">
             <div class="alert alert-danger alert-dismissible fade show invisible" id="theAlert">
                 <button type="button" class="close" id="close">&times;</button>
-                <p>Please select a connector type</p>
-              </div>
-        </div>
-    </div>
-    
-        <div id="connectorPlatform" class="display-header">
-            <div id="connectorPlatformContainer">
-                    <table class="table table-hover" id="tblConnectorList">
-                        <thead class="thead-light">
-                            <tr>
-                              <th>Connector</th>
-                              <th>Total Users</th>
-                              <th>Licenced Users</th>
-                              <th>Daily Messages</th>
-                              <th>Action</th>
-                            </tr>
-                            <tr>
-                                <form id="frmAddConnector" action="javascript:addConnector()" enctype="multipart/form-data"></form>
-                                    <th>
-                                        <div class="dropdown">
-                                            <select class="form-control" id="addConnectorType">
-                                                <option value="" selected disabled>Type</option>
-                                                <option value="Bloomberg">Bloomberg</option>
-                                                <option value="Box">Box</option>
-                                                <option value="Chatter">Chatter</option>
-                                                <option value="Facebook">Facebook</option>
-                                                <option value="Files">Files</option>
-                                                <option value="Google">Google+</option>
-                                                <option value="Jive">Jive</option>
-                                                <option value="LinkedIn">LinkedIn</option>
-                                                <option value="Lync">Lync</option>
-                                                <option value="OneDrive">OneDrive</option>
-                                                <option value="Sharepoint">Sharepoint</option>
-                                                <option value="Skype for Business">Skype for Business</option>
-                                                <option value="Skype On-Prem">Skype On-Prem</option>
-                                                <option value="Slack">Slack</option>
-                                                <option value="Symphony">Symphony</option>
-                                                <option value="Teams">Teams</option>
-                                                <option value="Twitter">Twitter</option>
-                                                <option value="Yammer">Yammer</option>
-                                                <option value="YouTube">YouTube</option>
-                                                <option value="Zoom">Zoom</option>
-                                                
-                                            </select>
-                                    </th>
-                                    <th>
-                                        <input type="number" min="0" class="form-control" placeholder="Total Users" id="addConnectorUsers" required>
-                                    </th>
-                                    <th>
-                                        <input type="number" min="0" class="form-control" placeholder="Licenced Users" id="addConnectorLicences" required>
-                                    </th>
-                                    <th>
-                                        <input type="number" min="0" class="form-control" placeholder="Messages Per day" id="addConnectorMessagesPerDay" required>
-                                    </th>
-                                    <th>
-                                        <button type="submit" min="0" id="btnAddConnector" type="button" class="btn btn-primary btn-block">Add</button>
-                                    </th>
-                                </form>
-                            </tr>
-                          </thead>
-                          <tbody id="tblBodyConnector">
-
-                          </tbody>
-    
-                    </table>
-                    <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
+                <p id="alertText"></p>
             </div>
         </div>
-    <hr class="rainbow">
+    </div>
+    <div class="row">
+            <div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h4 class="mb-0">Connectors</h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover" id="tblConnectorList">
+                                    <thead class="thead-light">
+                                        <tr>
+                                        <th>Connector</th>
+                                        <th>Total Users</th>
+                                        <th>Licenced Users</th>
+                                        <th>Daily Messages</th>
+                                        <th>Action</th>
+                                        </tr>
+                                        <tr>
+                                            <form id="frmAddConnector" action="javascript:addConnector()" enctype="multipart/form-data"></form>
+                                                <th>
+                                                    <div class="dropdown">
+                                                        <select class="form-control" id="addConnectorType">
+                                                            <option value="" selected disabled>Type</option>
+                                                            <option value="Bloomberg">Bloomberg</option>
+                                                            <option value="Box">Box</option>
+                                                            <option value="Chatter">Chatter</option>
+                                                            <option value="Facebook">Facebook</option>
+                                                            <option value="Files">Files</option>
+                                                            <option value="Google">Google+</option>
+                                                            <option value="Jive">Jive</option>
+                                                            <option value="LinkedIn">LinkedIn</option>
+                                                            <option value="Lync">Lync</option>
+                                                            <option value="OneDrive">OneDrive</option>
+                                                            <option value="Sharepoint">Sharepoint</option>
+                                                            <option value="Skype for Business">Skype for Business</option>
+                                                            <option value="Skype On-Prem">Skype On-Prem</option>
+                                                            <option value="Slack">Slack</option>
+                                                            <option value="Symphony">Symphony</option>
+                                                            <option value="Teams">Teams</option>
+                                                            <option value="Twitter">Twitter</option>
+                                                            <option value="Yammer">Yammer</option>
+                                                            <option value="YouTube">YouTube</option>
+                                                            <option value="Zoom">Zoom</option>
+                                                            
+                                                        </select>
+                                                </th>
+                                                <th>
+                                                    <input type="number" min="0" class="form-control" placeholder="Total Users" id="addConnectorUsers" required>
+                                                </th>
+                                                <th>
+                                                    <input type="number" min="0" class="form-control" placeholder="Licenced Users" id="addConnectorLicences" required>
+                                                </th>
+                                                <th>
+                                                    <input type="number" min="0" class="form-control" placeholder="Messages Per day" id="addConnectorMessagesPerDay" required>
+                                                </th>
+                                                <th>
+                                                    <button type="submit" min="0" id="btnAddConnector" type="button" class="btn btn-primary btn-block">Add</button>
+                                                </th>
+                                            </form>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblBodyConnector">
+
+                                    </tbody>
+                
+                                </table>
+                                <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
+                        </div>
+                    </div>
+                </div>
+            
+    </div>
 </div>
 
   
@@ -84,14 +89,12 @@
 
 <script>
 
-    $(
-        function() 
-        {
-            $('#close').on('click', function() {
-                $('#theAlert').addClass('invisible')
-            })
-        }
-    )
+    // Handle the Alert Close Button Event
+    $(function() {
+        $('#close').on('click', function() {
+            $('#theAlert').addClass('invisible')
+        })
+    })
 
 
     // ==================================================
@@ -128,6 +131,8 @@
     // Add Connector
     // ==================================================
     jQuery("#btnAddConnector").click(function() {
+        // If alert is visible, then hide it and process the form.
+        $('#theAlert').addClass('invisible');
 
         var addType = document.getElementById('addConnectorType')
         var addUsers = document.getElementById('addConnectorUsers')
@@ -136,35 +141,23 @@
         var showAlert = document.getElementById('theAlert')
 
         // check if the drop down is selected
-
-        
-        var selectedValue = addType.options[addType.selectedIndex].value;
-        if (selectedValue == "")
-        {
-            
-            $('#theAlert').removeClass('invisible');
-            
-            return
+        var selectedConnector = addType.options[addType.selectedIndex].value;
+        if (selectedConnector == "") {
+            // Make the alert visible
+            $('#alertText').empty()
+            $('#alertText').append("Please select a connector type")
+            return $('#theAlert').removeClass('invisible');
+           
         }
 
-        if (addUsers == "")
-        {
-            return
+        if (addUsers.value > addLicences.value) {
+            // Make the alert visible
+            $('#alertText').empty()
+            $('#alertText').append("Warning! You need more licences for the " + selectedConnector + " connector.")
+            $('#theAlert').removeClass('invisible');            
         }
 
-        if (addLicences == "") 
-        {
-            return
-        }
-
-        if (addMessages == "")
-        {
-            return
-        }
-
-        $('#theAlert').addClass('invisible');
-
-
+       
         var form = document.getElementById('frmAddConnector')
         var formData = new FormData(form)
         var cn = $('#customername').val()
@@ -177,12 +170,15 @@
         var addConnectorMessagesPerDay = $('#addConnectorMessagesPerDay').val()
         $('#addConnectorMessagesPerDay').val("")
 
+        // Create a new Connector object
         var newConnector = {
             type: addConnectorType,
             users: addConnectorUsers,
             licences: addConnectorLicences,
             dailymessages: addConnectorMessagesPerDay
         }
+
+        // Send the Connector object to the backend API 
         $.ajax({
             type: 'POST',
             url: '/addConnector/'+cn,
