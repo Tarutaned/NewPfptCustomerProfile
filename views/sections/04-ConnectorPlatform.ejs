@@ -48,7 +48,7 @@
     }
     
     .autocomplete-items div {
-      padding: 10px;
+      padding: 5px;
       cursor: pointer;
       background-color: #fff; 
       border-bottom: 1px solid #d4d4d4; 
@@ -75,7 +75,7 @@
 			<div class="alert alert-danger alert-dismissible fade show invisible" id="theAlert">
 				<button type="button" class="close" id="close">&times;</button>
 				<p id="alertText"/>
-			</div>
+      </div>
 		</div>
 	</div>
 	<div class="row p-2">
@@ -91,8 +91,10 @@
 							<tr>
 								<td>
 									<div class="autocomplete" style="width:300px;">
-										<input id="addConnectorType" type="text" name="addConnectorType" placeholder="Connector Type">
-										</div>
+                    <input id="addConnectorType" type="text" name="addConnectorType" placeholder="Connector Type">
+                  </div>
+                  
+
 									</td>
 									<td>
 										<input type="number" min="0" type="text" placeholder="Total Users" id="addConnectorUsers" >
@@ -153,41 +155,11 @@
         })
     })
 
-
-    // ==================================================
-    // Delete Connector
-    // ==================================================
-    $(document).on('click', '.btn-delete-connector', function(){ 
-        // delConfirm = confirm("Delete Connector?");
-        delConfirm = true
-        if(delConfirm) {
-            delData = {
-                "delConnectorID": this.id,
-                "customer": $('#customername').val()
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: '/delConnector/' + $('#customername').val(),
-                data: delData,
-                success: function(data) { 
-                    //alert(data)
-                    
-                },
-                error: function(err) { 
-                    alert(err.statusText)
-                }
-            })
-            jQuery(this).parent().parent().remove()
-        }
-    });
-
-
-
-    // ==================================================
+    // ============================================================
     // Add Connector
-    // ==================================================
-    jQuery("#btnAddConnector").click(function() {
+    // =============================================================
+    function addConnector() {
+      
         // If alert is visible, then hide it and process the form.
         $('#theAlert').addClass('invisible');
 
@@ -220,7 +192,7 @@
        
         var form = document.getElementById('frmAddConnector')
         var formData = new FormData(form)
-        var cn = $('#customername').val()
+        var customerName = $('#customername').val()
         var addConnectorType = $('#addConnectorType').val()
         $('#addConnectorType').val("")
         var addConnectorUsers = $('#addConnectorUsers').val()
@@ -241,7 +213,7 @@
         // Send the Connector object to the backend API 
         $.ajax({
             type: 'POST',
-            url: '/addConnector/'+cn,
+            url: '/addConnector/'+ customerName,
             data: newConnector,
             success: function(newItem) {
                 var newRow = '<tr>'
@@ -254,10 +226,41 @@
                 $("tbody#tblBodyConnector").append(newRow)                
             }
         })
-    })
+
+    }
 
 
+    // ==================================================
+    // Delete Connector
+    // ==================================================
+    $(document).on('click', '.btn-delete-connector', function(){ 
+        // delConfirm = confirm("Delete Connector?");
+        delConfirm = true
+        if(delConfirm) {
+            delData = {
+                "delConnectorID": this.id,
+                "customer": $('#customername').val()
+            }
 
+            $.ajax({
+                type: 'POST',
+                url: '/delConnector/' + $('#customername').val(),
+                data: delData,
+                success: function(data) { 
+                    //alert(data)
+                    
+                },
+                error: function(err) { 
+                    alert(err.statusText)
+                }
+            })
+            jQuery(this).parent().parent().remove()
+        }
+    });
+
+
+   
+   
     $(document).ready(function(){
 
 
@@ -285,6 +288,7 @@
         })
      })
 
+ 
 
     // ==================================================
     // Code for Autocomplete
@@ -294,6 +298,44 @@
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
     var currentFocus;
+
+
+    // handle the click event on the "Connector Type" input box
+    inp.addEventListener("click", function(e) {
+      console.log("Click")
+      var a, b, i
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      
+      currentFocus = -1;
+      
+      // Create the drop down list
+      dropDownList = document.createElement("DIV");
+      dropDownList.setAttribute("id", this.id + "autocomplete-list");
+      dropDownList.setAttribute("class", "autocomplete-items");
+
+      // Populate the drop down list with items
+      for (i = 0; i < arr.length; i++) {
+        listItem = document.createElement("DIV");
+        listItem.innerHTML = "<strong>" + arr[i] + "</strong>";
+        listItem.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+        // Add an event listner to each item in the list
+        listItem.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = this.getElementsByTagName("input")[0].value;
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+        // Add the list item to the list
+        dropDownList.appendChild(listItem)
+      }
+      // Add the list to the parent
+      this.parentNode.appendChild(dropDownList);
+  });
+
+
+
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a, b, i, val = this.value;
@@ -307,29 +349,34 @@
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
-        /*for each item in the array...*/
+        
         for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-          /*create a DIV element for each matching element:*/
-          b = document.createElement("DIV");
-          /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
-          /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          /*execute a function when someone clicks on the item value (DIV element):*/
-          b.addEventListener("click", function(e) {
-              /*insert the value for the autocomplete text field:*/
-              inp.value = this.getElementsByTagName("input")[0].value;
-              /*close the list of autocompleted values,
-              (or any other open lists of autocompleted values:*/
-              closeAllLists();
-          });
-          a.appendChild(b);
+
+          /*check if the item starts with the same letters as the text field value:*/
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            /*execute a function when someone clicks on the item value (DIV element):*/
+                b.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = this.getElementsByTagName("input")[0].value;
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
         }
-      }
   });
+
+
+
   /*execute a function presses a key on the keyboard:*/
   inp.addEventListener("keydown", function(e) {
       var x = document.getElementById(this.id + "autocomplete-list");
