@@ -7,8 +7,6 @@
       box-sizing: border-box;
     }
     
-
-    
     /*the container must be positioned relative:*/
     .autocomplete {
       position: relative;
@@ -34,7 +32,12 @@
       border-radius:0.25em;
     }
  
-    
+    .autocomplete-item {
+      border-width: thin;
+      font-size: 16px;
+      margin: 1px;
+    }
+
     .autocomplete-items {
       position: absolute;
       border: 1px solid #d4d4d4;
@@ -46,11 +49,11 @@
       left: 0;
       right: 0;
     }
-    
+
     .autocomplete-items div {
-      padding: 5px;
+      padding: 1px;
       cursor: pointer;
-      background-color: #fff; 
+      background-color: #faf8f8; 
       border-bottom: 1px solid #d4d4d4; 
     }
     
@@ -317,7 +320,7 @@
       // Populate the drop down list with items
       for (i = 0; i < arr.length; i++) {
         listItem = document.createElement("DIV");
-        listItem.innerHTML = "<strong>" + arr[i] + "</strong>";
+        listItem.innerHTML = '<P class="autocomplete-item">' + arr[i] + '</P>';
         listItem.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
         // Add an event listner to each item in the list
         listItem.addEventListener("click", function(e) {

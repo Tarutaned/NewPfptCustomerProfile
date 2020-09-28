@@ -173,7 +173,6 @@ app.get("/index", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   console.log(getTimeStamp() + "GET /index " + req.user.sAMAccountName)
   Customer.find({}).then((customers) => {
     var successMessage = "Listing " + Object.keys(customers).length + " customers"
-    //res.render("index", {customers: customers, success: successMessage, user: req.user})
     res.render('index.ejs', { message: req.flash('info-alert'),
                               customers: customers, 
                               success: successMessage, 
