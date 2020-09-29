@@ -75,11 +75,9 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12 mt-2 p-1 m-auto">
-			<div class="alert alert-danger alert-dismissible fade show invisible" id="theAlert">
-				<button type="button" class="close" id="close">&times;</button>
-				<p id="alertText"/>
+      <div id="alertDIV">
       </div>
-		</div>
+    </div>
 	</div>
 	<div class="row p-2">
 		<div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
@@ -158,6 +156,28 @@
         })
     })
 
+    function createAlert(alertType, textValue) {
+          newAlert = document.createElement("DIV")
+          newAlert.setAttribute("id", "theAlert")
+          newAlert.setAttribute("class", "alert " + alertType +  " alert-dismissible fade show")
+          alertCloseButton = document.createElement("BUTTON")
+          alertCloseButton.setAttribute("type", "button")
+          alertCloseButton.setAttribute("class", "close")
+          alertCloseButton.setAttribute("id", "close")
+          alertCloseButton.setAttribute("data-dismiss", "alert")
+          alertCloseSpan = document.createElement("i")
+          alertCloseSpan.setAttribute("class", "fa fa-window-close")
+          alertCloseSpan.setAttribute("aria-hidden", "true")
+          alertCloseButton.appendChild(alertCloseSpan)
+          newAlert.appendChild(alertCloseButton)
+          alertText = document.createElement("P")
+          alertText.setAttribute("id", "alertText")
+          alertText.appendChild(document.createTextNode(textValue))
+          newAlert.appendChild(alertText)
+          document.getElementById("alertDIV").appendChild(newAlert)
+    }
+
+
     // ============================================================
     // Add Connector
     // =============================================================
@@ -174,22 +194,16 @@
 
         // Check if Connector Type is empty
         if (addType.value == "") {
-            // Make the alert visible
-            $('#alertText').empty()
-            $('#alertText').append("Please select a connector type")
-            return $('#theAlert').removeClass('invisible');
-           
+          createAlert("alert-danger", "Choose a Connector Type.")
+          return           
         }
 
         // Check for licences
         numberOfUsers = parseFloat(addUsers.value)
         numberOfLicences = parseFloat(addLicences.value)
         if (numberOfUsers > numberOfLicences) {
-            // Make the alert visible
-            $('#alertText').empty()
-            $('#alertText').append("Warning! You need more licences for the " + addType.value + " connector.")
-            $('#theAlert').removeClass('invisible');   
-            console.log("Adding: " + addUsers.value + " With licences = " + addLicences.value)       
+          alerttext = "Warning! You need more licences for the " + addType.value + " connector."
+          createAlert("alert-warning", alerttext)
         }
 
        
@@ -305,7 +319,6 @@
 
     // handle the click event on the "Connector Type" input box
     inp.addEventListener("click", function(e) {
-      console.log("Click")
       var a, b, i
       /*close any already open lists of autocompleted values*/
       closeAllLists();
