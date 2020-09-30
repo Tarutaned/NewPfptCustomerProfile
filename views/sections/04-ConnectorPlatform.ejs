@@ -147,7 +147,7 @@
 
 <script>
 
-    var connectorList = ["Bloomberg", "Box", "Chatter", "Facebook", "Files", "Google", "Jive", "LinkedIn", "Lync", "OneDrive", "Sharepoint", "Skype for Business", "Skype On-Prem", "Slack", "Symphony", "Teams", "Twitter", "Yammer", "YouTube", "Zoom"]
+    const connectorList = ["Bloomberg", "Box", "Chatter", "Facebook", "Files", "Google", "Jive", "LinkedIn", "Lync", "OneDrive", "Sharepoint", "Skype for Business", "Skype On-Prem", "Slack", "Symphony", "Teams", "Twitter", "Yammer", "YouTube", "Zoom"]
 
     // Handle the Alert Close Button Event
     $(function() {
@@ -196,6 +196,25 @@
         if (addType.value == "") {
           createAlert("alert-danger", "Choose a Connector Type.")
           return           
+        }
+
+        
+        var unknownConnector = true
+        // Check if the typed value matches an item in "connectorList"
+        for(i = 0; i < connectorList.length; i++) {
+          currentVal = connectorList[i].toLowerCase()
+          typedVal = addType.value.toLowerCase()
+          if (currentVal == typedVal)
+          {
+            addType.value = connectorList[i]
+            unknownConnector = false
+          }
+        }
+
+        // If the user typed an unknownConnector name, then display a warning
+        if (unknownConnector) {
+          alerttext = "Warning! " + addType.value + " does not match an existing connector type."
+            createAlert("alert-warning", alerttext)
         }
 
         // Check for licences
