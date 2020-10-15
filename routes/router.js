@@ -221,6 +221,10 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
   } else {
       console.log(getTimeStamp() + "Trying to create new customer...");
       const newCustomer = req.body.customer
+      console.log("Customer Name = XX" + newCustomer.name + "XX")
+      newCustomer.name = newCustomer.name.trim()
+      console.log("trimming")
+      console.log("Customer Name = XX" + newCustomer.name + "XX")
       newCustomer.createdBy = req.user.sAMAccountName
       newCustomer.updatedBy = req.user.sAMAccountName
 
@@ -267,7 +271,7 @@ app.post("/new", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
           SupervisionQuestionsVersions.create({ refId: customer._id, versions: [questions] });
         })
         res.redirect("/index");
-        console.log(getTimeStamp() + "Created customer '" + req.body.customer["name"]);
+        console.log(getTimeStamp() + "Created customer " + req.body.customer["name"]);
       })
       .catch(error => {
         if (error["code"] == 11000) {
@@ -625,10 +629,16 @@ app.get("/getConnectors/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) =>
   Customer.findOne({name:req.params.id}, {_id: 0, connectors: 1}, (err, doc) => {
     if(err) {
       console.log(err)
-      
       return res.send("error")
     }
-    return res.send(doc.connectors)
+
+    if (doc == null) {
+      return console.log(getTimeStamp() + req.user.sAMAccountName + " getConnectors: " + req.params.id + " - connector list is null!")
+    }
+    else {
+      return res.send(doc.connectors)
+    }
+    
   })
 })
 

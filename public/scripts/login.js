@@ -1,5 +1,6 @@
 // Find the element by the generic btn class
 $(document).ready(() => {
+  console.log("Login page")
     $("#show_password").click(function () {
         if (document.getElementById("password").type == "password") {
           document.getElementById("password").type = "text";

@@ -97,7 +97,11 @@
                     <div class="form-group row">
                         <label class="col-lg-4 col-form-label form-control-label">Archiving Sales Engineer</label>
                         <div class="col-lg-8">
-                            <%- make_custom_dropdown("customer[archivingSe]", result.customer.archivingSe, ["Ben Chapman", "Brad Cope", "Coleem Chestnut", "Davin Stilson", "Frank Beck", "Jason Colvin", "Micah Wyenn", "Mike Fenili", "Robert Kreusher", "Shane Sauer", "Terry McMahon"]) %>
+                            <!-- Sales Engineers Combo Box -->
+                            <div class="autocomplete" style="width:300px;">
+                                <input id="txtArchivingSe" type="text" name="customer[archivingSe]" placeholder="Sales Engineer" value="<%= result.customer.archivingSe %>">
+                            </div>
+
                         </div>
                     </div>
                     <div class="form-group row">
@@ -308,55 +312,27 @@
                         </thead>
         
                         <tbody>
-                            <% if(result.customer.contacts && result.customer.contacts.length) {
-                                for(let i = 0; i < result.customer.contacts.length; i++) { %>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Contact Name" name="customer[contacts][<%= i %>][name]" value="<%= result.customer.contacts[i].name %>"
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Contact Title" name="customer[contacts][<%= i %>][title]" value="<%= result.customer.contacts[i].title%>"
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Contact Email" name="customer[contacts][<%= i %>][email]" value="<%= result.customer.contacts[i].email %>"
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Contact Phone" name="customer[contacts][<%= i %>][phone]" value="<%= result.customer.contacts[i].phone %>"
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Primary Contact" name="customer[contacts][<%= i %>][primary_contact]"
-                                            value="<%= result.customer.contacts[i].primary_contact %>" />
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-trash" aria-hidden="true" onclick='delete_row(this);'></i>
-                                    </td>
-                                </tr>
-                                <% } } else { %>
+                            <% if(result.customer.contacts && result.customer.contacts.length) { %>
+                                <% for(let i = 0; i < result.customer.contacts.length; i++) { %>
                                     <tr>
-                                        <td>
-                                            <input type="text" class="form-control" placeholder="Contact Name" name="customer[contacts][0][name]" value="" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" placeholder="Contact Title" name="customer[contacts][0][title]" value="" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" placeholder="Contact Email" name="customer[contacts][0][email]" value="" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" placeholder="Contact Phone" name="customer[contacts][0][phone]" value="" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="customer[contacts][0][primary_contact]" value="" />
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-trash" aria-hidden="true" onclick='delete_row(this);'></i>
-                                        </td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Name" name="customer[contacts][<%= i %>][name]" value="<%= result.customer.contacts[i].name %>"/></td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Title" name="customer[contacts][<%= i %>][title]" value="<%= result.customer.contacts[i].title%>"/></td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Email" name="customer[contacts][<%= i %>][email]" value="<%= result.customer.contacts[i].email %>"/></td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Phone" name="customer[contacts][<%= i %>][phone]" value="<%= result.customer.contacts[i].phone %>"/></td>
+                                        <td><input type="text" class="form-control" placeholder="Primary Contact" name="customer[contacts][<%= i %>][primary_contact]"value="<%= result.customer.contacts[i].primary_contact %>" /></td>
+                                        <td><i class="fa fa-trash" aria-hidden="true" onclick='delete_row(this);'></i></td>
                                     </tr>
-                                    <% } %>
+                                <% } // end for %>
+                            <% } else { %>
+                                    <tr>
+                                        <td><input type="text" class="form-control" placeholder="Contact Name" name="customer[contacts][0][name]" value="" /></td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Title" name="customer[contacts][0][title]" value="" /></td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Email" name="customer[contacts][0][email]" value="" /></td>
+                                        <td><input type="text" class="form-control" placeholder="Contact Phone" name="customer[contacts][0][phone]" value="" /></td>
+                                        <td><input type="text" class="form-control" name="customer[contacts][0][primary_contact]" value="" /></td>
+                                        <td><i class="fa fa-trash" aria-hidden="true" onclick='delete_row(this);'></i></td>
+                                    </tr>
+                            <% } // end else %>
                         </tbody>
                     </table>
                 </div>
@@ -385,3 +361,10 @@
     </fieldset>
     </form>
 </div>
+
+<script>
+
+    const SalesEngineers = ["Ben Chapman", "Brad Cope", "Coleem Chestnut", "Davin Stilson", "Frank Beck", "Jason Colvin", "Micah Wyenn", "Mike Fenili", "Robert Kreusher", "Shane Sauer", "Terry McMahon"]
+    // call the autocomplete.js scirpt
+    autocomplete(document.getElementById("txtArchivingSe"), SalesEngineers);
+</script>
