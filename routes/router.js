@@ -676,7 +676,6 @@ app.post("/addConnector/:id", connectEnsureLogin.ensureLoggedIn(), (req, res) =>
 // ======================================================
 app.post('/delConnector/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log(getTimeStamp() + req.user.sAMAccountName + " delConnector: " + req.params.id)
-  console.log(req.body)
   Customer.update({name: req.params.id}, { $pull: { connectors: { id: new mongoose.Types.ObjectId(req.body.delConnectorID)} }}, function (error, success) {
     if(error) {
       console.log(error)

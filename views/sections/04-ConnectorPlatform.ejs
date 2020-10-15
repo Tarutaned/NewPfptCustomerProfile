@@ -12,68 +12,68 @@
     </div>
 	</div>
 	<div class="row p-2">
-		<div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
+		<div class="col-xl-12 p-1 m-auto">
 			<div class="card h-100">
 				<div class="card-header">
 					<h4 class="mb-0">Add</h4>
 				</div>
-				<div class="card-body p-1">
-					<table class="table table-borderless">
-						<tr>
-							<form id="frmAddConnector" autocomplete="off" action="javascript:addConnector()" enctype="multipart/form-data"/>
-							<tr>
-								<td>
-									<div class="autocomplete" style="width:300px;">
-                    <input id="addConnectorType" type="text" name="addConnectorType" placeholder="Connector Type">
-                  </div>
-                  
+				<div class="card-body p-0">
 
-									</td>
-									<td>
-										<input type="number" min="0" type="text" placeholder="Total Users" id="addConnectorUsers" >
-										</td>
-										<td>
-											<input type="number" min="0" type="text" placeholder="Licenced Users" id="addConnectorLicences" >
-											</td>
-											<td>
-												<input type="number" min="0" type="text" placeholder="Messages Per day" id="addConnectorMessagesPerDay" >
-												</td>
-												<td>
-													<button type="submit" min="0" id="btnAddConnector" type="button" class="btn btn-primary btn-block">Add</button>
-												</td>
-											</form>
-										</tr>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
-							<div class="card h-100">
-								<div class="card-header">
-									<h4 class="mb-0">Connectors</h4>
-								</div>
-								<div class="card-body p-0">
-									<table class="table table-hover" id="tblConnectorList">
-										<thead class="thead-light">
-											<tr>
-												<th>Type</th>
-												<th>Total Users</th>
-												<th>Licenced Users</th>
-												<th>Daily Messages</th>
-												<th>Action</th>
-											</tr>
-										</thead>
-										<tbody id="tblBodyConnector">
-										</tbody>
-									</table>
-									<input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                        <table class="table" id="tblAdd">
+                            <tr>
+                                <form id="frmAddConnector" autocomplete="off" action="javascript:addConnector()" enctype="multipart/form-data"/>
+                                    <td>
+                                        <div class="autocomplete" style="width:300px;">
+                                            <input type="text" class="form-control" name="addConnectorType" placeholder="Connector Type" id="addConnectorType">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" min="0" placeholder="Total Users" id="addConnectorUsers" >
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" min="0" placeholder="Licenced Users" id="addConnectorLicences" >
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" min="0" placeholder="Messages Per day" id="addConnectorMessagesPerDay" >
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-primary btn-block" min="0" id="btnAddConnector" type="button" >Add</button>
+                                    </td>
+                                </form>
+                            </tr>
+                        </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row p-2">
+        <div class="col-xl-12 p-1 m-auto" style="background-color:rgb(255, 255, 255);">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h4 class="mb-0">Connectors</h4>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover" id="tblConnectorList">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Total Users</th>
+                                <th>Licenced Users</th>
+                                <th>Daily Messages</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblBodyConnector">
+                        </tbody>
+                    </table>
+                    <input type="hidden" id="customername" name="customername" value="<%= locals.result.customer.name %>"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
