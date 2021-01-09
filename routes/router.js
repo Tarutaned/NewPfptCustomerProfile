@@ -113,6 +113,9 @@ app.get('/error', (req, res) => {
   res.render('error.ejs', { message: req.flash('error') })
 })
 
+// ==================================================
+// Flash a message
+// ==================================================
 app.get('/flash', function(req, res){
   req.flash('error', 'This is a test error')
   res.redirect('/error');
@@ -182,25 +185,6 @@ app.get("/index", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
       console.log(error)
   })
 })
-
-// ======================================================
-// Test Render the Customer List
-// ======================================================
-app.get("/test", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  console.log(getTimeStamp() + "GET /test " + req.user.sAMAccountName)
-  Customer.find({}).then((customers) => {
-    var successMessage = "There are " + Object.keys(customers).length + " customers found"
-    req.flash('error', "testing")
-    res.render("test", {customers: customers, success: successMessage, user: req.user})
-      
-  }).catch((error) => {
-    req.flash('error', error)
-    res.render('error.ejs', {error: error, user: req.user.sAMAccountName})
-    console.log(error)
-  })
-})
-
-
 
 
 // ======================================================

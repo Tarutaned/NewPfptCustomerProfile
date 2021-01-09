@@ -53,5 +53,5 @@
   "scripts": {
     "dev": "nodemon app.js",
     "prod": "env-cmd -f ./config/prod.env node app.js"
-  }
+    }
 }
