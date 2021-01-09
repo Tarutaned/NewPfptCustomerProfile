@@ -36,8 +36,6 @@ var mongoose = require('mongoose');
 var append = "";
 
 
-
-
 // ==================================================
 // Display Customers where the current user is listed on the account
 // ==================================================
@@ -103,21 +101,20 @@ app.post('/login', function(req, res, next) {
 });
 
 
-
-
 // ==================================================
 // Display Error information
 // ==================================================
-app.get('/error', (req, res) => {
+app.get('/error', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   console.log(getTimeStamp() + "GET /error " + req.user.sAMAccountName)
-  res.render('error.ejs', { message: req.flash('error') })
+  res.render('error.ejs', { message: req.flash('error'), user: req.user })
 })
 
 // ==================================================
 // Flash a message
 // ==================================================
 app.get('/flash', function(req, res){
-  req.flash('error', 'This is a test error')
+  req.flash('msg1', 'This is a flash message ')
+  req.flash('msg2', 'This is message 2')
   res.redirect('/error');
 });
 
@@ -181,6 +178,7 @@ app.get("/index", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
                               success: successMessage, 
                               user: req.user })
   }).catch((error) => {
+    // render the error page here
       console.log(getTimeStamp() + req.user.sAMAccountName + " Error GET /index")
       console.log(error)
   })
@@ -599,7 +597,6 @@ app.get("/index/:id", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
 });
 
 
-
 // ======================================================
 // API Endpoint
 // Return a list of connectors for a Customer
@@ -683,12 +680,6 @@ app.post('/delConnector/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) =>
 }) 
 
 
-
-
-
-
-
-
 // ======================================================
 // Delete a customer profile
 // ======================================================
@@ -743,6 +734,7 @@ app.get("/activity", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   })  
 })
 
+
 app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => { 
   console.log(getTimeStamp() + req.user.sAMAccountName + " is displaying Activity Report page for " + req.params.days + " days.")
   // TO DO
@@ -759,6 +751,7 @@ app.get("/activity/:days", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       return res.render("error.ejs", {error, user: req.user.sAMAccountName}) }
     )
 })
+
 
 // =============================================
 // API Endpoint
